@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EvenementsController!{% endblock %}
+
+{% block body %}
+
+<main class="evenement">
+    <section class="header">
+        <twig:HeaderHero
+            event="{{event}}"
+            
+            img="{{asset('images/Rectangle_19.jpg')}}"
+        />
+    </section>
+
+    <section class="inscription">
+        <h2>S'inscrire</h2>
+            <pre>
+                {{ dump(event) }}
+            </pre>
+
+        <div class="form__container">
+            {{form_start(form)}}
+
+                {{form_row(form.nom)}}
+                {{form_row(form.prenom)}}
+
+                <div class="quantity__container">
+                    {{form_label(form.quantity)}}
+                    <div class="quantity__counter">
+
+                        <button type="button" id="decrease">-</button>
+                        {{form_widget(form.quantity)}}
+                        <button type="button" id="increase">+</button>
+                    </div>
+                </div>
+
+                {% if event.payant %}
+                    <div class="form_prix">
+                        {% if app.user %}
+                            <p>Prix : {{event.prix_adherant}}</p>
+                        {% else %}
+                            <p>Prix : {{event.prix}}€</p>
+                            
+                        {% endif %}
+                    </div>
+                {% endif %}
+                    
+                <button type='submit' class="btn--accent1" href="{{path('app_evenements_show',{'id': event.documentId})}}"> S'inscrire</button>
+            {{form_end(form)}}
+
+            <div class="info-section">
+                <h3>{{event.titre}}</h3>
+                <p>Pour participer à cet événement, il est nécessaire de réserver votre place.</p>
+                <p>Si vous avez des questions n'hésitez pas à <a href='{{path('app_contact')}}'>nous contacter</a>.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="eventCalender">
+
+        <h2>
+            Calendrier des evenements
+        </h2>
+
+        <div class="event__containers">
+            {% for event in thisWeek %}
+                <twig:EventCard 
+                    event="{{event}}"
+                />
+            {% endfor %}
+            
+        </div>
+    </section>
+
+
+
+
+</main>
+{% endblock %}

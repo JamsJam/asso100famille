@@ -1,0 +1,21 @@
+
+
+<div {{ attributes }} class="events__card">
+    <!-- component html -->
+    <div class="events__card__image">
+        <img src="{{asset('images/Rectangle_19.jpg')}}" alt="Zumba Picnic Swap Event">
+    </div>
+    <div class="events__card__details">
+
+        <h3>{{event.titre}}</h3>
+        <div class="events__info">
+
+            {# {% if event[type_evenement] == 'ponctuel' %}{% endif %} #}
+            <p>{{event.date|date('d/m/Y')}}</p>
+            <p>{{event.heure_debut|date('H:i')}} - {{event.heure_fin|date('H:i')}}</p>
+            <p>{{event.description}}</p>
+        </div>
+        <a class="btn--accent1" href="{{path('app_evenements_show',{'id': event.documentId})}}"> S'inscrire</a>
+    </div>
+</div>
+

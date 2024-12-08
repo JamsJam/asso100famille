@@ -1,0 +1,32 @@
+@use '../abstract' as *;
+
+.btn{
+    color: white;
+    padding-inline: 4rem;
+    padding-block: 1rem;
+    border-radius: 5px;
+    font-size: $text-24-16-desk;
+    font-weight: 400;
+
+    &--accent1{
+        @extend .btn;
+        background-color: $accent1
+    }
+    &--accent2{
+        @extend .btn;
+        background-color: $accent2
+    }
+    &--accent3{
+        @extend .btn;
+        background-color: $bg-clair2-active;
+        border-radius:0px;
+        border:none;
+        color:black;
+    }
+    &--footer{
+        @extend .btn;
+        background-color: white;
+        color: $accent2;
+        font-weight: 600;
+    }
+}

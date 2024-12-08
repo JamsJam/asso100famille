@@ -1,0 +1,143 @@
+@use '../abstract' as *;
+
+.register{
+
+
+    .header{
+        
+        background-color: $bg-clair1;
+        height: 50vh;
+    }
+
+    section:not(.header){
+        padding-block: 4rem 1rem;
+        @extend %container;
+
+        h2{
+            margin-block: 1rem
+        }
+    }
+
+    section.form__container{
+        
+
+        padding-block: 2rem;
+
+        form{
+            
+            .form__line{
+                @extend %flex-row-between-center;
+                padding-block:2rem;
+
+                label,p{
+                    font-size: 1.1rem;
+                    font-weight: 600
+                }
+
+                .counter{
+                    @extend %flex-row-center;
+                    gap: 0.3rem;
+
+                    input,button{
+                        padding: 0.5rem 0.5rem;
+                        font-size: 1.1rem;
+                        
+                        border: 1px solid black;
+                        border-radius: 4px
+                    }
+
+                    input {
+                        width: 4rem;
+                        text-align: center;
+                    }
+
+                    button{
+                        background-color: white;
+                        width: 50px;
+                    }
+
+                }
+            }
+
+            .donnation_line{
+                @extend %flex-column-center-stretch;
+                gap:2rem;
+                padding-block :2rem;
+                
+                .donnation_label{
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    color:$font-color1
+                }
+
+
+                .form__radio{
+                    
+                    @extend %flex-row-around-center;
+
+                    .radio__container{
+                        @extend %flex-column-center-center;
+                        gap:1rem;
+                        label{
+                            font-size: 1rem;
+                        }
+                    }
+                }
+            }
+
+            .totaux_container{
+                background-color: $bg-clair1;
+                padding:1rem;
+
+                @extend %flex-row-end-center;
+            }
+            
+            .boutons_container{
+
+                @extend %flex-row-end-center;
+                gap:1rem;
+            }
+        }
+
+
+        &.adherant{
+
+            form{
+
+
+                .form__line{
+
+                    @extend %flex-row-between-center;
+                    flex-wrap: wrap;
+
+                    gap: 2rem;
+
+                    &>div{
+                        @extend %flex-column-center-start;
+                        width: max(40%, 300px) ;
+                        gap: 1rem;
+
+                        label{
+                            font-weight: 400;
+                        }
+
+                        .text-type{
+                            width: max(100%, calc(320px - 4rem)) ;
+                            font-size: 1.5rem;
+                            padding-inline: 1rem;
+                            padding-block: 0.5rem;
+                        }
+                        .select-type{
+                            width: max(100%, calc(320px - 4rem)) ;
+                            padding-inline: 1rem;
+                            padding-block: 0.5rem;
+                            border-radius: 4px;
+                            font-size: 1rem;
+                        
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

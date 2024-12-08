@@ -1,0 +1,25 @@
+@use '../abstract' as *;
+
+.about{
+    section:not(.header){
+        @extend %container;
+        @extend %flex-column-center-start;
+        gap: 2rem;
+        padding-block: 3rem;
+        
+        p{
+            color: $font-color1;
+            font-size: $text-24-16-desk;
+        }
+        
+    }
+    
+    .header{
+        background-color: $bg-clair1;
+        height: 50vh;
+    }
+
+
+    
+
+}

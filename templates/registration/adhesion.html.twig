@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<main class="register">
+
+    <section class="header">
+        <twig:HeaderHero
+            title='Adhésion'
+            para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."
+            
+        />
+    </section>
+
+    {# <turbo-frame id="progressbar"> #}
+        <section class="progressbar__container">
+            <twig:Progressbar 
+            step='{{ 1|number_format }}'
+            />
+        </section>
+    {# </turbo-frame> #}
+
+
+    <turbo-frame id="form">
+        {% for flash_error in app.flashes('verify_email_error') %}
+        
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+        <section class="form__container" {{stimulus_controller('formregister')}}>
+            
+        
+            {{ form_errors(form) }}
+
+            {{ form_start(form) }}
+                <div class="form__line">
+                    <div>
+                    {{form_label(form.adhesionFamille)}}
+                    {{form_help(form.adhesionFamille)}}
+                    </div>
+
+                    <p>30€</p>
+
+                    
+                    <div class="counter" {{stimulus_controller('counter')}}>
+                        <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                        {{form_widget(form.adhesionFamille,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                        <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                    </div>
+                </div>
+                <div class="form__line">
+                
+                    <div>
+                        {{form_label(form.adhesionBienfaiteur)}}
+                        {{form_help(form.adhesionBienfaiteur)}}
+                    </div>
+
+                    <div class="counter" {{stimulus_controller('counter')}}>
+                        <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.adhesionBienfaiteurPrix,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                        <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                    </div>
+
+                    <div class="counter" {{stimulus_controller('counter')}}>
+                        <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                        {{form_widget(form.adhesionBienfaiteur,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                        <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                    </div>
+                </div>
+
+                <div class="donnation_line">
+                    <p class="donnation_label">
+                        Souhaitez-vous faire un don à Association 100% Famille en plus de votre adhésion ?
+                    </p>
+
+                    <div class="form__radio">
+                        {% for radio in form.don %}
+                            <div class="radio__container">
+                                {{form_label(radio)}}
+                                {{form_widget(radio,{ attr : stimulus_action('formregister', 'isCustomHandle','change').toArray()})}}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="custom__container" id="customDonation" {{stimulus_target('formregister', 'customDonation')}}>
+                        {{form_widget(form.customAmount)}}
+                        {{form_help(form.customAmount)}}
+                    </div>
+                </div>
+
+                <div class="totaux_container">  
+                    <div class="totaux">
+                        xxx
+                    </div>
+                </div>
+                        {# <button type="submit" class="button--accent3">Register</button> #}
+                <div class="boutons_container">
+                    <a class="button--accent3" data-turbo="false" href="{{path('app_home')}}">Retour</a>
+                    <button class="btn--accent3" >Suivant</button>
+                </div>
+
+            {{ form_end(form) }}
+        </section>
+
+        <section class="avantage">
+            <div class="avantage__info">
+                <h2>Les avantages</h2>
+                <h3>Les avantages d'une adhésion à l'association 100% Famille de Marie-Galante</h3>
+                <p>L'association offre une multitude de services et d'activités qui valorisent et soutiennent la vie familiale à chaque étape de la vie.</br>
+                    Voici quelques avantages de devenir membre :
+                </p>
+                <ul>
+                    <li>Accès à des événements variés</li>
+                    <li>Services adaptés pour tous les membres de la famille</li>
+                    <li>Espaces de coworking et détente</li>
+                    <li>Groupes de parole et activités récréatives comme le théâtre et les sorties détente</li>
+                    <li>Ateliers créatifs tels que couture et bricolage</li>
+                    <li>Activités sociales comme les défilés de mode et la danse</li>
+                    <li>Opportunités de socialisation et de développement personnel</li>
+                </ul>
+                <ul>
+                    <li>
+                        <h3>
+                            Pour les enfants :
+                        </h3>
+                    </li>
+                    <li>Espaces dédiés à la détente et au jeu</li>
+                    <li>Activités éducatives et récréatives comme les ateliers de lecture et les activités sportives</li>
+                    <li>Sorties culturelles et festivals</li>
+                </ul>
+                <ul>
+                    <li>
+                        <h3>
+                            Pour la jeunesse :
+                        </h3>
+                    </li>
+                    <li>Programmes spécifiques pour les jeunes (PS Jeunes)</li>
+                    <li>Activités sociales et culturelles telles que le théâtre et les ciné-débat</li>
+                    <li>Voyages et sorties récréatives</li>
+                    <li>Ateliers divers incluant activités sportives et défilés de mode</li>
+                </ul>
+                <ul>
+                    <li>
+                        <h3>
+                            Pour les seniors :
+                        </h3>
+                    </li>
+                    <li>Espaces de détente et de socialisation</li>
+                    <li>Initiation informatique et soirées jeux de société</li>
+                    <li>Activités culturelles comme le théâtre et la couture</li>
+                    <li>Sorties culturelles et activités mémorielles comme la baignade</li>
+                </ul>
+
+                <p>
+                    Elle offre un espace sûr et accueillant pour toutes les familles, quelle que soit leur composition ou leur situation.
+                </p>
+            </div>
+            <div class="avantage__paiement">
+                <h3>Plateforme de paiement 100% sécurisée</h3>
+                <p>
+                    Toutes  les informations bancaires pour traiter ce paiement sont totalement  sécurisées. Grâce au cryptage SSL de vos données bancaires, vous êtes  assurés de la fiabilité de vos transactions sur Stripe.
+                </p>
+                <div class="img_container">
+                    {# <img src="" alt="">
+                    <img src="" alt="">
+                    <img src="" alt="">
+                    <img src="" alt=""> #}
+                </div>
+            </div>
+        </section>
+    </turbo-frame>
+</main>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<main class="register">
+
+    <section class="header">
+        <twig:HeaderHero
+            title='Adhésion'
+            para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."
+            
+        />
+    </section>
+
+    {# <turbo-frame id="progressbar"> #}
+        <section class="progressbar__container">
+            <twig:Progressbar 
+                step='{{ 2|number_format }}'
+            />
+        </section>
+    {# </turbo-frame> #}
+
+
+    <turbo-frame id="form">
+        <section class="form__container adherant" {{stimulus_controller('formregister')}}>
+            {{form_start(form ,{'attr':{'action': path('app_register_adherant')}})}}
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.nom)}}
+                        {{form_widget(form.nom)}}
+                    </div>
+                    <div>
+                        {{form_label(form.prenom)}}
+                        {{form_widget(form.prenom)}}
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.dateDeNaissance)}}
+                        {{form_widget(form.dateDeNaissance)}}
+                    </div>
+                    <div>
+                        {{form_label(form.Profession)}}
+                        {{form_widget(form.Profession)}}
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.FamilleType)}}
+                        {{form_widget(form.FamilleType)}}
+                    </div>
+                    <div>
+                        {{form_label(form.FamilleNombre)}}
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleNombre,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.FamilleAdulte)}}
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleAdulte,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        {{form_label(form.FamilleHomme)}}
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleHomme,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.FamilleFemme)}}
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleFemme,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.FamilleMineur)}}
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleMineur,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        {{form_label(form.FamilleGarcon)}}
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleGarcon,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.FamilleFille)}}
+
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.FamilleFille,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="boutons_container">
+                    <button class="btn--accent3" >précédents</button>
+                    <button class="btn--accent3" >Suivant</button>
+                </div>
+            {{form_end(form)}}
+
+        </section>
+    </turbo-frame>
+</main>
+{% endblock %}

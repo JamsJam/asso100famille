@@ -1,0 +1,48 @@
+@use '../abstract' as *;
+
+footer{
+
+
+    .adhesionHero{
+        width: 100%;
+
+        background-color: $accent2;
+        color: white;
+
+        height: 400px;
+
+        @extend %flex-column-center-center;
+        gap: 2rem;
+
+        p{
+            font-size: $text-48-32-desk;
+            font-weight: 400;
+
+            &:first-child{
+                font-weight: 600;
+            }
+        }
+    }
+
+    .footer{
+
+        &__container{
+            @extend %container;
+            @extend %flex-row-between-center;
+            
+        }
+        
+        &_logo{
+            
+            @extend %flex-row-center;
+        }
+        
+        &__nav{
+            height: 120px;
+            @extend %flex-column-center-start;
+            gap: 1rem;
+            font-weight: 300;
+            
+        }
+    }
+}

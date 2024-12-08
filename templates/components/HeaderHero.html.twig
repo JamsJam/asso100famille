@@ -1,0 +1,140 @@
+<div{{ attributes }} class='hero__container'>
+    <!-- component html -->
+
+    {% if event is defined %}
+    
+            <div class='hero-info'>
+
+        
+            <h1>
+                {# Ensemble pour la famille, à chaque étape de la vie #}
+                {{event.titre}}
+            </h1>
+
+            <div class="date_info">
+
+
+
+                {% if event.type_evenement == "ponctuel" %}
+                    
+                    <p>
+                        {{event.date|date('d/m/Y')}}
+                    </p>
+                
+                {% else %}
+                    <p>
+                        Tous les {{event.date_type[0].jour}}
+                        
+                    </p>
+                    
+                {% endif %}
+                <p>
+                
+                    {{event.heure_debut|date('H:i')}} - {{event.heure_debut|date('H:i')}}
+                </p>
+            </div>
+
+
+            <p>
+                
+                {{event.description}}
+            </p>
+
+
+        </div>
+
+        {% if img is defined  %}
+            <div class='hero-img'>
+                <img  src="{{img}}" alt="">
+            </div>
+        {% endif %}
+
+    
+    {% else %}
+            
+
+        {% if contact is defined  %}
+        
+            <div class='hero-info contact-hero'>
+            
+        {% else %}
+            
+            <div class='hero-info'>
+        {% endif %}
+        
+            <h1>
+                {# Ensemble pour la famille, à chaque étape de la vie #}
+                {{title}}
+            </h1>
+
+
+            <p>
+                
+                {{para1}}
+            </p>
+
+            {% if cta is defined %}
+                <a href="" class="btn--accent1">{{cta}}</a>
+            {% endif %}
+
+            {% if contact is defined %}
+                <adress>
+                    <div>
+                        <p class='p-bold'>{{ contact.entreprise }}</p>
+                        <p>{{ contact.adress1 }}</p>
+                        <p>{{ contact.adress2 }}</p>
+                        <p>{{ contact.adress3 }}</p>
+                        <p>{{ contact.adress4 }}</p>
+                    </div>
+                    <div>
+                        <p>{{ contact.telephone }}</p>
+                        <p>{{ contact.email }}</p>
+                    </div>
+                    <div>
+                        <p class='p-bold'>Horraire</p>
+                        <p>{{ contact.jour }}</p>
+                        <p>{{ contact.horaire }}</p>
+                    </div>
+                </adress>
+            {% endif %}
+        </div>
+
+        {% if img is defined  %}
+            <div class='hero-img'>
+                <img  src="{{img}}" alt="">
+            </div>
+        {% endif %}
+
+
+        {% if bento %}
+            <div class="bento__container">
+                <a href='tel:+590590971351' class="bento__box" id="box1">
+                    {# <p> #}
+                        {# <span> #}
+                            {# {{ ux_icon('material-symbols:call-sharp',{'class':'ux-icon'}) }} #}
+                            <twig:ux:icon name="material-symbols:call-sharp" class='ux-icon' height='unset'  width='unset' />
+                        {# </span> #}
+                        Nous appeler
+                    {# </p> #}
+                </a>
+                <a href='mailto:asso100famille@gmail.com' class="bento__box" id="box2">
+                    {# <p>
+                        <span> #}
+                            {{ ux_icon('heroicons:envelope-20-solid',{'class':'ux-icon'}) }}
+                        Nous écrire
+                    {# </p> #}
+                </a>
+                {# <div class="bento__box" id="box3"> #}
+                    {# The map must have a defined height #}
+                    {{ ux_map(map, {id:'box3',class:"bento__box"}) }}
+                    {# <pre>
+                        {{ dump(map) }}
+                    </pre> #}
+                {# </div> #}
+            </div>
+        {% endif %}
+
+    {% endif %}
+    
+
+</div>

@@ -1,0 +1,88 @@
+@use '../abstract' as *;
+
+.home{
+    
+    
+    .header{
+        
+        background-color: $bg-clair1;
+        height: 50vh;
+        
+        // .hero__container{
+
+        //     @extend %flex-row-between-center;
+        //     @extend %container;
+        //     gap: 2rem;
+        //     height: 100%;
+        //     padding-block: 2rem;
+            
+        //     .hero-info{
+
+        //         @extend %flex-column-center-start;
+        //         gap: 2rem;
+        //         height: 100%;
+        //         width: 100%;
+                
+        //         p{
+        //             color: $font-color1;
+        //             font-size: $text-24-16-desk;
+        //             font-weight: 400;
+        //         }
+        //     }
+            
+        //     .hero-img{
+        //         // height: 100%;
+        //         width: 100%;
+
+        //         img{
+        //             width: 100%;
+        //         }
+        //     }
+        // }
+    }
+
+
+    .events{
+
+        @extend %container;
+
+        &__header{
+            @extend %flex-row-between-center;
+
+            margin-block:3rem
+        }
+        &__all{
+            color: $font-color1;
+        }
+
+        &__container{
+            @extend %flex-column-center-start;
+            gap: 2rem;
+        }
+
+
+
+
+    }
+
+    .service{
+
+
+            @extend %container;
+    
+            margin-block:3rem;
+            
+            h2{
+                margin-block:3rem;
+
+            }
+
+
+            &__container{
+                @extend %flex-row-around-center;
+                gap: 1rem;
+                flex-wrap: wrap;
+
+            }
+    }
+}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+
+{% block body %}
+<main class='home'>
+
+    <section class="header">
+        <twig:HeaderHero
+            title="Ensemble pour la famille, à chaque étape de la vie"
+            para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."
+            cta="En savoir plus"
+            img="{{asset('images/Rectangle_19.jpg')}}"
+        />
+    </section>
+
+
+    <section class='events'>
+
+        <div class="events__header">
+            <h2>Les événements</h2>
+            <a href="#" class="events__all">Tous les événements</a>
+        </div>
+        
+        {# {% for event in events %} #}
+        <div class='events__container'>
+
+        {% for event in events %}
+            
+            <twig:EventCard 
+                event="{{event}}"
+            />
+        {% endfor %}
+
+
+        </div>
+
+
+        {# {% endfor %} #}
+    </section>
+
+
+
+    <section class="service">
+        <h2>Les Services</h2>
+        <div class="service__container">
+            <twig:ServiceCard />
+            <twig:ServiceCard />
+            <twig:ServiceCard />
+            <twig:ServiceCard />
+        </div>
+    </section>
+
+
+</main>
+{% endblock %}

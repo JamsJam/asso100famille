@@ -1,0 +1,54 @@
+@use '../abstract' as *;
+
+.evenements{
+    
+
+    
+    .header{
+        
+        background-color: $bg-clair1;
+        height: 50vh;
+    }
+
+    section:not(.header){
+        padding-block: 4rem;
+        @extend %container;
+
+        h2{
+            margin-block-end: 2rem
+        }
+    }
+
+
+    .typeEvents{
+
+
+
+
+
+        &__content{
+
+            @extend %flex-row-center;
+            gap:4rem
+        }
+
+        &__list{
+
+            li{
+                font-size: $text-40-24-desk;
+                margin-block: 1rem;
+            }
+        }
+
+        &__image{
+            img{
+                aspect-ratio: 1.37/1;
+            }
+        }
+    }
+
+
+
+
+
+}

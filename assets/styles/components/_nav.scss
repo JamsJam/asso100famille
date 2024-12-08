@@ -1,0 +1,37 @@
+@use '../abstract' as *;
+
+nav{
+    @extend %flex-row-between-center;
+    @extend %container;
+    min-height: 120px;
+    font-size: $text-24-16-desk;
+
+    
+
+
+
+    .logo{}
+
+
+
+    .navLink{
+
+        color: $font-color1;
+        
+        &__container{
+            @extend %flex-row-evenly-center;
+            gap: 2.5rem;
+        }
+        
+        
+
+        
+        
+        &.active{
+
+
+            text-decoration: underline;
+        }
+    }
+}
+

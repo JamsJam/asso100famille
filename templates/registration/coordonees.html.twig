@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<main class="register">
+
+    <section class="header">
+        <twig:HeaderHero
+            title='Adhésion'
+            para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."
+            
+        />
+    </section>
+
+    {# <turbo-frame id="progressbar"> #}
+        <section class="progressbar__container">
+            <twig:Progressbar 
+            step='{{ 1|number_format }}'
+            />
+        </section>
+    {# </turbo-frame> #}
+
+
+    <turbo-frame id="form">
+        {% for flash_error in app.flashes('verify_email_error') %}
+        
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+        <section class="form__container adherant" {{stimulus_controller('formregister')}}>
+            
+        
+            {{ form_errors(form) }}
+
+            {{form_start(form,{'attr':{'action': path('app_register_coord')}})}}
+
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.Telephone)}}
+                        {{form_widget(form.Telephone)}}
+                    </div>
+                    <div>
+                        {{form_label(form.email)}}
+                        {{form_widget(form.email)}}
+                    </div>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.Adresse)}}
+                        {{form_widget(form.Adresse)}}
+                    </div>
+                    <div>
+                        {{form_label(form.Complement_adresse)}}
+                        {{form_widget(form.Complement_adresse)}}
+                    </div>
+                </div>
+
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.Code_postal)}}
+                        {{form_widget(form.Code_postal)}}
+                    </div>
+                    <div>
+                        {{form_label(form.Ville)}}
+                        {{form_widget(form.Ville)}}
+                    </div>
+                </div>
+
+                <div class="form__line">
+                    <div>
+                        {{form_label(form.Password.first)}}
+                        {{form_widget(form.Password.first)}}
+                    </div>
+                    <div>
+                        {{form_label(form.Password.second)}}
+                        {{form_widget(form.Password.second)}}
+                    </div>
+
+                </div>
+                
+
+
+                <div class="boutons_container">
+                    <button class="btn--accent3" >précédents</button>
+                    <button class="btn--accent3" >Suivant</button>
+                </div>
+            {{form_end(form)}}
+        </section>
+
+
+    </turbo-frame>
+</main>
+{% endblock %}

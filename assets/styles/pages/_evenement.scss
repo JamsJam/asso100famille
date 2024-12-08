@@ -1,0 +1,109 @@
+@use '../abstract' as *;
+
+.evenement{
+
+
+    .header{
+        
+        background-color: $bg-clair1;
+        height: 50vh;
+    }
+
+    section:not(.header){
+        padding-block: 4rem;
+        @extend %container;
+
+        h2{
+            margin-block-end: 2rem
+        }
+    }
+
+    .inscription{
+
+
+        .form__container{
+
+            @extend %flex-row-center-stretch;
+            gap:3rem;
+
+            form{
+                width: min(500px,50vw);
+
+                @extend %flex-column-start-stretch;
+                gap: 2rem;
+                padding: 4rem 2rem;
+                background-color: $bg-clair1;
+                
+                
+                &>div{
+                    @extend %flex-column-center-stretch;
+                    gap: 1rem;
+
+                    label{
+                        font-size: 1.5rem;
+                    }
+                    
+                    input{
+                        font-size: 1.5rem;
+                        padding: 0.6rem;
+                        border-radius: 4px;
+                        border: 1px solid black;
+                    }
+
+                    .quantity__counter{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: stretch;
+                        justify-content: flex-start ;
+                        gap: 0.3rem;
+
+                        button{
+                            padding-inline: 1rem;
+                            font-size: 1.5rem;
+                            background-color: white;
+                            border: 1px solid black;
+                            border-radius: 4px;
+                        }
+                        input{
+                            width: 70px;
+                            border: 1px solid black;
+                        }
+                    }
+
+                    
+                }
+                .form_prix{
+                    p{
+
+                        font-size: 1.5rem;
+                    }
+                }
+
+                button[type="submit"]{
+                    margin-block: 1rem;
+                    align-self: start;
+                    border: none;
+                }
+            }
+
+            .info-section{
+                padding-block: 3rem;
+                width: 400px;
+
+                @extend %flex-column-start-start;
+                gap: 2rem;
+
+                font-size: 1.5rem;
+
+
+                a{
+                    text-decoration: underline;
+
+                    &:hover{
+                        color: $accent1;
+                    }
+                }
+            }
+        }
+    }
+}

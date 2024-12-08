@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<main class="register">
+
+    <section class="header">
+        <twig:HeaderHero
+            title='Adhésion'
+            para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."
+            
+        />
+    </section>
+
+    {# <turbo-frame id="progressbar"> #}
+        <section class="progressbar__container">
+            <twig:Progressbar 
+            step='{{ 4|number_format }}'
+            />
+        </section>
+    {# </turbo-frame> #}
+
+
+    <turbo-frame id="form">
+        {% for flash_error in app.flashes('verify_email_error') %}
+        
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+        <section class="form__container récapitulatif" {{stimulus_controller('formregister')}}>
+            
+        
+            {{ form_errors(form) }}
+
+            {{form_start(form,{'attr':{'action': path('app_register_coord')}})}}
+
+                <h3>Récapitulatif</h3>
+                <div class="form__line">
+                        {#? Prenom Nom  #}
+                        <p>{{ username }}</p>
+                </div>
+                {% for item in itemsToPaid %}
+                    
+                    <div class="form__line">
+                        {#? Items Name  #}
+                        <p>{{item.nom}}</p>
+                        {#? Items Price  #}
+                        <p>{{(item.total / 100 )|round(2, 'floor')}}€</p>
+                    </div>
+                {% endfor %}
+                <hr>
+                <div class="form__line">
+                    {#? Items Name  #}
+                    <p>{{frais.nom}}</p>
+                    {#? Items Price  #}
+                    <p>{{(frais.prix / 100 )|number_format(2) }}€</p>
+                </div>
+                <div class="form__line">
+                    <div>
+                        {{form_widget(form.confirme)}}
+                        {{form_label(form.confirme)}}
+                    </div>
+                </div>
+                 <div class="totaux_container">  
+                    <p>Total</p>
+                    <p class="totaux">
+                        xxx
+                    </p>
+                </div>
+
+                
+
+
+                <div class="boutons_container">
+                    <button class="btn--accent3" >précédents</button>
+                    <button class="btn--accent3" >Valider et Payer</button>
+                </div>
+            {{form_end(form)}}
+        </section>
+
+
+    </turbo-frame>
+</main>
+{% endblock %}

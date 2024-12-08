@@ -1,0 +1,26 @@
+
+//?===== Color
+
+$accent1 : #3A7443;
+$accent2 : #C90037;
+$bg-clair1: rgba(58, 116, 67, 0.08);
+$bg-clair1-active: rgba(58, 116, 67, 0.1);
+
+$bg-clair2: #F0F4F0;
+$bg-clair2-active: #E2EAE2;
+
+$font-color1: #784457;
+$font-color2: #0b0f0b;
+
+
+//?===== typo
+//titre
+
+$title-48-32-desk :clamp(2rem, 0.8539rem + 2.3845vw, 3rem);
+$title-32-24-desk :clamp(1.5rem, 0.927rem + 1.1923vw, 2rem);
+
+
+//text
+$text-48-32-desk :clamp(2rem, 0.8539rem + 2.3845vw, 3rem);
+$text-40-24-desk :clamp(2rem, 1.4302rem + 1.1887vw, 2.5rem);
+$text-24-16-desk :clamp(1rem, 0.427rem + 1.1923vw, 1.5rem);

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AboutController!{% endblock %}
+
+{% block body %}
+<main class='contact'>
+
+    {# img="{{asset('images/Rectangle_19.jpg')}}" #}
+    <section class="header">
+        <twig:HeaderHero
+            title="Contact"
+            para1="Trouvez toutes les informations sur l’association 100% famille"
+            bento='{{true}}'
+            contact="{{ {
+                'adress1': 'LOCAL E6 ',
+                'adress2': 'Résidence de la plage les Basses',
+                'adress3': '97112 Grand-Bourg',
+                'adress4': 'Guadeloupe',
+                'jour': 'Lundi - Vendredi',
+                'horaire': '8h30 - 16h',
+                'entreprise':'Association 100% Famille',
+                'email':'asso100famille@gmail.com',
+                'telephone':'+590 590 97-1351'
+            } }}"
+            map="{{my_map}}"
+
+        />
+    </section>
+
+
+</main>
+{% endblock %}

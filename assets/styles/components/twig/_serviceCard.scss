@@ -1,0 +1,49 @@
+@use '../../abstract' as *;
+
+.service{
+
+    &__card{
+        // width: min(20vw,300px);
+        min-width: clamp(11rem, 0.6855rem + 21.4605vw, 20rem);
+        background-color: $bg-clair1;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+
+
+    &__img{
+        background: url(../images/img012.jpg) center/cover no-repeat;
+        // height: 200px;
+        aspect-ratio: 320/270;
+        // width: 100%;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    &__details{
+        padding:clamp(1rem, -2.4382rem + 7.1535vw, 4rem);
+        // padding-inline: auto ;
+
+        height: 500px;
+
+
+        font-size: clamp(1rem, 0.7135rem + 0.5961vw, 1.25rem);
+
+        @extend %flex-column-start-center; 
+        
+
+        h3{
+            margin-block:1.5rem;
+            // align-self: start
+
+        }
+        ul{
+            width: 100%;
+            @extend %flex-column-start-center; 
+        }
+        li{
+            font-weight: 300;
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AboutController!{% endblock %}
+
+{% block body %}
+<main class='about'>
+
+    <section class="header">
+        <twig:HeaderHero
+            title="A propos"
+            para1="Trouvez toutes les informations sur l’association 100% famille"
+            img="{{asset('images/Rectangle_19.jpg')}}"
+        />
+    </section>
+
+    <section>
+        <h2>Histoire</h2>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit tempore similique qui. Amet animi ipsa, cum voluptate dignissimos corporis consequatur expedita quaerat eligendi dicta laboriosam quia? Earum velit ipsam ex!
+        </p>
+    </section>
+
+    <section>
+        <h2>La Mission</h2>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem accusantium aut ex eum, alias ut placeat quis unde tempora assumenda asperiores aperiam voluptates, harum quasi neque illo quaerat blanditiis dolorum.
+        </p>
+    </section>
+
+    <section>
+        <h2>
+            Les valeurs
+        </h2>
+        <p>
+            Nous nous engageons  à défendre les droits et intérêts des familles, en leur offrant un  espace d'échange, de croissance et de détente, enrichi par des activités  éducatives et ludiques adaptées à tous les âges.
+        </p>
+    </section>
+</main>
+{% endblock %}

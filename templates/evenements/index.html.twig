@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EvenementsController!{% endblock %}
+
+{% block body %}
+
+<main class="evenements">
+    <section class="header">
+        <twig:HeaderHero
+            title="Evenements"
+            para1="Trouvez tous nos événements et demandez à participer."
+            cta="Voir tous les evenements"
+            img="{{asset('images/Rectangle_19.jpg')}}"
+        />
+    </section>
+    <section class="typeEvents">
+        <h2>
+            Types d’événements
+        </h2>
+
+        <div class="typeEvents__content">
+            <ul class="typeEvents__list">
+                <li>Ateliers</li>
+                <li>Foire</li>
+                <li>Formation</li>
+                <li>Evènements</li>
+                <li>Sport</li>
+                <li>Art & Culture</li>
+                <li>Voyage</li>
+                <li>Tiers-lieu</li>
+            </ul>
+            <div class="typeEvents__image">
+                <!-- Placeholder for an image -->
+                <img src="https://picsum.photos/670/490" alt="">
+            </div>
+        </div>
+
+    </section>
+    <section class="eventCalender">
+
+        <h2>
+            Calendrier des evenements
+        </h2>
+
+        <div class="event__containers">
+            {% for event in events %}
+                <twig:EventCard 
+                    event="{{event}}"
+                />
+            {% endfor %}
+            
+        </div>
+    </section>
+
+
+</main>
+{% endblock %}

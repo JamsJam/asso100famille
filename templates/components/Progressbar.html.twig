@@ -1,0 +1,30 @@
+<div{{ attributes }} 
+    class="progressbar"
+    {{stimulus_controller('progressbar',{ 'step': step })}}
+    >
+    <!-- component html -->
+    <div class="step" {{stimulus_target('progressbar','step')}}>
+        <twig:ux:icon name="bi:cart4" class='icon'/>
+        <p>Choix de l'adhésion</p>
+    </div>
+    <div class="step" {{stimulus_target('progressbar','step')}}>
+        <twig:ux:icon name="bi:person" class='icon'/>
+        <p>Adhérants</p>
+    </div>
+    <div class="step" {{stimulus_target('progressbar','step')}}>
+        <twig:ux:icon name="bi:person-vcard-fill" class='icon'/>
+        <p>Coordonnées</p>
+    </div>
+    <div class="step" {{stimulus_target('progressbar','step')}}>
+        <twig:ux:icon name="bi:check-square" class='icon'/>
+        <p>Confirmation</p>
+    </div>
+
+
+</div>
+{# <button data-action="click->progressbar#increaseStep">Next</button>
+<button data-action="click->progressbar#decreaseStep">Previous</button> #}
+
+
+
+{#? step amount control  #}

@@ -1,0 +1,114 @@
+@use '../../abstract' as *;
+
+.hero__container{
+
+    @extend %flex-row-between-center;
+    @extend %container;
+    
+    gap: 2rem;
+    height: 100%;
+    padding-block: 4rem;
+    
+    .hero-info{
+
+        @extend %flex-column-center-start;
+        gap: 2rem;
+        height: 100%;
+        width: 100%;
+        
+        
+        p{
+            color: $font-color1;
+            font-size: $text-24-16-desk;
+            font-weight: 300;
+
+
+            &.p-bold{
+                font-weight: 600;
+            }
+        }
+
+        // ======= Contact mode
+        &.contact-hero{
+            padding-block: 2rem;
+            width: clamp(20rem, 8.5395rem + 23.845vw, 30rem);
+            
+            adress{
+                @extend %flex-column-center-start;
+                gap:1rem;
+                
+                p{
+
+                    font-size: 1rem;
+                }
+            }
+
+        }
+
+    }
+    
+    .hero-img{
+        // height: 100%;
+        width: 100%;
+
+        img{
+            width: 100%;
+        }
+    }
+
+    .bento{
+
+        
+        
+        &__container{
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            grid-template-areas: 
+            "B1 B1 B2 B2" 
+            "B3 B3 B3 B3"
+
+            ;
+            gap:2rem
+            
+        }
+        
+        &__box{
+            border-radius: 8px;
+            // background-color: $bg-clair2-active;
+            background-color: $bg-clair1-active;
+            color: $font-color1;
+            height: 200px;
+            @extend %flex-row-center;
+            gap: 1rem;
+            font-weight: 700;
+
+            transition: background-color 250ms ease-in-out ;
+            
+            &:hover{
+                background-color: rgba(58, 116, 67, 0.3);
+
+            }
+
+            
+            &#box1{
+                grid-area: B1;
+            }
+            
+            &#box2{
+                grid-area: B2;
+            }
+            
+            &#box3{
+                grid-area: B3;
+            }
+
+            .ux-icon{
+                width: 1.5rem;
+                height: fit-content;
+            }
+        }
+    }
+
+
+}
