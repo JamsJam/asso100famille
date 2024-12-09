@@ -22,6 +22,7 @@ class DashboardController extends AbstractDashboardController
         //todo 1) affichier Les evenements de cette semaine
         //todo 2) affichier ne nombre d'utilisateur et un call to action pour la gestion
         //todo 3) afficher les donnes de l'utilisateur connecter et possibilité de le modifier si non admin
+        //todo 3) afficher les donnes de l'utilisateur connecter et possibilité de le modifier si non admin
         return $this->render('admin/dashboard.html.twig' ,[
             
         ]);
