@@ -1,0 +1,25 @@
+name: deployaction
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.APP_SERVE }}
+          username: ${{ secrets.APP_USER }}
+          password: ${{ secrets.APP_PASS }}
+          port: ${{ secrets.APP_PORT }}
+          script: |
+            cd /var/www/assodev/${{ secrets.APP_DOMAIN }}/; 
+            git pull;
+            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader -n;
+            APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear ;
+            php bin/console d:m:m -n;
+            php bin/console importmap:install ;
+            php bin/console sass:build;
+            php bin/console asset-map:compile;
