@@ -63,4 +63,5 @@ class HomeController extends AbstractController
             // Retourner la date du prochain événement
             return $prochainEvenement;
         }
+        
 }

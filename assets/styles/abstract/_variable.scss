@@ -13,14 +13,24 @@ $font-color1: #784457;
 $font-color2: #0b0f0b;
 
 
-//?===== typo
+//?===== typo desk
 //titre
 
 $title-48-32-desk :clamp(2rem, 0.8539rem + 2.3845vw, 3rem);
 $title-32-24-desk :clamp(1.5rem, 0.927rem + 1.1923vw, 2rem);
+$title-24-20-desk :clamp(1.25rem, 0.9643rem + 0.5952vw, 1.5rem);
 
 
 //text
 $text-48-32-desk :clamp(2rem, 0.8539rem + 2.3845vw, 3rem);
 $text-40-24-desk :clamp(2rem, 1.4302rem + 1.1887vw, 2.5rem);
 $text-24-16-desk :clamp(1rem, 0.427rem + 1.1923vw, 1.5rem);
+
+//?===== typo mob
+
+$title-32-20-mob : clamp(1.25rem, 0.7143rem + 2.6786vw, 2rem);
+$title-24-20-mob : clamp(1.25rem, 1.0714rem + 0.8929vw, 1.5rem);
+$title-20-18-mob : clamp(1.125rem, 1.0357rem + 0.4464vw, 1.25rem);
+
+
+$text-24-16-mob : clamp(1rem, 0.8214rem + 0.8929vw, 1.25rem);

@@ -29,4 +29,11 @@
         color: $accent2;
         font-weight: 600;
     }
+
+    @media screen and (max-width:768px)  {
+        &{
+            padding-inline: clamp(2rem, 0.5714rem + 7.1429vw, 4rem);
+            padding-block: clamp(0.5rem, 0.1429rem + 1.7857vw, 1rem);;
+        }
+    }
 }

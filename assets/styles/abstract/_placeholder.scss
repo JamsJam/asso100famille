@@ -8,6 +8,12 @@
     width: min(100vw, 1440px );
     padding-inline: 32px;
     margin-inline: auto;
+
+    @media screen and (max-width:768px)  {
+        &{
+            padding-inline: clamp(1.25rem, 0.7143rem + 2.6786vw, 2rem);
+        }
+    }
 }
 
 

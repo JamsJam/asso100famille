@@ -6,15 +6,18 @@
     @extend %container;
     
     gap: 2rem;
-    height: 100%;
+    min-height: 100%;
     padding-block: 4rem;
     
     .hero-info{
 
         @extend %flex-column-center-start;
         gap: 2rem;
-        height: 100%;
+        min-height: 100%;
         width: 100%;
+
+
+        
         
         
         p{
@@ -25,6 +28,12 @@
 
             &.p-bold{
                 font-weight: 600;
+            }
+
+            @media screen and (max-width:768px)  {
+                &{
+                    font-size: $text-24-16-mob;
+                }
             }
         }
 
@@ -53,6 +62,13 @@
 
         img{
             width: 100%;
+        }
+
+        @media screen and (max-width:768px) {
+            & {
+
+                display: none;
+            }
         }
     }
 

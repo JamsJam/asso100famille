@@ -23,16 +23,35 @@ h1,h2,h3{
 
     color: $font-color1;
     font-weight: 600;
+    text-wrap: pretty;
 
 }
-h1,h2{
+h1{
     font-size: $title-48-32-desk;
 
-
+    @media screen and (max-width:768px)  {
+        &{
+            font-size: $title-32-20-mob;
+        }
+    }
+}
+h2{
+    font-size: $title-32-24-desk;
+    
+    @media screen and (max-width:768px)  {
+        &{
+            font-size: $title-24-20-mob;
+        }
+    }
 }
 h3{
-    font-size: $title-32-24-desk;
-
+    font-size: $title-24-20-desk;
+    
+    @media screen and (max-width:768px)  {
+        &{
+            font-size: $title-20-18-mob;
+        }
+    }
 
 }
 
