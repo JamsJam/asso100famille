@@ -1,4 +1,4 @@
-<div{{ attributes }} class='hero__container'>
+<div{{ attributes }} class='hero__container {% if contact is defined %} contact__container{% endif %}'>
     <!-- component html -->
 
     {% if event is defined %}

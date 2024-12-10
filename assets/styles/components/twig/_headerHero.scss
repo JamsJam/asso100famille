@@ -9,6 +9,13 @@
     min-height: 100%;
     padding-block: 4rem;
     
+    
+        @media screen and (max-width:768px) {
+        &.contact__container{
+
+            flex-direction: column
+        }
+    }
     .hero-info{
 
         @extend %flex-column-center-start;
@@ -40,7 +47,7 @@
         // ======= Contact mode
         &.contact-hero{
             padding-block: 2rem;
-            width: clamp(20rem, 8.5395rem + 23.845vw, 30rem);
+            
             
             adress{
                 @extend %flex-column-center-start;
@@ -51,6 +58,12 @@
                     font-size: 1rem;
                 }
             }
+
+            @media screen and (min-width:769px){
+                width: clamp(20rem, 8.5395rem + 23.845vw, 30rem);
+            }
+
+
 
         }
 
