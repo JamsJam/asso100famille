@@ -16,6 +16,19 @@ class OneTimeEventRepository extends ServiceEntityRepository
         parent::__construct($registry, OneTimeEvent::class);
     }
 
+    public function findThisWeekEvent($today): ?OneTimeEvent
+    {
+        $qb =  $this->createQueryBuilder('p');
+        $qb ->andWhere( $qb->expr()->between(':today', 'p.startDate', 'p.$endDate'))
+            ->setParameter('today', $today)
+            
+            
+
+        ;
+
+        return  $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return OneTimeEvent[] Returns an array of OneTimeEvent objects
     //     */

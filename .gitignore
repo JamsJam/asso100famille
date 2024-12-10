@@ -23,3 +23,11 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+
+/public/assets/
+/public/images/upload/events/*
+!public/images/upload/**/.gitkeep
+
+/public/EasyCorp/
+/assets/vendor/

@@ -29,9 +29,6 @@ services:
     App\Controller\EvenementsController:
         arguments:
             $strapi_event_url : "%strapi_event_url%"
-    App\Controller\HomeController:
-        arguments:
-            $strapi_event_url : "%strapi_event_url%"
     App\Service\EncryptionService:
         arguments:
             $encryption_key: "%encryption_key%"

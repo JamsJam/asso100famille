@@ -12,7 +12,7 @@ abstract class EventAbstract
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
@@ -20,16 +20,16 @@ abstract class EventAbstract
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeImmutable $startDate;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $startDate = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $endDate = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeImmutable $startHour;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $startHour = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $endHour = null;
 
     #[ORM\Column]
@@ -41,8 +41,14 @@ abstract class EventAbstract
     #[ORM\Column(nullable:true)]
     private ?int $userPrice = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $crop = null;
+
     // Méthodes communes
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -74,7 +80,7 @@ abstract class EventAbstract
         return $this->startDate;
     }
 
-    public function setStartDate(?\DateTimeImmutable $startDate): self
+    public function setStartDate(\DateTimeImmutable $startDate): self
     {
         $this->startDate = $startDate;
         return $this;
@@ -85,7 +91,7 @@ abstract class EventAbstract
         return $this->endDate;
     }
 
-    public function setEndDate(?\DateTimeImmutable $endDate): self
+    public function setEndDate(\DateTimeImmutable $endDate): self
     {
         $this->endDate = $endDate;
         return $this;
@@ -118,7 +124,7 @@ abstract class EventAbstract
         return $this->isFree;
     }
 
-    public function setFree(bool $isFree): static
+    public function setIsFree(bool $isFree): static
     {
         $this->isFree = $isFree;
 
@@ -144,6 +150,30 @@ abstract class EventAbstract
     public function setUserPrice(?int $userPrice): self
     {
         $this->userPrice = $userPrice;
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCrop(): ?Array
+    {
+        return $this->crop;
+    }
+
+    public function setCrop(?Array $crop): self
+    {
+        $this->crop = $crop;
+
         return $this;
     }
 
