@@ -26,12 +26,16 @@
         {# {% for event in events %} #}
         <div class='events__container'>
 
-        {# {% for event in events %}
-            
-            <twig:EventCard 
-                event="{{event}}"
-            />
-        {% endfor %} #}
+            {% if event|length > 0 %}
+                {% for event in events %}
+                        
+                    <twig:EventCard 
+                        event="{{event}}"
+                    />
+                {% endfor %}
+            {% else %}
+                <p>Il n'y a pas d'evenements programmés cette semaines</p>
+            {% endif %}
 
 
         </div>

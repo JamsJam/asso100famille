@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\OneTimeEvent;
+use App\Entity\RecurringEvent;
+use App\Repository\OneTimeEventRepository;
+use App\Repository\RecurringEventRepository;
 use DateTime;
 use DateInterval;
 use App\Service\ApiFetchService;
@@ -15,16 +19,17 @@ class HomeController extends AbstractController
 
 
     #[Route('/', name: 'app_home')]
-    public function index(): Response
+    public function index(OneTimeEventRepository $oter , RecurringEventRepository $rer ): Response
     {
         $today = new DateTime();
         $sevenDaysLater = (new DateTime())->add(new DateInterval('P7D'));
 
-        $events = "meh";
+        $events = $oter->findAll();
+        // dd($events,$rer->findAll());
 
 
         return $this->render('home/index.html.twig', [
-            // 'events' => $weekEnvent ,
+            'events' => [] ,
         ]);
     }
 
