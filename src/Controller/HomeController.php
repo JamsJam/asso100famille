@@ -11,58 +11,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
-    private $event_url;
 
-    public function __construct(string $strapi_event_url)
-    {
-        $this->event_url = $strapi_event_url;
-    }
 
 
     #[Route('/', name: 'app_home')]
-    public function index(ApiFetchService $fetch): Response
+    public function index(): Response
     {
         $today = new DateTime();
-        $sevenDaysLater = new DateTime();
-        $sevenDaysLater->add(new DateInterval('P7D'));
-            //?=========== fetch this week event Data
+        $sevenDaysLater = (new DateTime())->add(new DateInterval('P7D'));
 
-        $events = $fetch->getApiData($this->event_url . '?populate=*');
-        $thisWeekEvents = array_filter($events, function ($evenement) use ($today, $sevenDaysLater) {
-        // Mettre à jour la date si l'événement est récurrent
-        if ($evenement['type_evenement'] === 'recurent') {
-            $evenement['date'] = $this->getProchainEvenement($evenement['date_type'][0]['jour']);
-        } else {
-            $evenement['date'] = $evenement['date_type'][0]['date'];
-        }
+        $events = "meh";
 
-        // Vérifier si la date de l'événement est comprise entre aujourd'hui et dans 7 jours
-        $eventDate = new DateTime($evenement['date']);
-        return $eventDate >= $today && $eventDate <= $sevenDaysLater;
-    });
-
-    // dd($thisWeekEvents);
-
-    // foreach ($thisWeekEvents as $event) {
-    //     if ($event['type_evenement'] === 'recurent') {
-    //         $event['date'] = $this->getProchainEvenement($event['date_type'][0]['jour']);
-    //     } else {
-    //         $event['date'] = $event['date_type'][0]['date'];
-    //     }
-    // }
-    $weekEnvent = array_map(function($event){
-        if ($event['type_evenement'] === 'recurent') {
-            $event['date'] = $this->getProchainEvenement($event['date_type'][0]['jour']);
-        } else {
-            $event['date'] = $event['date_type'][0]['date'];
-        }
-        return $event;
-    },$thisWeekEvents);
-
-    // dd($thisWeekEvents, $weekEnvent);
 
         return $this->render('home/index.html.twig', [
-            'events' => $weekEnvent ,
+            // 'events' => $weekEnvent ,
         ]);
     }
 
