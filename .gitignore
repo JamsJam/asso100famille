@@ -26,7 +26,7 @@
 
 
 /public/assets/
-/public/images/upload/events*
+/public/images/upload/events/*
 !public/images/upload/**/.gitkeep
 
 /public/EasyCorp/
