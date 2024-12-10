@@ -29,7 +29,7 @@ class EvenementsController extends AbstractController
     public function index(ApiFetchService $fetch): Response
     {
 
-        // // dd($this->event_url);
+        
         // // dd($fetch->getApiData( $this->event_url.'kg5y2mqolkkbac2l24swf1mb' ));
         // $evenements = $fetch->getApiData( $this->event_url.'?populate=*');
         // // dd($evenements);
