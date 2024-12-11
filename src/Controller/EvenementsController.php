@@ -94,7 +94,7 @@ class EvenementsController extends AbstractController
         }
 
         return $this->render('evenements/show.html.twig', [
-            'event' => $event,
+            // 'event' => $event,
             // 'thisWeek' => $thisWeekEvents,
             'form' => $form
         ]);
