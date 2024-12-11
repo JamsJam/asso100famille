@@ -26,9 +26,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Controller\EvenementsController:
-        arguments:
-            $strapi_event_url : "%strapi_event_url%"
+
     App\Service\EncryptionService:
         arguments:
             $encryption_key: "%encryption_key%"
