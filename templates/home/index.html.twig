@@ -4,6 +4,7 @@
 
 
 {% block body %}
+{{parent()}}
 <main class='home'>
 
     <section class="header">
@@ -11,6 +12,7 @@
             title="Ensemble pour la famille, à chaque étape de la vie"
             para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."
             cta="En savoir plus"
+            ctalink="{{path('app_about')}}"
             img="{{asset('images/Rectangle_19.jpg')}}"
         />
     </section>

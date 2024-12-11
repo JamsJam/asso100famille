@@ -22,7 +22,6 @@ nav{
             @extend %flex-row-evenly-center;
             gap: 2.5rem;
             
-
             
             &.hide{
                 display: none;
@@ -42,10 +41,19 @@ nav{
 
 
     .navBurger {
-
+        
         
         &.hide{
             display: none;
+        }
+
+        .nav__burger{
+
+
+                height: 20px;
+                width: 20px;
+                cursor: pointer;
+            
         }
     }
 }

@@ -13,7 +13,7 @@
         <a class="btn--accent2" href="{{path('app_register')}}">J'adhère</a>
     </div>
 
-    <div class="navBurger" {{stimulus_target('responsivnav', 'navMobile')}}>
+    <div class="navBurger" {{stimulus_target('responsivnav', 'navMobile')| stimulus_action('responsivnav','getNavModal','click')}}>
         {{ ux_icon('mingcute:menu-fill',{'class':'nav__burger'})}} 
 
     </div>

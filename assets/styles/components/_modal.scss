@@ -1,0 +1,73 @@
+
+@use '../abstract' as *;
+
+.modal{
+    width: 100dvw;
+    height: 100%;
+    background-color: rgba(58, 116, 67, 0.375);
+    backdrop-filter: blur(5px);
+    // pointer-events: none;
+
+
+    position:absolute;
+    top: 0;
+    left:-1000%;
+    transition: left 250ms ease;
+    z-index: 99;
+
+    padding-block-start: 2rem;
+
+    &.open{
+        left:0
+    }
+    &.hide{
+        display: none;
+    }
+
+
+    &__container{
+        width: max(320px, 60%);
+        // max-width: max(320px, 60%);
+        background-color: hsl(129, 33%, 94%);
+        min-height: calc(100vh - 4rem);
+        margin-inline: auto;
+        position: relative;
+        // pointer-events:
+
+        @extend %flex-column-around-center;
+
+        .close{
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+
+            height: 2rem;
+            width: 2rem;
+
+            cursor: pointer;
+        }
+
+    }
+
+    &__logo{
+
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+
+    &__link{
+        //todo flex column
+        @extend %flex-column-around-center;
+        gap: 3rem;
+    }
+
+    &__footer{
+        //cta j'adhere / connection
+    }
+
+
+}

@@ -8,7 +8,7 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     static targets = ['navDesktop', 'navMobile']
     static values = {
-        breakpoint : { type : Number, default: 768},
+        breakpoint : { type : Number, default: 769},
     }
 
 
@@ -18,14 +18,13 @@ export default class extends Controller {
     }
 
     connect(){
-        console.log('connect')
         this.getRightNavForm()
     }
 
 
 
     getRightNavForm(){
-        console.log(window.innerWidth,this.breakpointValue,this.isMobile())
+
         if(this.isMobile()){
             this.navDesktopTarget.classList.add("hide")
             this.navMobileTarget.classList.remove("hide")
@@ -36,6 +35,17 @@ export default class extends Controller {
         }
     }
 
+
+
+
+
+    getNavModal(){
+
+            this.dispatch("getModalEvent", { detail: { content: "" } })
+
+    }
+
+
     /**
      * return true if viewport width under breakpointValue 
      * @returns {bool}
@@ -44,4 +54,8 @@ export default class extends Controller {
     {
         return window.innerWidth < this.breakpointValue
     }
+
+
+
+    
 }

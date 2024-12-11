@@ -52,10 +52,22 @@
             }
 
 
+
             &__container{
                 @extend %flex-row-around-center;
                 gap: 1rem;
-                flex-wrap: wrap;
+                
+                
+                @media screen and (max-width:768px) {
+                    &{
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        justify-items: center;
+                        gap:1rem;
+                        // background-color: blue;
+
+                    }
+                }
 
             }
     }
