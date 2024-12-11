@@ -29,6 +29,8 @@ class EvenementsController extends AbstractController
     public function index(): Response
     {
 
+
+
         
 
         return $this->render('evenements/index.html.twig', [
