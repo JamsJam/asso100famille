@@ -21,6 +21,12 @@ nav{
         &__container{
             @extend %flex-row-evenly-center;
             gap: 2.5rem;
+            
+
+            
+            &.hide{
+                display: none;
+            }
         }
         
         
@@ -31,6 +37,15 @@ nav{
 
 
             text-decoration: underline;
+        }
+    }
+
+
+    .navBurger {
+
+        
+        &.hide{
+            display: none;
         }
     }
 }

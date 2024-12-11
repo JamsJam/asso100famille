@@ -26,27 +26,10 @@ class EvenementsController extends AbstractController
 
 
     #[Route('/evenements', name: 'app_evenements')]
-    public function index(ApiFetchService $fetch): Response
+    public function index(): Response
     {
 
-        // // dd($this->event_url);
-        // // dd($fetch->getApiData( $this->event_url.'kg5y2mqolkkbac2l24swf1mb' ));
-        // $evenements = $fetch->getApiData( $this->event_url.'?populate=*');
-        // // dd($evenements);
-        // $new_events = array_map(function ($evenement){
-        //     // Si l'événement est récurrent, mettre à jour la date
-        //     if ($evenement['type_evenement'] === 'recurent') {
-        //         $evenement['date'] = $this->getProchainEvenement($evenement['date_type'][0]['jour']);
-        //     }else{
-        //         $evenement['date'] = $evenement['date_type'][0]['date'];
-        //     }
-            
-        //     // Retourner l'événement, qu'il ait été modifié ou non
-        //     return $evenement;
-        // },$evenements);
         
-        // dd($new_events);
-
 
         return $this->render('evenements/index.html.twig', [
             'events' => [],
