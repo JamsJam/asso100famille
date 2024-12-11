@@ -26,7 +26,29 @@
         </header>
         
         
-            {% block body %}{% endblock %}
+            {% block body %}
+                <div class="modal" {{stimulus_controller('modalmanager')|stimulus_target('modalmanager', 'modal')|stimulus_action('modalmanager','openModal','responsivnav:getModalEvent@window')|stimulus_action('modalmanager','showOnlyOnMobile','resize@window')}}>
+                    <div class="modal__container">
+                        {{ ux_icon('iconamoon:close-bold',{'class':'close', 'data-action':'click->modalmanager#closeModal'}) }}
+                        <div class="logo">
+                            
+                            <a href="{{path('app_home')}}">
+                            {# <img src="" alt="logo Association 100% famille"> #}
+                                Association 100% famille
+                            </a>
+                        </div>
+                        <div class="modal__link">
+                            <a class="{{ app.current_route == 'app_about' ? 'navLink active' : 'navLink' }}" href="{{path('app_about')}}">A propos</a>
+                            <a class="{{ app.current_route == 'app_evenements' ? 'navLink active' : 'navLink' }}" href="{{path('app_evenements')}}">Evenements</a>
+                            <a class="{{ app.current_route == 'app_contact' ? 'navLink active' : 'navLink' }}" href="{{path('app_contact')}}">Contact</a>
+                            
+                        </div>
+                        <div class="modal__footer">
+                            <a class="btn--accent2" href="{{path('app_register')}}">J'adhère</a>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
 
             <twig:Footer />
 
