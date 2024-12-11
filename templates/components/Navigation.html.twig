@@ -1,13 +1,24 @@
-<nav {{attributes}}>
+<nav {{attributes}}
+    {{stimulus_controller('responsivnav')|stimulus_action('responsivnav','getRightNavForm','resize@window')}}
+>
     <a class='logo__container' href="{{path('app_home')}}">
 
         <img class='logo' src="" alt="">
         <span>Association 100% Famille</span>
     </a>
-    <div class="navLink__container">
+    <div class="navLink__container" {{stimulus_target('responsivnav', 'navDesktop')}}>
         <a class="{{ app.current_route == 'app_about' ? 'navLink active' : 'navLink' }}" href="{{path('app_about')}}">A propos</a>
         <a class="{{ app.current_route == 'app_evenements' ? 'navLink active' : 'navLink' }}" href="{{path('app_evenements')}}">Evenements</a>
         <a class="{{ app.current_route == 'app_contact' ? 'navLink active' : 'navLink' }}" href="{{path('app_contact')}}">Contact</a>
         <a class="btn--accent2" href="{{path('app_register')}}">J'adhère</a>
     </div>
+
+    <div class="navBurger" {{stimulus_target('responsivnav', 'navMobile')}}>
+        {{ ux_icon('mingcute:menu-fill',{'class':'nav__burger'})}} 
+
+    </div>
 </nav>
+
+
+
+
