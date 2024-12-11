@@ -7,6 +7,8 @@ use DateInterval;
 use App\Entity\Reservation;
 use App\Service\ApiFetchService;
 use App\Form\Evenement\InscriptionType;
+use App\Repository\OneTimeEventRepository;
+use App\Repository\RecurringEventRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,10 +28,12 @@ class EvenementsController extends AbstractController
 
 
     #[Route('/evenements', name: 'app_evenements')]
-    public function index(): Response
+    public function index(OneTimeEventRepository $oter , RecurringEventRepository $rer): Response
     {
 
 
+        $events1 = $oter->findAll();
+        $events2 = $rer->findAll();
 
         
 
@@ -41,7 +45,7 @@ class EvenementsController extends AbstractController
 
 
     #[Route('/evenement/{id}', name: 'app_evenements_show')]
-    public function show(string $id, Request $request, ApiFetchService $fetch): Response
+    public function show(string $id, Request $request,OneTimeEventRepository $oter, RecurringEventRepository $rer): Response
     {
         $today = new DateTime();
         $sevenDaysLater = new DateTime();
@@ -57,29 +61,29 @@ class EvenementsController extends AbstractController
 
         //?=========== fetch event Data
 
-        $event = $fetch->getApiData($this->event_url.''.$id.'?populate=*');
+        // $event = $fetch->getApiData($this->event_url.''.$id.'?populate=*');
         // dd($event);
-        if ($event['type_evenement'] === 'recurent') {
-            $event['date'] = $this->getProchainEvenement($event['date_type'][0]['jour']);
-        }else{
-            $event['date'] = $event['date_type'][0]['date'];
-        }
+        // if ($event['type_evenement'] === 'recurent') {
+        //     $event['date'] = $this->getProchainEvenement($event['date_type'][0]['jour']);
+        // }else{
+        //     $event['date'] = $event['date_type'][0]['date'];
+        // }
 
-    //?=========== fetch this week event Data
+    // //?=========== fetch this week event Data
 
-    $events = $fetch->getApiData($this->event_url . '?populate=*');
-    $thisWeekEvents = array_filter($events, function ($evenement) use ($today, $sevenDaysLater) {
-        // Mettre à jour la date si l'événement est récurrent
-        if ($evenement['type_evenement'] === 'recurent') {
-            $evenement['date'] = $this->getProchainEvenement($evenement['date_type'][0]['jour']);
-        } else {
-            $evenement['date'] = $evenement['date_type'][0]['date'];
-        }
+    // $events = $fetch->getApiData($this->event_url . '?populate=*');
+    // $thisWeekEvents = array_filter($events, function ($evenement) use ($today, $sevenDaysLater) {
+    //     // Mettre à jour la date si l'événement est récurrent
+    //     if ($evenement['type_evenement'] === 'recurent') {
+    //         $evenement['date'] = $this->getProchainEvenement($evenement['date_type'][0]['jour']);
+    //     } else {
+    //         $evenement['date'] = $evenement['date_type'][0]['date'];
+    //     }
 
-        // Vérifier si la date de l'événement est comprise entre aujourd'hui et dans 7 jours
-        $eventDate = new DateTime($evenement['date']);
-        return $eventDate >= $today && $eventDate <= $sevenDaysLater;
-    });
+    //     // Vérifier si la date de l'événement est comprise entre aujourd'hui et dans 7 jours
+    //     $eventDate = new DateTime($evenement['date']);
+    //     return $eventDate >= $today && $eventDate <= $sevenDaysLater;
+    // });
 
 
         //?=========== form handle
@@ -90,8 +94,8 @@ class EvenementsController extends AbstractController
         }
 
         return $this->render('evenements/show.html.twig', [
-            'event' => $event,
-            'thisWeek' => $thisWeekEvents,
+            // 'event' => $event,
+            // 'thisWeek' => $thisWeekEvents,
             'form' => $form
         ]);
     }

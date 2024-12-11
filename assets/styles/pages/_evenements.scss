@@ -37,12 +37,22 @@
             li{
                 font-size: $text-40-24-desk;
                 margin-block: 1rem;
+
+                @media screen and (max-width:768px) {
+                    font-size: $text-24-16-mob;
+                }
             }
         }
 
         &__image{
             img{
-                aspect-ratio: 1.37/1;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-fit:center;
+            }
+            @media screen and (max-width:768px) {
+                display: none;
             }
         }
     }
