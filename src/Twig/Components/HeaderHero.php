@@ -15,6 +15,8 @@ final class HeaderHero
 
     public ?string $cta ;
 
+    public ?string $ctalink ;
+
     public ?string $img;
 
     public ?bool   $bento = false;
