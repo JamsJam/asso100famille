@@ -39,7 +39,7 @@ export default class extends Controller {
     }
 
     showOnlyOnMobile(){
-        if(isMobile()){
+        if(this.isMobile()){
             this.showModal()
 
         }else{
