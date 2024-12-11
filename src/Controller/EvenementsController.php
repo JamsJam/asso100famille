@@ -18,12 +18,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 class EvenementsController extends AbstractController
 {
 
-    private $event_url;
-
-    public function __construct(string $strapi_event_url)
-        {
-            $this->event_url = $strapi_event_url;
-        }
 
 
 
