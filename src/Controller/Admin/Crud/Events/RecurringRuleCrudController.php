@@ -28,8 +28,9 @@ class RecurringRuleCrudController extends AbstractCrudController
         return [
             
             FormField::addRow(),
-            ChoiceField::new('recurringRule.daysOfWeek', 'Tous les ...')
-                ->allowMultipleChoices(true)
+            ChoiceField::new('daysOfWeek', 'Tous les ...')
+                ->allowMultipleChoices(false)
+                ->renderExpanded(true)
                 ->setChoices([
                     'Lundi' => 'monday',
                     'Mardi' => 'tuesday',
@@ -43,15 +44,15 @@ class RecurringRuleCrudController extends AbstractCrudController
                     'attr' => [
                         'style' => 'display:flex;justify-content:start;flex-wrap:wrap;align-items:center;gap:1rem', 
                         ]
+                        ,
                     ])
-                ->renderExpanded(true)
                 ->setRequired(true)
                 ->setColumns(6),
 
-            BooleanField::new('recurringRule.until', 'Jusqu\'à')
+            BooleanField::new('isActive', 'Actif ')
                 ->setRequired(false)
                 ->setColumns(6)
-                ->hideOnForm(),
+                // ->hideOnForm(),
     
         ];
     }

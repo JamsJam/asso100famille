@@ -104,8 +104,8 @@ class OneTimeEventCrudController extends AbstractCrudController
                 ->setUploadDir('public/images/upload/events')
                 ->setUploadedFileNamePattern('[timestamp]-[randomhash].[extension]')
                 ->setFormTypeOptions([
+                    'required'=> false,
                     'attr' =>[
-                        'require'=> false,
 
                         "data-action"=>"change->cropper#loadImage"
                         ]

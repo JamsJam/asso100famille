@@ -19,17 +19,18 @@ class RecurringEventRepository extends ServiceEntityRepository
     //    /**
     //     * @return RecurringEvent[] Returns an array of RecurringEvent objects
     //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       public function findActivEvents(): array
+       {
+            return $this->createQueryBuilder('r')
+                ->addSelect('a')
+                ->innerJoin('r.recurringRule','a')
+                ->andWhere('a.isActive = :val')
+                ->setParameter('val', true)
+                ->orderBy('r.startDate', 'ASC')
+                ->getQuery()
+                ->getResult()
+            ;
+       }
 
     //    public function findOneBySomeField($value): ?RecurringEvent
     //    {

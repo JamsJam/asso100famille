@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\OneTimeEvent;
-use App\Entity\RecurringEvent;
-use App\Repository\OneTimeEventRepository;
-use App\Repository\RecurringEventRepository;
 use DateTime;
 use DateInterval;
+use App\Entity\OneTimeEvent;
+use App\Entity\RecurringEvent;
 use App\Service\ApiFetchService;
+use App\Service\RecurringEventsService;
+use App\Repository\OneTimeEventRepository;
+use App\Repository\RecurringEventRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,17 +20,30 @@ class HomeController extends AbstractController
 
 
     #[Route('/', name: 'app_home')]
-    public function index(OneTimeEventRepository $oter , RecurringEventRepository $rer ): Response
+    public function index(OneTimeEventRepository $oter , RecurringEventRepository $rer,RecurringEventsService $recurringEventsService ): Response
     {
-        $today = new DateTime();
-        $sevenDaysLater = (new DateTime())->add(new DateInterval('P7D'));
+        // $today = new DateTime();
+        // $sevenDaysLater = (new DateTime())->add(new DateInterval('P7D'));
 
-        $events = $oter->findAll();
-        // dd($events,$rer->findAll());
+        // $events = $oter->findAll();
+        // // dd($events,$rer->findAll());
+
+
+        $today = new \DateTimeImmutable();
+
+        $ponctualEvents = $oter->findThisWeekEvent($today);
+        $recurringEvents = $rer->findActivEvents();
+
+        $events = array_merge($ponctualEvents,$recurringEventsService->getOccurrences($recurringEvents,$today,$today->modify("+7 day")));
+
+        
+        usort($events, function ($a, $b) {
+            return $a->getStartDate() <=> $b->getStartDate();
+        });
 
 
         return $this->render('home/index.html.twig', [
-            'events' => [] ,
+            'events' => $events ,
         ]);
     }
 
