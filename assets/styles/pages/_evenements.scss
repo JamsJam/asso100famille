@@ -22,10 +22,6 @@
 
     .typeEvents{
 
-
-
-
-
         &__content{
 
             @extend %flex-row-center;
@@ -53,6 +49,19 @@
             }
             @media screen and (max-width:768px) {
                 display: none;
+            }
+        }
+    }
+
+    section.eventCalender{
+
+        .event{
+
+            
+            &__containers{
+                @extend %flex-column-center-start;
+                gap: 2rem;
+
             }
         }
     }
