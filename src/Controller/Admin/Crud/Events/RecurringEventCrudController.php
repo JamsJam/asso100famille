@@ -125,135 +125,116 @@ class RecurringEventCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
 
+        yield FormField::addFieldset('Date');
+        yield TextField::new('title','Titre')
+            ->setSortable(true);
+        yield TextEditorField::new('description','Description')
+            ->setSortable(true)
+            ->hideOnIndex();
+    //? ==========================================
+    //? ==========================================
+    //? ==========================================
+        yield FormField::addFieldset('Dates et Horaire de l\'évenement');
+        yield FormField::addRow();
+        yield DateField::new('startDate','Date de début')
+            ->setFormTypeOptions([
+                "input" => "datetime_immutable"
+            ])
+            ->setColumns(6)
+            ->setSortable(true);
+    //? ==========================================
+    //? ==========================================
+    //? ==========================================
+        yield FormField::addRow();
+        yield TimeField::new('startHour', 'Heure de l\'evenement')
+            ->setColumns(6)
+            ->setSortable(true);
+        yield TimeField::new('endHour','Heure de fin')
+            ->setColumns(6)
+            ->setSortable(true);
 
-            // FormField::addTab('Evenement'),
-            FormField::addFieldset('Date'),
-            TextField::new('title','Titre')
-                ->setSortable(true)
-            ,
-            TextEditorField::new('description','Description')
-                ->setSortable(true)
-            ,
-            FormField::addFieldset('Dates et Horaire de l\'évenement'),
-            FormField::addRow(),
-            DateField::new('startDate','Date de début')
-                ->setFormTypeOptions([
-                    "input" => "datetime_immutable"
-                ])
-                ->setColumns(6)
-                ->setSortable(true)
-            ,
-            // DateField::new('endDate','Date de fin')
-            //     ->setColumns(6)
-            //     ->setSortable(true)
-            // ,
+        yield FormField::addRow();
 
-            FormField::addRow(),
-            TimeField::new('startHour', 'Heure de l\'evenement')
-                ->setColumns(6)
-                ->setSortable(true)
-            ,
-            TimeField::new('endHour','Heure de fin')
-                ->setColumns(6)
-                ->setSortable(true)
-            ,
-            FormField::addRow(),
-            AssociationField::new('recurringRule', 'Récurrence')
-                ->renderAsEmbeddedForm(RecurringRuleCrudController::class)
-                // ->setRequired(false) // Rendre le champ optionnel
+        if(Crud::PAGE_EDIT == $pageName || Crud::PAGE_NEW == $pageName ){
+            yield AssociationField::new('recurringRule', 'Récurrence')
+                ->renderAsEmbeddedForm(RecurringRuleCrudController::class,"admin_recurring_rule_create","admin_recurring_rule_edit")
                 ->setFormTypeOptions([
                     'by_reference' => false,  // Important pour gérer la relation sans redirection
-                ])
-                ->onlyOnForms()  // Afficher uniquement dans le formulaire
-                ->hideOnIndex()
+                    ])
+                // ->onlyOnForms()  // Afficher uniquement dans le formulaire
+                // ->hideOnIndex()
                 ->setColumns(12)
-                , 
+            ;
+        }
 
-            FormField::addFieldset('Prix de l\'évenement'),
+        if(Crud::PAGE_INDEX == $pageName || Crud::PAGE_DETAIL == $pageName){
 
-            BooleanField::new('isFree', 'Evenement gratuit ?')
-            // ->setColumns(12)
-            
-            ,
-            FormField::addRow(),
-            MoneyField::new('price', 'Prix')
-                ->setColumns(6)
-                ->setCurrency('EUR')
-                ->setNumDecimals(2)
-                ,
-            MoneyField::new('userPrice', 'Prix Abonné')
-                ->setColumns(6)
-                ->setCurrency('EUR')
-                ->setNumDecimals(2),
-        
-
-            FormField::addFieldset('Image'),
-            FormField::addRow(),
-            ImageField::new('image')
-                ->setBasePath('/images/upload/events')
-                ->setUploadDir('public/images/upload/events')
-                ->setUploadedFileNamePattern('[timestamp]-[randomhash].[extension]')
-                ->setFormTypeOptions([
-                    'attr' =>[
-                        'require'=> false,
-
-                        "data-action"=>"change->cropper#loadImage"
-                        ]
+            yield ChoiceField::new('RecurringRule.daysOfWeek', 'Tous les ...')
+                ->allowMultipleChoices(false)
+                ->renderExpanded(true)
+                ->setChoices([
+                    'Lundi' => 'monday',
+                    'Mardi' => 'tuesday',
+                    'Mercredi' => 'wednesday',
+                    'Jeudi' => 'thursday',
+                    'Vendredi' => 'friday',
+                    'Samedi' => 'saturday',
+                    'Dimanche' => 'sunday',
                 ])
-                ->setColumns(6),
+                ->setRequired(false)
+                ->setColumns(6)
 
-            // FormField::addFieldset('Aperçu image'),
-            TextField::new('crop', 'Aperçu')
                 ->setFormTypeOptions([
-                    'mapped'=>'false',
-                    'block_name' => 'crop_image'
-                ])
-                ->onlyOnForms()
-                ->setColumns(6),
+                    'attr' => [
+                        'style' => 'display:flex;justify-content:start;flex-wrap:wrap;align-items:center;gap:1rem', 
+                        ],
+                    ]);
+            yield BooleanField::new('RecurringRule.isActive', 'Actif ')
+                    ->setRequired(false)
+                    ->setColumns(6);
 
-
-
-
-            // FormField::addTab('Regle de récurrence'),
-            
-             // AssociationField pour gérer la règle de récurrence
-             // Masquer ce champ dans la liste des événements récurrents
-
-
-            // Vous pouvez aussi ajouter des champs pour la création de la règle directement dans ce formulaire.
-
-        //     ChoiceField::new('frequency', 'Fréquence')
-        //         ->setChoices([
-        //             'Quotidienne' => 'daily',
-        //             'Hebdomadaire' => 'weekly',
-        //             'Mensuelle' => 'monthly',
-        //         ])
-        //         ->setRequired(false),
-        //     IntegerField::new('finterval', 'Intervalle')
-        //         ->setRequired(false),
-        //     ChoiceField::new('daysOfWeek', 'Jours de la semaine')
-        //         ->allowMultipleChoices(true)
-        //         ->setChoices([
-        //             'Lundi' => 'monday',
-        //             'Mardi' => 'tuesday',
-        //             'Mercredi' => 'wednesday',
-        //             'Jeudi' => 'thursday',
-        //             'Vendredi' => 'friday',
-        //             'Samedi' => 'saturday',
-        //             'Dimanche' => 'sunday',
-        //         ])
-        //         ->renderExpanded(true)
-        //         ->setRequired(false),
-        //     DateTimeField::new('until', 'Jusqu\'à')
-        //         ->setRequired(false),
-        ];
                 
-
-        
-
+        }
+    //? ==========================================
+    //? ==========================================
+    //? ==========================================
+        yield FormField::addFieldset('Prix de l\'évenement')->hideOnIndex();;
+        yield BooleanField::new('isFree', 'Evenement gratuit ?')
+            ->hideOnIndex();
+        yield FormField::addRow();
+        yield MoneyField::new('price', 'Prix')
+            ->setColumns(6)
+            ->setCurrency('EUR')
+            ->setNumDecimals(2)
+            ->hideOnIndex();
+        yield MoneyField::new('userPrice', 'Prix Abonné')
+            ->setColumns(6)
+            ->setCurrency('EUR')
+            ->setNumDecimals(2)
+            ->hideOnIndex();
+    //? ==========================================
+    //? ==========================================
+    //? ==========================================
+        yield FormField::addFieldset('Image');
+        yield FormField::addRow();
+        yield ImageField::new('image')
+            ->setBasePath('/images/upload/events')
+            ->setUploadDir('public/images/upload/events')
+            ->setUploadedFileNamePattern('[timestamp]-[randomhash].[extension]')
+            ->setColumns(6)
+            ->setFormTypeOptions([
+                "required"=> false,
+                "attr" =>[
+                    "data-action"=>"change->cropper#loadImage"
+                    ]
+            ]);
+        yield TextField::new('crop', 'Aperçu')
+            ->setFormTypeOptions([
+                'mapped'=>'false',
+                'block_name' => 'crop_image'
+            ])
+            ->onlyOnForms()
+            ->setColumns(6);
     }
-
-
 }

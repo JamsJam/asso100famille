@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RecurringRuleRepository;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Boolean;
+
 
 #[ORM\Entity(repositoryClass: RecurringRuleRepository::class)]
 class RecurringRule
@@ -23,7 +23,7 @@ class RecurringRule
     // private ?int $finterval = null;
 
     #[ORM\Column]
-    private array $daysOfWeek = [];
+    private ?string $daysOfWeek = null;
 
     #[ORM\Column]
     private bool $isActive = true;
@@ -38,12 +38,12 @@ class RecurringRule
 
  
 
-    public function getDaysOfWeek(): array
+    public function getDaysOfWeek(): ?string
     {
         return $this->daysOfWeek;
     }
 
-    public function setDaysOfWeek(array $daysOfWeek): static
+    public function setDaysOfWeek(?string $daysOfWeek): static
     {
         $this->daysOfWeek = $daysOfWeek;
 
@@ -62,7 +62,7 @@ class RecurringRule
     //     return $this;
     // }
 
-    public function isActive(bool $isActive): bool
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -73,4 +73,13 @@ class RecurringRule
 
         return $this;
     }
+
+    // public function __toString(): string
+    // {
+    //     // Adaptez ceci en fonction des propriétés pertinentes de RecurringRule
+    //     return $this->daysOfWeek ? implode(', ', $this->daysOfWeek) : 'Règle de récurrence';
+
+    // }
+
+
 }

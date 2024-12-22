@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\OneTimeEvent;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,33 +17,31 @@ class OneTimeEventRepository extends ServiceEntityRepository
         parent::__construct($registry, OneTimeEvent::class);
     }
 
-    public function findThisWeekEvent($today): ?OneTimeEvent
+    public function findThisWeekEvent($today): ? array
     {
-        $qb =  $this->createQueryBuilder('p');
-        $qb ->andWhere( $qb->expr()->between(':today', 'p.startDate', 'p.$endDate'))
-            ->setParameter('today', $today)
-            
-            
+        ($qb = $this->createQueryBuilder('e'))
+                ->andWhere($qb->expr()->between('e.startDate', ':today', ':NextDay'))
+                ->orderBy('e.id', 'ASC')
+                ->setParameter('today', $today)
+                ->setParameter('NextDay', $today->modify("+1 week"));
 
-        ;
-
-        return  $qb->getQuery()->getResult();
+            return $qb ->getQuery()->getResult();
     }
 
     //    /**
     //     * @return OneTimeEvent[] Returns an array of OneTimeEvent objects
     //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       public function findThisMonthEvent(\DateTimeImmutable $today): array
+       {
+
+            ($qb = $this->createQueryBuilder('e'))
+                ->andWhere($qb->expr()->between('e.startDate', ':today', ':NextDay'))
+                ->orderBy('e.id', 'ASC')
+                ->setParameter('today', $today)
+                ->setParameter('NextDay', $today->modify("+1 month"));
+
+            return $qb ->getQuery()->getResult();
+       }
 
     //    public function findOneBySomeField($value): ?OneTimeEvent
     //    {

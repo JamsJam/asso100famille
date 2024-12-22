@@ -7,15 +7,17 @@
     </div>
     <div class="events__card__details">
 
-        <h3>{{event.titre}}</h3>
-        <div class="events__info">
+        <h3>{{event.title}}</h3>
+        <div class="events__info" {{stimulus_controller('wordbreak')}}>
 
             {# {% if event[type_evenement] == 'ponctuel' %}{% endif %} #}
-            <p>{{event.date|date('d/m/Y')}}</p>
-            <p>{{event.heure_debut|date('H:i')}} - {{event.heure_fin|date('H:i')}}</p>
-            <p>{{event.description}}</p>
+            <p>{{event.startDate|date('d/m/Y')}}</p>
+            <p>{{event.startHour|date('H:i')}} - {{event.endHour|date('H:i')}}</p>
+            <p class='description' {{stimulus_target('wordbreak', 'description')}}>
+                {{event.description}}
+            </p>
         </div>
-        <a class="btn--accent1" href="{{path('app_evenements_show',{'id': event.documentId})}}"> S'inscrire</a>
+        <a class="btn--accent1" href="{{path('app_evenements_show',{'id': event.id, 'type':event.recurringRule is defined ? "recurring" : "ponctuel" })}}"> S'inscrire</a>
     </div>
 </div>
 
