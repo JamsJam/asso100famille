@@ -8,6 +8,7 @@
     <section class="header">
         <twig:HeaderHero
             event="{{event}}"
+            typeEvent="{{type_event}}"
             
             img="{{asset('images/Rectangle_19.jpg')}}"
         />
@@ -15,9 +16,9 @@
 
     <section class="inscription">
         <h2>S'inscrire</h2>
-            <pre>
+            {# <pre>
                 {{ dump(event) }}
-            </pre>
+            </pre> #}
 
         <div class="form__container">
             {{form_start(form)}}
@@ -35,22 +36,22 @@
                     </div>
                 </div>
 
-                {% if event.payant %}
+                {% if not event.isFree %}
                     <div class="form_prix">
                         {% if app.user %}
-                            <p>Prix : {{event.prix_adherant}}</p>
+                            <p>Prix : {{(event.userPrice / 100)|number_format(2,'.')}}</p>
                         {% else %}
-                            <p>Prix : {{event.prix}}€</p>
+                            <p>Prix : {{(event.price / 100)|number_format(2,'.')}}€</p>
                             
                         {% endif %}
                     </div>
                 {% endif %}
                     
-                <button type='submit' class="btn--accent1" href="{{path('app_evenements_show',{'id': event.documentId})}}"> S'inscrire</button>
+                <button type='submit' class="btn--accent1" data-turbo=false href="{{path('app_evenements_show',{'id': event.id})}}"> S'inscrire</button>
             {{form_end(form)}}
 
             <div class="info-section">
-                <h3>{{event.titre}}</h3>
+                <h3>{{event.title}}</h3>
                 <p>Pour participer à cet événement, il est nécessaire de réserver votre place.</p>
                 <p>Si vous avez des questions n'hésitez pas à <a href='{{path('app_contact')}}'>nous contacter</a>.</p>
             </div>
@@ -65,11 +66,11 @@
         </h2>
 
         <div class="event__containers">
-            {% for event in thisWeek %}
+            {# {% for event in thisWeek %}
                 <twig:EventCard 
                     event="{{event}}"
                 />
-            {% endfor %}
+            {% endfor %} #}
             
         </div>
     </section>

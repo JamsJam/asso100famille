@@ -2,19 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\RecurringEvent;
 use DateTime;
 use DateInterval;
+use DateTimeImmutable;
+use Stripe\StripeClient;
 use App\Entity\Reservation;
+use App\Entity\RecurringEvent;
 use App\Service\ApiFetchService;
 use App\Form\Evenement\InscriptionType;
+use App\Service\RecurringEventsService;
 use App\Repository\OneTimeEventRepository;
 use App\Repository\RecurringEventRepository;
-use App\Service\RecurringEventsService;
-use DateTimeImmutable;
+use App\Service\StripeService;
+use Stripe\V2\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
@@ -54,7 +58,7 @@ class EvenementsController extends AbstractController
 
 
     #[Route('/evenement/{id}', name: 'app_evenements_show')]
-    public function show(string $id, Request $request,OneTimeEventRepository $oter, RecurringEventRepository $rer, RecurringEventsService $recurringEventsService): Response
+    public function show(string $id, Request $request,OneTimeEventRepository $oter, RecurringEventRepository $rer, RecurringEventsService $recurringEventsService,StripeService $stripeService): Response
     {
         $today = new DateTime();
         $sevenDaysLater = new DateTime();
@@ -68,42 +72,47 @@ class EvenementsController extends AbstractController
         $form->handleRequest($request);
 
 
-        //?=========== fetch event Data
+        //?=========== get type Event from post parameter
 
-        // $event = $fetch->getApiData($this->event_url.''.$id.'?populate=*');
-        // dd($event);
-        // if ($event['type_evenement'] === 'recurent') {
-        //     $event['date'] = $this->getProchainEvenement($event['date_type'][0]['jour']);
-        // }else{
-        //     $event['date'] = $event['date_type'][0]['date'];
-        // }
+        $typeEvent = $request->query->get('type');
 
-    // //?=========== fetch this week event Data
 
-    // $events = $fetch->getApiData($this->event_url . '?populate=*');
-    // $thisWeekEvents = array_filter($events, function ($evenement) use ($today, $sevenDaysLater) {
-    //     // Mettre à jour la date si l'événement est récurrent
-    //     if ($evenement['type_evenement'] === 'recurent') {
-    //         $evenement['date'] = $this->getProchainEvenement($evenement['date_type'][0]['jour']);
-    //     } else {
-    //         $evenement['date'] = $evenement['date_type'][0]['date'];
-    //     }
+        //?=========== get event 
 
-    //     // Vérifier si la date de l'événement est comprise entre aujourd'hui et dans 7 jours
-    //     $eventDate = new DateTime($evenement['date']);
-    //     return $eventDate >= $today && $eventDate <= $sevenDaysLater;
-    // });
+        $event = match ($typeEvent) {
+            'ponctuel'=> $oter->findOneBy(['id'=>$id]),
+            'recurring'=> $rer->findOneBy(['id'=>$id]),
+            default => 'none',
+        };
+        if($event === 'none'){
+            return $this->redirectToRoute('app_home');
+        }
+
+        //?=========== get event  of the month
+        // $thisWeekEvent = ;
 
 
         //?=========== form handle
         if ($form->isSubmitted() && $form->isValid()){
             
-            //stripe
+            // dd($form->getData(), $event);
+            $price = $this->getUser() ? $event->getPrice() : $event->getUserPrice() ;
+            $produit = [
+                "productName" => $event->getTitle(),
+                "quantity"=>$form->getData()->getQuantity(),
+                "amount"=>$price,
+                'type'=> "payment",
+                "interval"=> null
+            ];
+            
+
+            return $this->redirect($stripeService->createCheckoutSession($produit));
 
         }
 
         return $this->render('evenements/show.html.twig', [
-            // 'event' => $event,
+            'event' => $event,
+            'type_event'=> $typeEvent,
             // 'thisWeek' => $thisWeekEvents,
             'form' => $form
         ]);

@@ -18,9 +18,7 @@
         }
     }
 
-    .inscription{
-
-
+    .inscription{ 
         .form__container{
 
             @extend %flex-row-center-stretch;
@@ -33,7 +31,6 @@
                 gap: 2rem;
                 padding: 4rem 2rem;
                 background-color: $bg-clair1;
-                
                 
                 &>div{
                     @extend %flex-column-center-stretch;
@@ -69,8 +66,6 @@
                             border: 1px solid black;
                         }
                     }
-
-                    
                 }
                 .form_prix{
                     p{
@@ -101,6 +96,29 @@
 
                     &:hover{
                         color: $accent1;
+                    }
+                }
+            }
+
+            @media screen and (max-width:768px) {
+                &{
+
+                    flex-direction: column-reverse;
+
+                    form,.info-section{
+                        width: 100%;
+                    }
+                    .info-section{
+                        padding-block: 2rem;
+                    }
+                    form{
+
+
+                        
+                        button[type='submit']{
+                            align-self: center;
+
+                        }
                     }
                 }
             }
