@@ -40,14 +40,16 @@
                     {{form_label(form.adhesionFamille)}}
                     {{form_help(form.adhesionFamille)}}
                     </div>
-
-                    <p>30€</p>
-
+                    <div class="form__value">
                     
-                    <div class="counter" {{stimulus_controller('counter')}}>
-                        <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
-                        {{form_widget(form.adhesionFamille,{attr: stimulus_target('counter', 'counter').toArray() })}}
-                        <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        <p>30€</p>
+
+                        
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.adhesionFamille,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
                     </div>
                 </div>
                 <div class="form__line">
@@ -56,17 +58,18 @@
                         {{form_label(form.adhesionBienfaiteur)}}
                         {{form_help(form.adhesionBienfaiteur)}}
                     </div>
+                    <div class="form__value">
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                                {{form_widget(form.adhesionBienfaiteurPrix,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
 
-                    <div class="counter" {{stimulus_controller('counter')}}>
-                        <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
-                            {{form_widget(form.adhesionBienfaiteurPrix,{attr: stimulus_target('counter', 'counter').toArray() })}}
-                        <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
-                    </div>
-
-                    <div class="counter" {{stimulus_controller('counter')}}>
-                        <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
-                        {{form_widget(form.adhesionBienfaiteur,{attr: stimulus_target('counter', 'counter').toArray() })}}
-                        <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        <div class="counter" {{stimulus_controller('counter')}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
+                            {{form_widget(form.adhesionBienfaiteur,{attr: stimulus_target('counter', 'counter').toArray() })}}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        </div>
                     </div>
                 </div>
 
