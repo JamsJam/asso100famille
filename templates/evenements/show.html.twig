@@ -23,15 +23,19 @@
         <div class="form__container">
             {{form_start(form)}}
 
+            {% if not app.user %}
+                
                 {{form_row(form.nom)}}
                 {{form_row(form.prenom)}}
+                {{form_row(form.email)}}
+            {% endif %}
 
                 <div class="quantity__container">
                     {{form_label(form.quantity)}}
                     <div class="quantity__counter">
 
                         <button type="button" id="decrease">-</button>
-                        {{form_widget(form.quantity)}}
+                            {{form_widget(form.quantity)}}
                         <button type="button" id="increase">+</button>
                     </div>
                 </div>
@@ -66,11 +70,11 @@
         </h2>
 
         <div class="event__containers">
-            {# {% for event in thisWeek %}
+            {% for event in thisWeek %}
                 <twig:EventCard 
                     event="{{event}}"
                 />
-            {% endfor %} #}
+            {% endfor %}
             
         </div>
     </section>

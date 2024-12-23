@@ -124,4 +124,17 @@
             }
         }
     }
+
+    section.eventCalender{
+
+        .event{
+
+            
+            &__containers{
+                @extend %flex-column-center-start;
+                gap: 2rem;
+
+            }
+        }
+    }
 }

@@ -9,13 +9,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class StripeService
 {
-//     private $stripeSecretKey;
-
-//     public function __construct(string $stripeSecretKey)
-//     {
-//         $this->stripeSecretKey = $stripeSecretKey;
-//         Stripe::setApiKey($this->stripeSecretKey);
-//     }
 
 
 
@@ -38,20 +31,23 @@ class StripeService
         ?string $cancelUrl = null
     ): string 
     {
-        // Vérifier que le tableau de produits n'est pas vide
-        if (empty($products)) {
-            throw new \InvalidArgumentException('Le tableau de produits ne peut pas être vide.');
-        }
+
 
         $stripe = new StripeClient($this->stripeSecretKey);
-        $lineItem = [];
-        $mode = 'payment'; // Par défaut, mode pour les paiements uniques
-        // default sucess and cancel
-        $successRedirect = $successUrl || $this->urlGenerator->generate("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL);
-        $cancelRedirect  = $cancelUrl || $this->urlGenerator->generate("app_stripe_cancel",[],UrlGeneratorInterface::ABSOLUTE_URL);
+
+        //? ================= set Default Parameters
+            $lineItem = [];
+            $mode = 'payment'; // Par défaut, mode pour les paiements uniques
+            // default sucess and cancel
+            $successRedirect = $successUrl || $this->urlGenerator->generate("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL);
+            $cancelRedirect  = $cancelUrl || $this->urlGenerator->generate("app_stripe_cancel",[],UrlGeneratorInterface::ABSOLUTE_URL);
 
         foreach ($products as $product) {
         //? ================= Error Checking
+                    // Vérifier que le tableau de produits n'est pas vide
+            if (empty($products)) {
+                throw new \InvalidArgumentException('Le tableau de produits ne peut pas être vide.');
+            }
             if (!isset($product['productName'], $product['amount'], $product['quantity'], $product['type'])) {
                 throw new \InvalidArgumentException(
                     'Chaque produit doit contenir "productName", "amount", "quantity", et "type".'
