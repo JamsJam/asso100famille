@@ -126,6 +126,7 @@
                 padding:1rem;
 
                 @extend %flex-row-end-center;
+                gap: 1rem
             }
             
             .boutons_container{

@@ -14,13 +14,13 @@
         />
     </section>
 
-    {# <turbo-frame id="progressbar"> #}
+    <turbo-frame id="progressbar">
         <section class="progressbar__container">
             <twig:Progressbar 
-            step='{{ 1|number_format }}'
+            step='{{ step|number_format }}'
             />
         </section>
-    {# </turbo-frame> #}
+    </turbo-frame>
 
 
     <turbo-frame id="form">
@@ -29,29 +29,34 @@
             <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
         {% endfor %}
 
-        <section class="form__container" {{stimulus_controller('formregister')}}>
+        <section class="form__container" {{stimulus_controller('formregister')}} data-step=1>
             
         
             {{ form_errors(form) }}
 
-            {{ form_start(form) }}
+            {{ form_start(form, {attr :{ 
+                "data-controller":'totalcalculator', 
+                "data-action":"counter:totalchange->totalcalculator#updateTotal"
+            }})}}
+            {# {{ form_start(form, { attr: stimulus_controller('chart').toArray() }) }} #}
                 <div class="form__line">
                     <div>
                     {{form_label(form.adhesionFamille)}}
                     {{form_help(form.adhesionFamille)}}
                     </div>
                     <div class="form__value">
-                    
-                        <p>30€</p>
+
+                        <p {{ stimulus_target('totalcalculator','html1') }}>30€</p>
 
                         
-                        <div class="counter" {{stimulus_controller('counter')}}>
-                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
-                            {{form_widget(form.adhesionFamille,{attr: stimulus_target('counter', 'counter').toArray() })}}
-                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        <div class="counter" {{ stimulus_controller('counter', {'mincount' : 1 }) }}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')|stimulus_target('counter','btndecrease')}}>-</button>
+                            {{form_widget(form.adhesionFamille,{ attr: { 'data-counter-target': 'counter', 'data-totalcalculator-target': 'htmlquantity1' } }) }}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')|stimulus_target('counter','btnincrease')}}>+</button>
                         </div>
                     </div>
                 </div>
+
                 <div class="form__line">
                 
                     <div>
@@ -59,16 +64,16 @@
                         {{form_help(form.adhesionBienfaiteur)}}
                     </div>
                     <div class="form__value">
-                        <div class="counter" {{stimulus_controller('counter')}}>
-                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
-                                {{form_widget(form.adhesionBienfaiteurPrix,{attr: stimulus_target('counter', 'counter').toArray() })}}
-                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        <div class="counter" {{stimulus_controller('counter',{'mincount' : 80})}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')|stimulus_target('counter','btndecrease')}}>-</button>
+                                {{form_widget(form.adhesionBienfaiteurPrix,{attr: { 'data-counter-target': 'counter', 'data-totalcalculator-target': 'input1' } }) }}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')|stimulus_target('counter','btnincrease')}}>+</button>
                         </div>
 
-                        <div class="counter" {{stimulus_controller('counter')}}>
-                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')}}>-</button>
-                            {{form_widget(form.adhesionBienfaiteur,{attr: stimulus_target('counter', 'counter').toArray() })}}
-                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')}}>+</button>
+                        <div class="counter" {{stimulus_controller('counter',{'mincount' : 0})}}>
+                            <button type="button" id="decrease" {{stimulus_action('counter','decreaseCount', 'click')|stimulus_target('counter','btndecrease')}}>-</button>
+                            {{form_widget(form.adhesionBienfaiteur,{attr: { 'data-counter-target': 'counter', 'data-totalcalculator-target': 'quantity1' } }) }}
+                            <button type="button" id="increase" {{stimulus_action('counter','increaseCount', 'click')|stimulus_target('counter','btnincrease')}}>+</button>
                         </div>
                     </div>
                 </div>
@@ -82,20 +87,23 @@
                         {% for radio in form.don %}
                             <div class="radio__container">
                                 {{form_label(radio)}}
-                                {{form_widget(radio,{ attr : stimulus_action('formregister', 'isCustomHandle','change').toArray()})}}
+                                {{form_widget(radio,{ attr : {
+                                        "data-totalcalculator-target":"radio",
+                                        "data-action":"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                                    }})}}
                             </div>
                         {% endfor %}
 
                     </div>
 
-                    <div class="custom__container" id="customDonation" {{stimulus_target('formregister', 'customDonation')}}>
+                    <div class="custom__container" id="customDonation" {{stimulus_target('formregister', 'customDonation')}}|>
                         {{form_widget(form.customAmount)}}
                         {{form_help(form.customAmount)}}
                     </div>
                 </div>
 
                 <div class="totaux_container">  
-                    <div class="totaux">
+                    <div class="totaux" {{stimulus_target('totalcalculator','total')}}>
                         xxx
                     </div>
                 </div>

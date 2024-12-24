@@ -14,13 +14,13 @@
         />
     </section>
 
-    {# <turbo-frame id="progressbar"> #}
+    <turbo-frame id="progressbar">
         <section class="progressbar__container">
             <twig:Progressbar 
             step='{{ 1|number_format }}'
             />
         </section>
-    {# </turbo-frame> #}
+    </turbo-frame>
 
 
     <turbo-frame id="form">
@@ -29,7 +29,7 @@
             <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
         {% endfor %}
 
-        <section class="form__container adherant" {{stimulus_controller('formregister')}}>
+        <section class="form__container adherant" {{stimulus_controller('formregister')}} data-step=3>
             
         
             {{ form_errors(form) }}
@@ -83,8 +83,8 @@
 
 
                 <div class="boutons_container">
-                    <button class="btn--accent3" >précédents</button>
-                    <button class="btn--accent3" >Suivant</button>
+                    <a class="button--accent3"  href="{{path('app_register_adherant')}}" >Précédents</a>
+                    <button class="btn--accent3"  >Suivant</button>
                 </div>
             {{form_end(form)}}
         </section>

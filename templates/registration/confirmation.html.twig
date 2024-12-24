@@ -14,13 +14,13 @@
         />
     </section>
 
-    {# <turbo-frame id="progressbar"> #}
+    <turbo-frame id="progressbar">
         <section class="progressbar__container">
             <twig:Progressbar 
             step='{{ 4|number_format }}'
             />
         </section>
-    {# </turbo-frame> #}
+    </turbo-frame>
 
 
     <turbo-frame id="form">
@@ -29,12 +29,15 @@
             <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
         {% endfor %}
 
-        <section class="form__container récapitulatif" {{stimulus_controller('formregister')}}>
+        <section class="form__container récapitulatif" {{stimulus_controller('formregister')}} data-step=4>
             
         
             {{ form_errors(form) }}
 
-            {{form_start(form,{'attr':{'action': path('app_register_coord')}})}}
+            {{form_start(form,{'attr':{
+                'action': path('app_register_coord'),
+                'data-controller':'totalcalculator'
+                }})}}
 
                 <h3>Récapitulatif</h3>
                 <div class="form__line">
@@ -42,21 +45,20 @@
                         <p>{{ username }}</p>
                 </div>
                 {% for item in itemsToPaid %}
-                    
+                    {% if loop.first %}
+                        <hr>
+                    {% endif %}
                     <div class="form__line">
                         {#? Items Name  #}
                         <p>{{item.nom}}</p>
                         {#? Items Price  #}
-                        <p>{{(item.total / 100 )|round(2, 'floor')}}€</p>
+                        <p {{stimulus_target('totalcalculator','html' ~ loop.index )}}>{{(item.total / 100 )|number_format(2)}}€</p>
                     </div>
+                    {# {% if not loop.first %} #}
+                        <hr>
+                    {# {% endif %} #}
                 {% endfor %}
-                <hr>
-                <div class="form__line">
-                    {#? Items Name  #}
-                    <p>{{frais.nom}}</p>
-                    {#? Items Price  #}
-                    <p>{{(frais.prix / 100 )|number_format(2) }}€</p>
-                </div>
+
                 <div class="form__line">
                     <div>
                         {{form_widget(form.confirme)}}
@@ -64,17 +66,14 @@
                     </div>
                 </div>
                  <div class="totaux_container">  
-                    <p>Total</p>
-                    <p class="totaux">
+                    <p>Total :</p>
+                    <p class="totaux" {{stimulus_target('totalcalculator','total')}}>
                         xxx
                     </p>
                 </div>
 
-                
-
-
                 <div class="boutons_container">
-                    <button class="btn--accent3" >précédents</button>
+                    <a class="button--accent3" href="{{path('app_register_coord')}}" >Précédents</a>
                     <button class="btn--accent3" >Valider et Payer</button>
                 </div>
             {{form_end(form)}}

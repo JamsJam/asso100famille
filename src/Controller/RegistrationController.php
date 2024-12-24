@@ -52,9 +52,10 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_register_adherant');
         }
-
+        $step = 1;
         return $this->render('registration/adhesion.html.twig', [
             'form' => $form,
+            'step'=>$step
         ]);
     }
 
@@ -79,9 +80,10 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_register_coord');
         }
-
+        $step = 2;
         return $this->render('registration/adherant.html.twig', [
             'form' => $form,
+            'step'=>$step
         ]);
     }
     
@@ -136,15 +138,18 @@ class RegistrationController extends AbstractController
                 'prix' => 3000,
                 'quantity' => $decryptSession['adhesionFamille'],
                 'total' => 3000 * intval($decryptSession['adhesionFamille']),
-            ],
-            [
+            ]
+        ];
+        //? --- if bienfaiter
+        if($decryptSession['adhesionBienfaiteur'] > 0){
+            array_push($items,            [
                 'nom' => 'Adhésion bienfaiteur',
                 'prix' => $decryptSession['adhesionBienfaiteurPrix'] * 100,
                 'quantity' => $decryptSession['adhesionBienfaiteur'],
                 'total' => intVal($decryptSession['adhesionBienfaiteurPrix'] * 100) * intval($decryptSession['adhesionBienfaiteur']),
-            ],
-        ];
-
+            ]);
+        }
+        //? --- if don/customdon
         if ($decryptSession['don'] == null  ) {
             array_push($items,[
                 'nom' => 'Don',
@@ -162,12 +167,14 @@ class RegistrationController extends AbstractController
 
         };
 
+
         $frais = [
             'nom' => 'Frais techniques',
             'prix' => 310,
             'quantity' => 1,
             'total' => 310 ,
         ];
+        array_push($items,$frais);
 
         $userName = $decryptCoord['prenom'] .' '. $decryptCoord['nom'];
 
@@ -217,6 +224,8 @@ class RegistrationController extends AbstractController
                 $entityManager->flush();
             //?-----------
             
+
+
             //? =======Stripe
             $stripe = new StripeClient();
             $stripe->checkout->session->create([

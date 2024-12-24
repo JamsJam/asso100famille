@@ -16,6 +16,8 @@ export default class extends Controller {
         if (this.hasCustomDonationTarget) {
             this.displayerChanger(this.isCustomValue);
         }
+
+        this.verifyFormStep()
     }
 
     isCustomValueChanged(value) {
@@ -39,5 +41,21 @@ export default class extends Controller {
         if (this.hasRadioCustomTarget) {
             this.isCustomValue = this.radioCustomTarget.checked;
         }
+    }
+
+    nextStep({params}){
+        const {step} = params
+        this.dispatch('updateStep',{detail : { step }})
+    }
+
+    previusStep({params}){
+        const {step} = params
+        this.dispatch('updateStep',{detail : {step}})
+    }
+
+    verifyFormStep(){
+        const step = this.element.getAttribute('data-step')
+
+        this.dispatch('updateStep',{detail : {step}})
     }
 }

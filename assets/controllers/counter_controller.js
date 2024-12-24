@@ -6,6 +6,7 @@ import { Controller } from '@hotwired/stimulus';
 */
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
+
     static targets = [
         'btnincrease', 
         'btndecrease',
@@ -13,26 +14,47 @@ export default class extends Controller {
     ]
 
     static values = {
-        counter: {type: Number, default:0}
+        counter: {type: Number, default:0},
+        mincount : Number
     } 
     
 
     counterTargetConnected(element){
         this.counterValue = element.value
+        console.log(this.mincountValue)
+        this.capMinValue()
     }
     
-    increaseCount(){
+    increaseCount(e){
         this.counterValue++ ;
+        // this.capMinValue()
         this.updateValue()
     }
     
-    decreaseCount(){
+    decreaseCount(e){
         this.counterValue-- ;
+        // this.capMinValue()
         this.updateValue()
 
     }
     
     updateValue(){
         this.counterTarget.value = this.counterValue
+        this.capMinValue()
+        this.updateTotal()
+
+    }
+
+    capMinValue(){
+        if(this.mincountValue >= this.counterValue ){
+            this.btndecreaseTarget.style.pointerEvents = "none"
+        }else{
+            this.btndecreaseTarget.removeAttribute('style')
+
+        }
+    }
+
+    updateTotal(){
+        this.dispatch(("totalchange"))
     }
 }

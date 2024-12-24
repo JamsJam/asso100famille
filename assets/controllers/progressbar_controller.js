@@ -13,41 +13,20 @@ export default class extends Controller {
 
     connect() {
 
-        // document.querySelector('#nextStep').addEventListener('click',(e)=>{
-        //     e.preventDefault()
-        //     this.increaseStep()
-        //     document.querySelector('#nextStep').closest('form').submit()
-        // })
-        // document.querySelector('#previusStep').addEventListener('click',(e)=>{
-        //     e.preventDefault()
-        //     this.increaseStep()
-        //     // document.querySelector('#previusStep').closest('form').submit()
-        // })
+
         this.updateProgressBar();
     }
 
-    // disconnect() {
-    //     document.querySelector('#nextStep').removeEventListener('click',(e)=>{
-    //         e.preventDefault()
-    //         this.increaseStep()
-    //         document.querySelector('#nextStep').closest('form').submit()
-    //     })
-    //     document.querySelector('#previusStep').removeEventListener('click',(e)=>{
-    //         e.preventDefault()
-    //         this.increaseStep()
-    //         // document.querySelector('#previusStep').closest('form').submit()
-    //     })
-    // }
 
     updateProgressBar() {
         console.log(this.stepTargets);
         this.stepTargets.forEach((stepElement, index) => {
+            
             if (index < this.stepValue) {
                 // Mark the step as completed or active based on the current step value
                 console.log(index, this.stepValue, 'add');
                 stepElement.classList.add('active');
-                
-  
+
 
             } else {
                 console.log(index, this.stepValue, 'remove');
@@ -72,5 +51,10 @@ export default class extends Controller {
             this.stepValue--;
             this.updateProgressBar();  // Reflect the step change in the UI
         }
+    }
+
+    getFormStep({detail :{step}}){
+        this.stepValue = step
+        this.updateProgressBar()
     }
 }
