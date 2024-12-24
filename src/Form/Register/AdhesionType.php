@@ -57,14 +57,19 @@ class AdhesionType extends AbstractType
                 '20€' => 20,
                 'Montant de choix' => null, // Custom amount option
             ],
+            'preferred_choices' => ['Pas de don' => 0],
+            'duplicate_preferred_choices' => false,
             'choice_attr' => [
-                'Pas de don' => ['checked'=> true],
+                'Pas de don' => [
+                    'checked'=> true
+                ],
                 'Montant de choix' => [
                     'data-formregister-target' => 'radioCustom'
                 ],
             ],
             'expanded' => true, // For radio button display
             'multiple' => false,
+            'data' => 0,
         ])
 
         // Field for custom donation amount if the user selects "Montant de choix"

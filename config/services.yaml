@@ -4,7 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    strapi_event_url : "%env(STRAPI_EVENT_URL)%" 
+    stripe_api_key : "%env(STRIPE_TEST_KEY)%" 
+    # stripe_api_key : "%env(STRIPE_PROD_KEY)%" 
     encryption_key : "%env(ENCRYPTION_KEY)" 
 
 services:
@@ -30,3 +31,7 @@ services:
     App\Service\EncryptionService:
         arguments:
             $encryption_key: "%encryption_key%"
+
+    App\Service\StripeService:
+        arguments:
+            $stripeSecretKey: "%stripe_api_key%"

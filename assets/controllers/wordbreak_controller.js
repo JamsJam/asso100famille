@@ -6,7 +6,10 @@ import { Controller } from '@hotwired/stimulus';
 */
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['description']
+    static targets = [
+        'description',
+        'descriptionFull'
+    ]
     static values = {
         numBeforeBeak: {type:Number, default: 40},
     }
@@ -24,7 +27,18 @@ export default class extends Controller {
             element.innerText =   element.innerText.slice(0, this.numBeforeBeakValue) + '...' 
         }
         
-        console.log(element.innerText)
+
+        
+    }
+
+    descriptionFullTargetConnected(element){
+        element.innerText = element.innerText.replaceAll('<div>','')
+        element.innerText = element.innerText.replaceAll('</div>','')
+        element.innerText = element.innerText.replaceAll('&nbsp;','')
+        
+
+        
+        
         
     }
 }

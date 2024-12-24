@@ -2,19 +2,26 @@
 
 namespace App\Controller;
 
-use App\Entity\RecurringEvent;
 use DateTime;
 use DateInterval;
+use DateTimeImmutable;
+use Stripe\StripeClient;
 use App\Entity\Reservation;
+use App\Entity\RecurringEvent;
 use App\Service\ApiFetchService;
 use App\Form\Evenement\InscriptionType;
+use App\Service\RecurringEventsService;
 use App\Repository\OneTimeEventRepository;
 use App\Repository\RecurringEventRepository;
-use App\Service\RecurringEventsService;
-use DateTimeImmutable;
+use App\Repository\ReservationRepository;
+use App\Service\StripeService;
+use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
+use Stripe\V2\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
@@ -22,7 +29,7 @@ class EvenementsController extends AbstractController
 {
 
     #[Route('/evenements', name: 'app_evenements')]
-    public function index(OneTimeEventRepository $oter , RecurringEventRepository $rer, RecurringEventsService $recurringEventsService): Response
+    public function index(OneTimeEventRepository $oter , RecurringEventRepository $rer,RecurringEventsService $recurringEventsService,): Response
     {
         $today = new \DateTimeImmutable();
 
@@ -54,9 +61,11 @@ class EvenementsController extends AbstractController
 
 
     #[Route('/evenement/{id}', name: 'app_evenements_show')]
-    public function show(string $id, Request $request,OneTimeEventRepository $oter, RecurringEventRepository $rer, RecurringEventsService $recurringEventsService): Response
+    public function show(string $id, Request $request, OneTimeEventRepository $oter, RecurringEventRepository $rer, StripeService $stripeService, EntityManagerInterface $entityManager, RecurringEventsService $recurringEventsService): Response
     {
-        $today = new DateTime();
+        $today = new DateTimeImmutable();
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
         $sevenDaysLater = new DateTime();
         $sevenDaysLater->add(new DateInterval('P7D'));
 
@@ -68,43 +77,95 @@ class EvenementsController extends AbstractController
         $form->handleRequest($request);
 
 
-        //?=========== fetch event Data
+        //?=========== get type Event from post parameter
 
-        // $event = $fetch->getApiData($this->event_url.''.$id.'?populate=*');
-        // dd($event);
-        // if ($event['type_evenement'] === 'recurent') {
-        //     $event['date'] = $this->getProchainEvenement($event['date_type'][0]['jour']);
-        // }else{
-        //     $event['date'] = $event['date_type'][0]['date'];
-        // }
+        $typeEvent = $request->query->get('type');
 
-    // //?=========== fetch this week event Data
 
-    // $events = $fetch->getApiData($this->event_url . '?populate=*');
-    // $thisWeekEvents = array_filter($events, function ($evenement) use ($today, $sevenDaysLater) {
-    //     // Mettre à jour la date si l'événement est récurrent
-    //     if ($evenement['type_evenement'] === 'recurent') {
-    //         $evenement['date'] = $this->getProchainEvenement($evenement['date_type'][0]['jour']);
-    //     } else {
-    //         $evenement['date'] = $evenement['date_type'][0]['date'];
-    //     }
+        //?=========== get event 
 
-    //     // Vérifier si la date de l'événement est comprise entre aujourd'hui et dans 7 jours
-    //     $eventDate = new DateTime($evenement['date']);
-    //     return $eventDate >= $today && $eventDate <= $sevenDaysLater;
-    // });
+        $event = match ($typeEvent) {
+            'ponctuel'=> $oter->findOneBy(['id'=>$id]),
+            'recurring'=> $rer->findOneBy(['id'=>$id]),
+            default => 'none',
+        };
+        if($event === 'none'){
+            return $this->redirectToRoute('app_home');
+        }
+
+        //?=========== get event  of the month
+
+        $ponctualEvents = $oter->findThisWeekEvent($today);
+        $recurringEvents = $rer->findActivEvents();
+
+        $thisWeekEvents = array_merge($ponctualEvents,$recurringEventsService->getOccurrences($recurringEvents,$today,$today->modify("+1 week")));
 
 
         //?=========== form handle
         if ($form->isSubmitted() && $form->isValid()){
             
-            //stripe
+            // dd($form->getData(), $event);
+            $price = $user ? $event->getPrice() : $event->getUserPrice() ;
+            $produit = [
+                "productName" => $event->getTitle(),
+                "quantity"=>$form->getData()->getQuantity(),
+                "amount"=>$price,
+                'type'=> "payment",
+                "interval"=> null
+            ];
+            
+
+                //?=========== create reservation
+
+
+                    if($typeEvent === 'ponctuel'){
+                        $reservation 
+                            ->setOtEvent($event)// ontime eventID
+                        ;
+                        
+                    }else if($typeEvent === 'ponctuel'){
+                        $reservation 
+                            ->setREvent($event) // recuring eventID
+                        ;
+                    }else {
+                            throw new \InvalidArgumentException('Type d\'événement invalide.');
+                        }
+        
+        
+                    if($user){
+                        $reservation 
+                            ->setUser($user)
+                            ->setPrix($event->isFree() ? 0 : $event->getUserPrice)
+                            ->setNom($user->getNom())
+                            ->setPrenom($user->getPrenom())
+                            ->setEmail($user->getEmail())
+                        ;
+                    }else{
+                        $reservation 
+                            ->setPrix($event->isFree() ? 0 : $event->getPrice)
+                            // customer data fill by the form
+                        ;
+                    }
+        
+                    $reservation 
+                        ->setCreatedAt($today)
+                        ->setTypeEvent($typeEvent)
+                        ->setFinalPrice($reservation->getPrix() * $reservation->getQuantity())
+                    ;
+
+
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+            $request->getSession()->set('reservationContext',$reservation->getId());
+
+            return $this->redirect($stripeService->createCheckoutSession($produit));
 
         }
 
         return $this->render('evenements/show.html.twig', [
-            // 'event' => $event,
-            // 'thisWeek' => $thisWeekEvents,
+            'event' => $event,
+            'type_event'=> $typeEvent,
+            'thisWeek' => $thisWeekEvents,
             'form' => $form
         ]);
     }

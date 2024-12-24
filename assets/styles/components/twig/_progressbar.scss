@@ -47,4 +47,9 @@
             z-index: 2;
         }
     }
+
+    @media screen and (max-width:768px) {
+        grid-template-columns: unset;
+        grid-template-rows: repeat(4,1fr);
+    }
 }

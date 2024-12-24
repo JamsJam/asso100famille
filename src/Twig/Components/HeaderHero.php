@@ -29,4 +29,6 @@ final class HeaderHero
 
     public mixed   $event;
 
+    public ?string   $typeEvent;
+
 }

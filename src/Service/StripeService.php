@@ -2,68 +2,105 @@
 
 namespace App\Service;
 
-use phpDocumentor\Reflection\Types\Integer;
-use Stripe\Stripe;
+use Stripe\StripeClient;
 use Stripe\Checkout\Session;
+
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class StripeService
 {
-//     private $stripeSecretKey;
 
-//     public function __construct(string $stripeSecretKey)
-//     {
-//         $this->stripeSecretKey = $stripeSecretKey;
-//         Stripe::setApiKey($this->stripeSecretKey);
-//     }
 
-//     /**
-//      * Créer une session de paiement pour un abonnement avec des frais ponctuels
-//      *
-//      * @param int $amountSubscription Montant de l'abonnement (en centimes)
-//      * @param int $amountOneTime Montant des frais ponctuels (en centimes)
-//      * @param string $currency Devise du paiement (ex: 'eur')
-//      * @param string $successUrl URL de redirection en cas de succès
-//      * @param string $cancelUrl URL de redirection en cas d'annulation
-//      * @return Session
-//      */
-//     public function createCheckoutSession(
-//         int $amountSubscription,
-//         int $amountOneTime,
-//         string $currency,
-//         int $quantity,
-//         string $successUrl,
-//         string $cancelUrl
-//     ): Session {
-//         return Session::create([
-//             'payment_method_types' => ['card'],
-//             'line_items' => [
-//                 [
-//                     'price_data' => [
-//                         'currency' => $currency,
-//                         'product_data' => [
-//                             'name' => 'Abonnement mensuel',
-//                         ],
-//                         'unit_amount' => $amountSubscription,
-//                         'recurring' => [
-//                             'interval' => 'month',
-//                         ],
-//                     ],
-//                     'quantity' => $quantity,
-//                 ],
-//                 [
-//                     'price_data' => [
-//                         'currency' => $currency,
-//                         'product_data' => [
-//                             'name' => 'Frais de service',
-//                         ],
-//                         'unit_amount' => $amountOneTime,
-//                     ],
-//                     'quantity' => 1,
-//                 ],
-//             ],
-//             'mode' => 'subscription',
-//             'success_url' => $successUrl . '?session_id={CHECKOUT_SESSION_ID}',
-//             'cancel_url' => $cancelUrl,
-//         ]);
-//     }
+
+    public function __construct(
+        private string $stripeSecretKey,
+        private UrlGeneratorInterface $urlGenerator,
+    ){}
+
+    /**
+     * Créer une session Stripe Checkout et retourner l'URL
+     *
+     * @param array  $products Tableau des produits avec type ('one_time' ou 'subscription')
+     * @param string $successUrl url apres succes du paiement
+     * @param string $cancelUrl url apres echec du paiement
+     * @return string
+     */
+    public function createCheckoutSession(
+        array $products,
+        ?string $successUrl = null,
+        ?string $cancelUrl = null
+    ): string 
+    {
+
+
+        $stripe = new StripeClient($this->stripeSecretKey);
+
+        //? ================= set Default Parameters
+            $lineItem = [];
+            $mode = 'payment'; // Par défaut, mode pour les paiements uniques
+            // default sucess and cancel
+            $successRedirect = $successUrl || $this->urlGenerator->generate("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL);
+            $cancelRedirect  = $cancelUrl || $this->urlGenerator->generate("app_stripe_cancel",[],UrlGeneratorInterface::ABSOLUTE_URL);
+
+        foreach ($products as $product) {
+        //? ================= Error Checking
+                    // Vérifier que le tableau de produits n'est pas vide
+            if (empty($products)) {
+                throw new \InvalidArgumentException('Le tableau de produits ne peut pas être vide.');
+            }
+            if (!isset($product['productName'], $product['amount'], $product['quantity'], $product['type'])) {
+                throw new \InvalidArgumentException(
+                    'Chaque produit doit contenir "productName", "amount", "quantity", et "type".'
+                );
+            }
+
+        //? ================= Products handle
+            if ($product['type'] === 'subscription') {
+                $mode = 'subscription';
+                $lineItem[] = [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'recurring' => [
+                            'interval' => $product['interval'], // Ex : 'month', 'year'
+                        ],
+                        'product_data' => [
+                            'name' => $product['productName'],
+                        ],
+                        'unit_amount' => $product['amount'], // Montant en centimes
+                    ],
+                    'quantity' => $product['quantity'],
+                ];
+            } else { // Si c'est un produit standard (paiement unique)
+                $lineItem[] = [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => $product['productName'],
+                        ],
+                        'unit_amount' => $product['amount'], // Montant en centimes
+                    ],
+                    'quantity' => $product['quantity'],
+                ];
+            } }
+
+
+        //? =========== Create  session
+            try{
+                $checkout_session = $stripe->checkout->sessions->create([
+                    'payment_method_types' => ['card'],
+                    'line_items' => $lineItem,
+                    'mode' => $mode,
+                    'success_url' => $successRedirect,
+                    'cancel_url' => $cancelRedirect,
+                ]);
+            } catch (\Exception $e) {
+                throw new \RuntimeException('Erreur Stripe : ' . $e->getMessage());
+            }
+
+        
+        
+            return $checkout_session->url;
+    }
+
+
 }

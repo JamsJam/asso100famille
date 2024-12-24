@@ -3,42 +3,42 @@
 
     {% if event is defined %}
     
-            <div class='hero-info'>
+        <div class='hero-info' {{stimulus_controller('wordbreak')}}>
 
         
             <h1>
                 {# Ensemble pour la famille, à chaque étape de la vie #}
-                {{event.titre}}
+                {{event.title}}
             </h1>
 
             <div class="date_info">
 
 
 
-                {% if event.type_evenement == "ponctuel" %}
+                {% if typeEvent == "ponctuel" %}
                     
                     <p>
-                        {{event.date|date('d/m/Y')}}
+                        {{event.startDate|date('d/m/Y')}}
                     </p>
                 
                 {% else %}
                     <p>
-                        Tous les {{event.date_type[0].jour}}
+                        Tous les {{event.recurringRule.daysOfWeek}}
                         
                     </p>
                     
                 {% endif %}
                 <p>
                 
-                    {{event.heure_debut|date('H:i')}} - {{event.heure_debut|date('H:i')}}
+                    {{event.startHour|date('H:i')}} - {{event.endHour|date('H:i')}}
                 </p>
+
             </div>
-
-
-            <p>
+            <p {{stimulus_target('wordbreak','descriptionFull')}}>
                 
                 {{event.description}}
             </p>
+
 
 
         </div>

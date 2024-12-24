@@ -20,10 +20,10 @@ class OneTimeEventRepository extends ServiceEntityRepository
     public function findThisWeekEvent($today): ? array
     {
         ($qb = $this->createQueryBuilder('e'))
-                ->andWhere($qb->expr()->between('e.startDate', ':today', ':NextDay'))
+                ->andWhere($qb->expr()->between('e.startDate', ':today', ':nextWeek'))
                 ->orderBy('e.id', 'ASC')
                 ->setParameter('today', $today)
-                ->setParameter('NextDay', $today->modify("+1 week"));
+                ->setParameter('nextWeek', $today->modify("+1 week"));
 
             return $qb ->getQuery()->getResult();
     }
@@ -35,10 +35,10 @@ class OneTimeEventRepository extends ServiceEntityRepository
        {
 
             ($qb = $this->createQueryBuilder('e'))
-                ->andWhere($qb->expr()->between('e.startDate', ':today', ':NextDay'))
+                ->andWhere($qb->expr()->between('e.startDate', ':today', ':nextMonth'))
                 ->orderBy('e.id', 'ASC')
                 ->setParameter('today', $today)
-                ->setParameter('NextDay', $today->modify("+1 month"));
+                ->setParameter('nextMonth', $today->modify("+1 month"));
 
             return $qb ->getQuery()->getResult();
        }
