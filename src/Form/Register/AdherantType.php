@@ -63,9 +63,9 @@ class AdherantType extends AbstractType
                 'label' => false,
                 'choices' => [
                     "Votre type de famille" => "",
-                    "traditionnel" => "traditionnel",
-                    "nucléaire" => "nucléaire",
-                    "pacsé" => "pacse",
+                    "traditionnel" => "traditionnelle",
+                    "nucléaire" => "nucleaire",
+                    "pacsé" => "pacsee",
                 ],
                 'multiple' => false,
                 'expanded' => false,

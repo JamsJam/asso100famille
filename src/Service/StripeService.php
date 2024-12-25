@@ -38,10 +38,13 @@ class StripeService
         //? ================= set Default Parameters
             $lineItem = [];
             $mode = 'payment'; // Par défaut, mode pour les paiements uniques
+            
+            
             // default sucess and cancel
-            $successRedirect = $successUrl || $this->urlGenerator->generate("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL);
-            $cancelRedirect  = $cancelUrl || $this->urlGenerator->generate("app_stripe_cancel",[],UrlGeneratorInterface::ABSOLUTE_URL);
 
+            $successRedirect = $successUrl === null ? $this->urlGenerator->generate("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL): $successUrl;
+            $cancelRedirect  = $cancelUrl === null ? $this->urlGenerator->generate("app_stripe_cancel",[],UrlGeneratorInterface::ABSOLUTE_URL) : $cancelUrl;
+            // dd($successRedirect,$cancelRedirect);
         foreach ($products as $product) {
         //? ================= Error Checking
                     // Vérifier que le tableau de produits n'est pas vide

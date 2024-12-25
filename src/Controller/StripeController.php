@@ -24,7 +24,7 @@ class StripeController extends AbstractController
                 
                 /** @var int $context */
                 $context = $session->get('reservationContext');
-                $session->remove('reservationContext');
+                
 
                 /** @var \App\Entity\Reservation $reservation */
                 $reservation = $reservationRepository->findOnebyId($context);
@@ -36,17 +36,52 @@ class StripeController extends AbstractController
 
                 //? ------------- send mail to subscriber
 
-                
-                
-                $this->addFlash(
-                    'stripe_success',
-                    'Votre reservation a bien été pris en compte'
-                );
-                return $this->redirectToRoute('app_home', [
-                    
-                ]);
+
+                //? ------------- clean session
+
+                $session->remove('reservationContext');
+
+                //? ------------- create Flash
+                    $this->addFlash(
+                        'stripe_success',
+                        'Votre reservation a bien été pris en compte'
+                    );
+                //? ------------- Redirect
+                    return $this->redirectToRoute('app_home', [
+                        
+                    ]);
 
             }
+        //? ----------------------
+
+
+
+        //? ================== success after register
+            if ($session->has("registerContext")) {
+                    # code...
+
+                //? ------------- send mail to subscriber
+
+
+
+                //? ------------- clean session
+
+                $session->remove('reservationContext');
+
+
+                //? ------------- create Flash
+                    $this->addFlash(
+                        'stripe_success',
+                        'Votre inscription à bien été pris en compte'
+                    );
+                //? ------------- Redirect
+                    return $this->redirectToRoute('app_home', [
+                        
+                    ]);
+
+            }
+
+
 
 
 
@@ -55,7 +90,7 @@ class StripeController extends AbstractController
         
         
         //? ================== -> unatorized access
-
+            return $this->redirect("app_home", 401);
     }
 
 
@@ -65,7 +100,7 @@ class StripeController extends AbstractController
         $session = $request->getSession();
 
 
-        //? ================== fail after .........
+        //? ================== fail after reservation
             if($session->has('reservationContext')){
 
                 $request->getSession()->remove('reservationContext');
@@ -81,11 +116,15 @@ class StripeController extends AbstractController
 
 
 
-        //? ================== fail after .........
+        //? ================== fail after register
+            if ($session->has('reservationContext')) {
+                
+                
 
+            }
 
         //? ================== -> unatorized access
-
+        return $this->redirect("app_home", 401);
     }
 
 

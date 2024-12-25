@@ -35,7 +35,7 @@
             {{ form_errors(form) }}
 
             {{form_start(form,{'attr':{
-                'action': path('app_register_coord'),
+                'action': path('app_register_confirm'),
                 'data-controller':'totalcalculator'
                 }})}}
 
@@ -74,7 +74,7 @@
 
                 <div class="boutons_container">
                     <a class="button--accent3" href="{{path('app_register_coord')}}" >Précédents</a>
-                    <button class="btn--accent3" >Valider et Payer</button>
+                    <button class="btn--accent3" data-turbo=false >Valider et Payer</button>
                 </div>
             {{form_end(form)}}
         </section>
