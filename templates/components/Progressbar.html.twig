@@ -1,6 +1,6 @@
 <div{{ attributes }} 
     class="progressbar"
-    {{stimulus_controller('progressbar',{ 'step': step })}}
+    {{stimulus_controller('progressbar',{ 'step': step })|stimulus_action('progressbar','getFormStep','formregister:updateStep@window')}}
     >
     <!-- component html -->
     <div class="step" {{stimulus_target('progressbar','step')}}>

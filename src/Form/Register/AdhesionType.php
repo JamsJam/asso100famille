@@ -34,7 +34,7 @@ class AdhesionType extends AbstractType
             'input'=> 'string',
             'attr' => [
                 'readonly' => true,
-                'value' => 1
+                'value' => 0
             ]
         ])
         ->add('adhesionBienfaiteurPrix', NumberType::class, [
@@ -57,14 +57,34 @@ class AdhesionType extends AbstractType
                 '20€' => 20,
                 'Montant de choix' => null, // Custom amount option
             ],
-            'preferred_choices' => ['Pas de don' => 0],
-            'duplicate_preferred_choices' => false,
             'choice_attr' => [
-                'Pas de don' => [
-                    'checked'=> true
-                ],
                 'Montant de choix' => [
-                    'data-formregister-target' => 'radioCustom'
+                    'data-formregister-target' => 'radioCustom',
+                    "data-totalcalculator-target"=>"radio",
+                    "data-action"=>"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                    'data-value' => 'custom'
+                ],
+                'Pas de don'=>[
+                    "data-totalcalculator-target"=>"radio",
+                    "data-action"=>"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                    'data-value' => 0,
+                ],
+                "data-totalcalculator-target"=>"radio",
+                "data-action"=>"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                '5€'=>[
+                    "data-totalcalculator-target"=>"radio",
+                    "data-action"=>"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                    'data-value' => 5,
+                ],
+                '10€'=>[
+                    "data-totalcalculator-target"=>"radio",
+                    "data-action"=>"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                    'data-value' => 10
+                ],
+                '20€'=>[
+                    "data-totalcalculator-target"=>"radio",
+                    "data-action"=>"change->formregister#isCustomHandle change->totalcalculator#updateTotal",
+                    'data-value' => 20
                 ],
             ],
             'expanded' => true, // For radio button display
@@ -79,6 +99,8 @@ class AdhesionType extends AbstractType
             'required' => false,
             'attr' => [
                 'placeholder' => 'Saisir le montant',
+                "data-totalcalculator-target"=>"customDonation",
+                "data-action"=>"input->totalcalculator#updateTotal",
             ],
         ])
     ;

@@ -13,6 +13,7 @@ use App\Form\Register\AdhesionType;
 use Symfony\Component\Mime\Address;
 use App\Form\Register\ConfirmationType;
 use App\Repository\FamilleTypeRepository;
+use App\Service\StripeService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\StripeClient;
@@ -52,9 +53,10 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_register_adherant');
         }
-
+        $step = 1;
         return $this->render('registration/adhesion.html.twig', [
             'form' => $form,
+            'step'=>$step
         ]);
     }
 
@@ -79,9 +81,10 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_register_coord');
         }
-
+        $step = 2;
         return $this->render('registration/adherant.html.twig', [
             'form' => $form,
+            'step'=>$step
         ]);
     }
     
@@ -114,7 +117,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/adhesion/confirm', name: 'app_register_confirm')]
-    public function registerConfirm(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FamilleTypeRepository $familleTypeRepository): Response
+    public function registerConfirm(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FamilleTypeRepository $familleTypeRepository,StripeService $stripeService): Response
     {
         $session = $request->getSession();
         if (!$session->has('register1') || !$session->has('register2') || !$session->has('register3')) {
@@ -136,15 +139,20 @@ class RegistrationController extends AbstractController
                 'prix' => 3000,
                 'quantity' => $decryptSession['adhesionFamille'],
                 'total' => 3000 * intval($decryptSession['adhesionFamille']),
-            ],
-            [
+                'interval' => 'month',
+                'type' => 'subscription',
+            ]
+        ];
+        //? --- if bienfaiter
+        if($decryptSession['adhesionBienfaiteur'] > 0){
+            array_push($items,            [
                 'nom' => 'Adhésion bienfaiteur',
                 'prix' => $decryptSession['adhesionBienfaiteurPrix'] * 100,
                 'quantity' => $decryptSession['adhesionBienfaiteur'],
                 'total' => intVal($decryptSession['adhesionBienfaiteurPrix'] * 100) * intval($decryptSession['adhesionBienfaiteur']),
-            ],
-        ];
-
+            ]);
+        }
+        //? --- if don/customdon
         if ($decryptSession['don'] == null  ) {
             array_push($items,[
                 'nom' => 'Don',
@@ -162,12 +170,14 @@ class RegistrationController extends AbstractController
 
         };
 
+
         $frais = [
             'nom' => 'Frais techniques',
             'prix' => 310,
             'quantity' => 1,
             'total' => 310 ,
         ];
+        array_push($items,$frais);
 
         $userName = $decryptCoord['prenom'] .' '. $decryptCoord['nom'];
 
@@ -185,19 +195,23 @@ class RegistrationController extends AbstractController
                 $user
                     ->setNom($sessionFormData['nom'])
                     ->setPrenom($sessionFormData['prenom'])
+                    ->setEmail($sessionFormData['email'])
                     ->setDdn(new DateTimeImmutable($sessionFormData['dateDeNaissance']))
                     ->setEmail($sessionFormData['email'])
+                    ->setAdresse($sessionFormData['Adresse'])
+                    ->setAdresse2($sessionFormData['Complement_adresse'])
                     ->setTelephone($sessionFormData['Telephone'])
                     ->setVille($sessionFormData['Ville'])
                     ->setCodepostal($sessionFormData['Code_postal'])
-                    ->setProfession($sessionFormData['profession'])
+                    ->setProfession($sessionFormData['Profession'])
                     ->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
                 ;
             //?-----------
-            
+            // dd( $sessionFormData);
+            // dd($familleTypeRepository->findOneBy(["nom" =>$sessionFormData['FamilleType']]));
             //?========== Set Famille
                 $famille
-                    ->setType($familleTypeRepository->findOneBy(['nom', $sessionFormData['FamillyType']]) )
+                    ->setType($familleTypeRepository->findOneBy(["nom" =>$sessionFormData['FamilleType']])) 
                     ->setNbFemmes($sessionFormData['FamilleFemme'])
                     ->setNbHommes($sessionFormData['FamilleHomme'])
                     ->setNbGarcons($sessionFormData['FamilleGarcon'])
@@ -214,16 +228,44 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->persist($famille);
 
-                $entityManager->flush();
+                // $entityManager->flush();
             //?-----------
             
-            //? =======Stripe
-            $stripe = new StripeClient();
-            $stripe->checkout->session->create([
-                'success_url'=>"",
-                'cancel_url'=>"",
+
+
+
+            //? =======Stripe - create session
+
+                $stripe_checkout_url = $stripeService->createCheckoutSession(
+                    array_map(
+                        function($item){
+                            if ($item['nom'] == 'Adhésion famille') {
+                                return [
+                                    "productName"=>$item['nom'],
+                                    "quantity"=>1,
+                                    "amount"=> $item['total'],
+                                    "type"=>"",
+                                ];
+                            }else {
+                               return [
+                                "productName"=>$item['nom'],
+                                "quantity"=>1,
+                                "amount"=> $item['total'],
+                                "type"=>"",
+                               ]; 
+                            }
+                        },$items)
+                );
                 
-            ]);
+                $session->set('registerContext', $user->getId());
+            //?-----------
+
+
+            //? =======Clean Session
+
+                $session->remove('register1');
+                $session->remove('register2');
+                $session->remove('register3');
             //?-----------
 
 
@@ -241,18 +283,13 @@ class RegistrationController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_evenements');
+            // dd($stripe_checkout_url);
+
+                return $this->redirect(
+                    $stripe_checkout_url
+            );
         }
 
-        // if ($form->isSubmitted() && $form->isValid()) {
-            
-        //     $plainData = $form->getData();
-        //     $session = $request->getSession();
-        //     $session->set('register3', $this->cryptRecursively($plainData, 1) );
-        //     // dd($this->cryptRecursively(array_merge($session->get('register1'),$session->get('register2'),$session->get('register3')),2));
-        //     ;
-        //     return $this->redirectToRoute('app_register_confirm');
-        // }
 
         return $this->render('registration/confirmation.html.twig', [
             'form' => $form,
