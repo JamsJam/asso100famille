@@ -8,6 +8,14 @@
 <main class='home'>
 
     <section class="header">
+        {% for message in app.flashes('success_form') %}
+
+            <twig:Flash
+                type="success_form"
+                message="{{message}}"
+            />
+        {% endfor %}
+        
         <twig:HeaderHero
             title="Ensemble pour la famille, à chaque étape de la vie"
             para1="L'association 100% Famille se dédie à la valorisation et au soutien de  la vie familiale à travers une multitude de services et d'activités  variées, touchant aussi bien les aspects sociaux, récréatifs que  culturels."

@@ -5,6 +5,7 @@ use App\Entity\Promos;
 use DateTimeImmutable;
 use App\Entity\Activites;
 use App\Entity\Excursions;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -25,6 +26,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         return [
             BeforeEntityPersistedEvent::class => ['convertDateToDateTimeImmutable'],
             // BeforeEntityUpdatedEvent::class => ['updateEntities'],
+            // BeforeCrudActionEvent::class      => ['addReservationInfoToEvent'] 
         ];
     }
 
@@ -33,6 +35,13 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
     public function convertDateToDateTimeImmutable(BeforeEntityPersistedEvent $event){
         $start = $event->getEntityInstance()->getStartDate();
+
+        // dd($event->getEntityInstance()->getStartDate());
+    }
+
+
+    public function addReservationInfoToEvent(BeforeCrudActionEvent $event){
+        // dd($event);
 
         // dd($event->getEntityInstance()->getStartDate());
     }

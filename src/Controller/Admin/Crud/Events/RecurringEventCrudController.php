@@ -2,12 +2,9 @@
 
 namespace App\Controller\Admin\Crud\Events;
 
-use App\Entity\RecurringRule;
 use App\Entity\RecurringEvent;
-use App\Form\RecurringRuleType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -17,8 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\SearchMode;
@@ -143,6 +139,7 @@ class RecurringEventCrudController extends AbstractCrudController
             ])
             ->setColumns(6)
             ->setSortable(true);
+
     //? ==========================================
     //? ==========================================
     //? ==========================================
@@ -157,7 +154,7 @@ class RecurringEventCrudController extends AbstractCrudController
         yield FormField::addRow();
 
         if(Crud::PAGE_EDIT == $pageName || Crud::PAGE_NEW == $pageName ){
-            yield AssociationField::new('recurringRule', 'Récurrence')
+            yield AssociationField::new('recurringRule', false)
                 ->renderAsEmbeddedForm(RecurringRuleCrudController::class,"admin_recurring_rule_create","admin_recurring_rule_edit")
                 ->setFormTypeOptions([
                     'by_reference' => false,  // Important pour gérer la relation sans redirection
@@ -192,7 +189,9 @@ class RecurringEventCrudController extends AbstractCrudController
                     ]);
             yield BooleanField::new('RecurringRule.isActive', 'Actif ')
                     ->setRequired(false)
-                    ->setColumns(6);
+                    ->setColumns(6)
+                    ->renderAsSwitch(false)
+                    ;
 
                 
         }
@@ -213,6 +212,16 @@ class RecurringEventCrudController extends AbstractCrudController
             ->setCurrency('EUR')
             ->setNumDecimals(2)
             ->hideOnIndex();
+
+    //? ==========================================
+    //? ==========================================
+    //? ==========================================
+    if(Crud::PAGE_DETAIL == $pageName){
+
+        yield FormField::addFieldset('Réservation');
+        yield CollectionField::new('reservations', false)->setTemplatePath('admin/fields/event_reservations.html.twig');
+    }
+
     //? ==========================================
     //? ==========================================
     //? ==========================================

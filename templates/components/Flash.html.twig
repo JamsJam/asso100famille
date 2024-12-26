@@ -1,0 +1,11 @@
+<div {{ attributes }} class="flash__container"  {{stimulus_controller("flash")}}>
+    <div class="flash__{{type}}" {{stimulus_target("flash","flash")}}>
+        <p>
+            {{ message }}
+        </p>
+        {# <p>
+        ! test purpose
+            Ceci est le message test du flash
+        </p> #}
+    </div>
+</div>

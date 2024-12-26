@@ -40,25 +40,7 @@ class AdherantType extends AbstractType
                     "class" => 'text-type'
                 ]
             ])
-            // ->add('FamilleType',EntityType::class, [
-            //     'class'=> FamilleType::class,
-                
-            //     'label' => false,
-            //     // 'choices' => [
-            //     //     "Votre type de famille" => "",
-            //     //     "traditionnel" => "traditionnel",
-            //     //     "nucléaire" => "nucléaire",
-            //     //     "pacsé" => "pacse",
-            //     // ],
-            //     'multiple' => false,
-            //     'expanded' => false,
 
-            //     'choice_label'=>"nom",
-            //     'placeholder' => 'Votre type de famille',
-            //     "attr" => [
-            //         "class" => 'select-type'
-            //     ]
-            // ])
             ->add('FamilleType',ChoiceType::class, [
                 'label' => false,
                 'choices' => [

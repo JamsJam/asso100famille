@@ -123,7 +123,7 @@ class EvenementsController extends AbstractController
                             ->setOtEvent($event)// ontime eventID
                         ;
                         
-                    }else if($typeEvent === 'ponctuel'){
+                    }else if($typeEvent === 'recurring'){
                         $reservation 
                             ->setREvent($event) // recuring eventID
                         ;
@@ -139,6 +139,7 @@ class EvenementsController extends AbstractController
                             ->setNom($user->getNom())
                             ->setPrenom($user->getPrenom())
                             ->setEmail($user->getEmail())
+                            
                         ;
                     }else{
                         $reservation 
@@ -151,14 +152,18 @@ class EvenementsController extends AbstractController
                         ->setCreatedAt($today)
                         ->setTypeEvent($typeEvent)
                         ->setFinalPrice($reservation->getPrix() * $reservation->getQuantity())
+                        ->setActiv(false)
+                        ->setPaid(false)
                     ;
 
 
             $entityManager->persist($reservation);
             $entityManager->flush();
-            $request->getSession()->set('reservationContext',$reservation->getId());
 
-            return $this->redirect($stripeService->createCheckoutSession($produit));
+            $request->getSession()->set('reservationContext',$reservation->getId());
+            if($event->isFree())
+
+            return $this->redirect( $event->isFree() ? $this->generateUrl("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL) : $stripeService->createCheckoutSession($produit));
 
         }
 
@@ -173,85 +178,85 @@ class EvenementsController extends AbstractController
 
 
 
-    // Méthode privée qui calcule le prochain événement basé sur le jour en français
-    private function getProchainEvenement(string $jourFrancais): string
-    {
-        // Tableau de correspondance entre les jours en français et en anglais
-        $jours = [
-            'lundi'    => 'Monday',
-            'mardi'    => 'Tuesday',
-            'mercredi' => 'Wednesday',
-            'jeudi'    => 'Thursday',
-            'vendredi' => 'Friday',
-            'samedi'   => 'Saturday',
-            'dimanche' => 'Sunday',
-        ];
+    // // Méthode privée qui calcule le prochain événement basé sur le jour en français
+    // private function getProchainEvenement(string $jourFrancais): string
+    // {
+    //     // Tableau de correspondance entre les jours en français et en anglais
+    //     $jours = [
+    //         'lundi'    => 'Monday',
+    //         'mardi'    => 'Tuesday',
+    //         'mercredi' => 'Wednesday',
+    //         'jeudi'    => 'Thursday',
+    //         'vendredi' => 'Friday',
+    //         'samedi'   => 'Saturday',
+    //         'dimanche' => 'Sunday',
+    //     ];
 
-        // Convertir le jour en anglais
-        if (isset($jours[strtolower($jourFrancais)])) {
-            $jourAnglais = $jours[strtolower($jourFrancais)];
-        } else {
-            return "Jour invalide !";
-        }
+    //     // Convertir le jour en anglais
+    //     if (isset($jours[strtolower($jourFrancais)])) {
+    //         $jourAnglais = $jours[strtolower($jourFrancais)];
+    //     } else {
+    //         return "Jour invalide !";
+    //     }
 
-        // Date actuelle
-        $aujourdhui = date('Y-m-d');
+    //     // Date actuelle
+    //     $aujourdhui = date('Y-m-d');
 
-        // Calculer la date du prochain jour de l'événement
-        if (date('l') == $jourAnglais) {
-            $prochainEvenement = $aujourdhui; // Si aujourd'hui est le jour de l'événement
-        } else {
-            $prochainEvenement = date('Y-m-d', strtotime("next $jourAnglais", strtotime($aujourdhui)));
-        }
+    //     // Calculer la date du prochain jour de l'événement
+    //     if (date('l') == $jourAnglais) {
+    //         $prochainEvenement = $aujourdhui; // Si aujourd'hui est le jour de l'événement
+    //     } else {
+    //         $prochainEvenement = date('Y-m-d', strtotime("next $jourAnglais", strtotime($aujourdhui)));
+    //     }
 
-        // Retourner la date du prochain événement
-        return $prochainEvenement;
-    }
+    //     // Retourner la date du prochain événement
+    //     return $prochainEvenement;
+    // }
 
-    private function getOccurrences(array $events, DateTimeImmutable $startDate, DateTimeImmutable $endDate): array
-    {
-        $occurrences = [];
+    // private function getOccurrences(array $events, DateTimeImmutable $startDate, DateTimeImmutable $endDate): array
+    // {
+    //     $occurrences = [];
 
 
-        foreach ($events as $event) {
-            // Vérifie si l'événement est actif
-            if (!$event->getRecurringRule()->isActive()) {
-                continue;
-            }
+    //     foreach ($events as $event) {
+    //         // Vérifie si l'événement est actif
+    //         if (!$event->getRecurringRule()->isActive()) {
+    //             continue;
+    //         }
 
-            // Récupère les jours de la semaine et la date de début
-            $daysOfWeek = $event->getRecurringRule()->getDaysOfWeek();
-            $eventStartDate = $event->getStartDate();
+    //         // Récupère les jours de la semaine et la date de début
+    //         $daysOfWeek = $event->getRecurringRule()->getDaysOfWeek();
+    //         $eventStartDate = $event->getStartDate();
 
-                // Trouve le premier jour correspondant à la règle après le début de la plage
-                $currentDate = (clone $startDate)->modify("next ". $daysOfWeek);
-                // while ($currentDate < $day) {
-                //     $currentDate->modify('+1 day');
-                // }
+    //             // Trouve le premier jour correspondant à la règle après le début de la plage
+    //             $currentDate = (clone $startDate)->modify("next ". $daysOfWeek);
+    //             // while ($currentDate < $day) {
+    //             //     $currentDate->modify('+1 day');
+    //             // }
 
-                // Vérifie si la date calculée est dans la plage et après la date de début de l'événement
-                while ($currentDate < $endDate) {
-                    // if ($currentDate >= $eventStartDate) {
-                    //     $newEvent = $event;
-                    //     // $newEvent = $currentDate;
-                    //      // Met à jour la startDate avec l'occurrence
-                    //     $occurrences[] = $newEvent;
-                    // }
-                    $newEvent = clone $event;
-                    // $eventStartDate
-                    $newEvent->setStartDate($currentDate);
-                    // $newEvent->getRecurringRule()->setDaysOfWeek(($jours)[$newEvent->getRecurringRule()->getDaysOfWeek()]);
-                    $occurrences[] = $newEvent;
-                    // Ajoute une semaine pour trouver la prochaine occurrence du même jour
-                    $currentDate = $currentDate->modify('+1 week');
-                }
+    //             // Vérifie si la date calculée est dans la plage et après la date de début de l'événement
+    //             while ($currentDate < $endDate) {
+    //                 // if ($currentDate >= $eventStartDate) {
+    //                 //     $newEvent = $event;
+    //                 //     // $newEvent = $currentDate;
+    //                 //      // Met à jour la startDate avec l'occurrence
+    //                 //     $occurrences[] = $newEvent;
+    //                 // }
+    //                 $newEvent = clone $event;
+    //                 // $eventStartDate
+    //                 $newEvent->setStartDate($currentDate);
+    //                 // $newEvent->getRecurringRule()->setDaysOfWeek(($jours)[$newEvent->getRecurringRule()->getDaysOfWeek()]);
+    //                 $occurrences[] = $newEvent;
+    //                 // Ajoute une semaine pour trouver la prochaine occurrence du même jour
+    //                 $currentDate = $currentDate->modify('+1 week');
+    //             }
             
 
 
             
-        }
+    //     }
 
-        return $occurrences;
-    }
+    //     return $occurrences;
+    // }
 }
 

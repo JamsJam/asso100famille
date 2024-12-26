@@ -76,6 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
     private Collection $reservations;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Abonement $abonement = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -321,6 +324,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $reservation->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAbonement(): ?Abonement
+    {
+        return $this->abonement;
+    }
+
+    public function setAbonement(?Abonement $abonement): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($abonement === null && $this->abonement !== null) {
+            $this->abonement->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($abonement !== null && $abonement->getUser() !== $this) {
+            $abonement->setUser($this);
+        }
+
+        $this->abonement = $abonement;
 
         return $this;
     }
