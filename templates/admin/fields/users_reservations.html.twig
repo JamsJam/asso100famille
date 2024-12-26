@@ -1,0 +1,30 @@
+<div class="ea_event_reservation_detail_field">
+    {% if field.value is empty %}
+
+        Aucune reservationa ce jour pour cette evenement
+
+    {% else %}
+
+        <div class="reservation_grid">
+            <div class="titre">Date</div>
+            <div class="titre">Nom</div>
+            <div class="titre">Email</div>
+            <div class="titre">Quantity</div>
+            <div class="titre">Prix</div>
+            <div class="titre">Status</div>
+            {% for reservation in field.value %}
+    
+                {% if reservation.paid %}
+                    
+                    <div>{{reservation.createdAt|date("m/d/Y")}}</div>
+                    {# <div>{{reservation.prenom ~ " " ~ reservation.nom}}</div> #}
+                    {# <div>{{reservation.email}}</div> #}
+                    <div>{{reservation.quantity}}</div>
+                    <div>{{reservation.finalPrice}}</div>
+                    <div>{{reservation.isActiv ? "Validé" : "Annulé" }}</div>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

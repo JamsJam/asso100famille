@@ -27,7 +27,7 @@ class StripeController extends AbstractController
                 
 
                 /** @var \App\Entity\Reservation $reservation */
-                $reservation = $reservationRepository->findOnebyId($context);
+                $reservation = $reservationRepository->findOneBy(['id' => $context]);
                 $reservation
                     ->setActiv(true)
                     ->setPaid(true)

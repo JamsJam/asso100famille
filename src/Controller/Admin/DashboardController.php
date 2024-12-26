@@ -61,18 +61,14 @@ class DashboardController extends AbstractDashboardController
         ;
     }
 
-    // public function configureAssets(): Assets
-    // {
-    //     return Assets::new()
+    public function configureAssets(): Assets
+    {
+        return Assets::new()
 
-    //         // you can also import multiple entries
-    //         // it's equivalent to calling {{ importmap(['app', 'admin']) }}
-    //         ->addAssetMapperEntry('app')
-    //         ->addHtmlContentToBody('<script>
-    //         document.addEventListener("DOMContentLoaded", function() {
-    //             document.querySelector("main").classList.add("easy-admin-main");
-    //         });
-    //     </script>')
-    //     ;
-    // }
+            // you can also import multiple entries
+            // it's equivalent to calling {{ importmap(['app', 'admin']) }}
+            ->addAssetMapperEntry('admin')
+            // ->addCssFile('build/admin.css')
+        ;
+    }
 }

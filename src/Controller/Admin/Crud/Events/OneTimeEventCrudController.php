@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\SearchMode;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -45,85 +46,92 @@ class OneTimeEventCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
-        return [
 
-            FormField::addFieldset('Date'),
-            TextField::new('title','Titre')
-                ->setSortable(true)
-            ,
-            TextEditorField::new('description','Description')
-                ->setSortable(true)
-            ,
-            FormField::addFieldset('Dates et horaire de l\'évenement'),
-            FormField::addRow(),
-            DateField::new('startDate','Date de l\'evenement')
+        yield FormField::addFieldset('Date');
+        yield TextField::new('title', 'Titre')
+            ->setSortable(true);
+
+        yield TextEditorField::new('description', 'Description')
+            ->setSortable(true);
+
+        //? ==========================================
+        //! SECTION: Dates et horaire
+        //? ==========================================
+            yield FormField::addFieldset('Dates et horaire de l\'évenement');
+            yield FormField::addRow();
+            yield DateField::new('startDate', 'Date de l\'evenement')
                 ->setFormTypeOptions([
                     "input" => "datetime_immutable"
                 ])
                 ->setColumns(6)
-                ->setSortable(true)
-            ,
-            // DateField::new('endDate','Date de fin')
-            //     ->setColumns(6)
-            //     ->setSortable(true)
-            // ,
+                ->setSortable(true);
 
-            // FormField::addFieldset('Horraire de l\'évenement'),
-            FormField::addRow(),
-            TimeField::new('startHour', 'Heure de début')
+        //? ==========================================
+        //! SECTION: Heure de l'événement
+        //? ==========================================
+            yield FormField::addRow();
+            yield TimeField::new('startHour', 'Heure de début')
                 ->setColumns(6)
-                ->setSortable(true)
-            ,
-            TimeField::new('endHour','Heure de fin')
+                ->setSortable(true);
+
+            yield TimeField::new('endHour', 'Heure de fin')
                 ->setColumns(6)
-                ->setSortable(true)
-            ,
+                ->setSortable(true);
 
-            FormField::addFieldset('Prix de l\'évenement'),
+        //? ==========================================
+        //! SECTION: Prix de l'événement
+        //? ==========================================
+            yield FormField::addFieldset('Prix de l\'évenement');
+            yield BooleanField::new('isFree', 'Evenement gratuit ?');
 
-            BooleanField::new('isFree', 'Evenement gratuit ?')
-            // ->setColumns(12)
-            
-            ,
-            FormField::addRow(),
-            MoneyField::new('price', 'Prix')
+            yield FormField::addRow();
+            yield MoneyField::new('price', 'Prix')
                 ->setColumns(6)
                 ->setCurrency('EUR')
-                ->setNumDecimals(2)
-                ,
-            MoneyField::new('userPrice', 'Prix Abonné')
+                ->setNumDecimals(2);
+
+            yield MoneyField::new('userPrice', 'Prix Abonné')
                 ->setColumns(6)
                 ->setCurrency('EUR')
-                ->setNumDecimals(2),
-        
+                ->setNumDecimals(2);
 
-            FormField::addFieldset('Image'),
-            FormField::addRow(),
-            ImageField::new('image')
+        //? ==========================================
+        //! SECTION: Réservation
+        //? ==========================================
+            if(Crud::PAGE_DETAIL == $pageName){
+
+                yield FormField::addFieldset('Réservation');
+                yield CollectionField::new('reservations', false)->setTemplatePath('admin/fields/event_reservations.html.twig');
+            }
+
+        //? ==========================================
+        //! SECTION: Image
+        //? ==========================================
+            yield FormField::addFieldset('Image');
+            yield FormField::addRow();
+            yield ImageField::new('image')
                 ->setBasePath('/images/upload/events')
                 ->setUploadDir('public/images/upload/events')
                 ->setUploadedFileNamePattern('[timestamp]-[randomhash].[extension]')
                 ->setFormTypeOptions([
-                    'required'=> false,
-                    'attr' =>[
-
-                        "data-action"=>"change->cropper#loadImage"
-                        ]
+                    'required' => false,
+                    'attr' => [
+                        "data-action" => "change->cropper#loadImage"
+                    ]
                 ])
-                ->setColumns(6)
-                
-                ,
+                ->setColumns(6);
 
-            // FormField::addFieldset('Aperçu image'),
-            TextField::new('crop', 'Aperçu')
+            yield TextField::new('crop', 'Aperçu')
                 ->setFormTypeOptions([
-                    'mapped'=>'false',
+                    'mapped' => 'false',
                     'block_name' => 'crop_image'
                 ])
                 ->onlyOnForms()
-                ->setColumns(6),
-        ];
+                ->setColumns(6);
     }
+
+
+
     
 
     public function configureActions(Actions $actions): Actions
