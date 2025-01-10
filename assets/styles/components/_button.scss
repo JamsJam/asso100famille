@@ -9,6 +9,11 @@
     font-weight: 400;
     text-align: center;
     cursor: pointer;
+    transition: 
+        background-color 250ms ease-in-out,
+        color 250ms ease-in-out,
+        border 250ms ease-in-out,
+    ;
 
     &--accent1{
         @extend .btn;
