@@ -3,20 +3,20 @@
 {% block title %}Réinitialisation de Mot de Passe{% endblock %}
 
 {% block body %}
+{{ parent() }}
+<main class="login">
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
     <h1>Réinitialisation votre Mot de Passe</h1>
 
     {{ form_start(requestForm) }}
+        <p>
+            Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+        </p>
         {{ form_row(requestForm.email) }}
-        <div>
-            <small>
-                Enter your email address, and we will send you a
-                link to reset your password.
-            </small>
-        </div>
 
-        <button class="btn btn-primary">Send password reset email</button>
+        <button class="btn--success">Envoyer l'e-mail</button>
     {{ form_end(requestForm) }}
+</main>
 {% endblock %}

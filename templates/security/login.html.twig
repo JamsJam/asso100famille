@@ -15,6 +15,8 @@
             <div class="mb-3">
                 You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
+        
+            
         {% endif %}
 
         <div class="form-field">
@@ -25,6 +27,7 @@
         <div class="form-field">
             <label for="password">Mot de passe</label>
             <input type="password" name="_password" id="password"  autocomplete="current-password" required>
+            <a href="{{path("app_forgot_password_request")}}">Mot de passe oublié ?</a>
         </div>
 
         <input 
@@ -41,6 +44,7 @@
         <div class="checkbox mb-3">
             <input type="checkbox" name="_remember_me" id="_remember_me">
             <label for="_remember_me">Rester connecter</label>
+            
         </div>
 
         <button class="btn--success " type="submit">
