@@ -11,7 +11,7 @@ class ApiFetchService
     ) {
     }
 
-    public function getApiData(String $url , String $token = null, ): array
+    public function getApiData(?String $url , ?String $token = null, ): array
     {
         $response = $this->client->request(
             'GET',

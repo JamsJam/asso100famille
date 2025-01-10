@@ -1,0 +1,48 @@
+@use '../abstract' as *;
+
+
+.login{
+    min-height: calc(100vh - 2 * 120px - 200px);
+    padding-block: 4rem;
+    @extend %flex-column-center-center;
+    gap: 2rem;
+    
+    
+    form{
+        width: min(calc(1440px * 0.5 ), 60vw);
+        min-width: 300px;
+        padding: 2rem;
+        background-color: $bg-clair1;
+        border: $bg-clair2-active 2px solid;
+
+        @extend %flex-column-center-start;
+        gap: 3rem;
+        
+        .form-field{
+            @extend %flex-column-center-start;
+            gap: 1.2rem;
+            width: 100%;
+
+            input[type="text"],
+            input[type="email"],
+            input[type="password"]
+            {
+                width: 100%;
+                font-size: 1.2rem;
+                padding: 0.5rem 1rem;
+                // border-radius: 8px;
+            }
+
+            
+        } 
+        label{
+            font-size: 1.1rem;
+            font-weight: 500
+        }
+
+        .btn--success{
+            align-self: center;
+        }
+    
+    }
+}

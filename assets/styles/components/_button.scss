@@ -8,14 +8,28 @@
     font-size: $text-24-16-desk;
     font-weight: 400;
     text-align: center;
+    cursor: pointer;
 
     &--accent1{
         @extend .btn;
-        background-color: $accent1
+        background-color: $accent1;
+        &:hover{
+
+            background-color: hsl(129, 33%, 24%);;
+
+            
+        }
     }
     &--accent2{
         @extend .btn;
-        background-color: $accent2
+        background-color: $accent2;
+
+        &:hover{
+
+            background-color: hsl(344, 100%, 29%);
+
+            
+        }
     }
     &--accent3{
         @extend .btn;
@@ -23,12 +37,35 @@
         border-radius:0px;
         border:none;
         color:black;
+        &:hover{
+            background-color: hsl(120, 16%, 75%);
+            
+        }
     }
     &--footer{
         @extend .btn;
         background-color: white;
         color: $accent2;
         font-weight: 600;
+        border: 2px solid white;
+                
+        &:hover{
+            color: white;
+            background-color: hsl(344, 100%, 29%);
+            border: 2px solid white;
+            
+        }
+    }
+    &--success{
+        @extend .btn;
+        background-color: hsl(127, 55%, 45%);
+        font-weight: 600;
+        border: none;
+        
+        &:hover{
+            background-color: hsl(127, 55%, 35%);
+
+        }
     }
 
     @media screen and (max-width:768px)  {
