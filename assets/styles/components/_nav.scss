@@ -20,7 +20,7 @@ nav{
         
         &__container{
             @extend %flex-row-evenly-center;
-            gap: 2.5rem;
+            gap: 1.5rem;
             
             
             &.hide{
@@ -55,6 +55,11 @@ nav{
                 cursor: pointer;
             
         }
+    }
+
+
+    .hide{
+        display: none !important;
     }
 }
 

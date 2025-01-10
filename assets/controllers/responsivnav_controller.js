@@ -26,11 +26,25 @@ export default class extends Controller {
     getRightNavForm(){
 
         if(this.isMobile()){
-            this.navDesktopTarget.classList.add("hide")
-            this.navMobileTarget.classList.remove("hide")
+            this.navDesktopTargets.forEach(element => {
+                
+                element.classList.add("hide")
+            });
+            this.navMobileTargets.forEach(element => {
+                
+                element.classList.remove("hide")
+            });
         }else{
-            this.navDesktopTarget.classList.remove("hide")
-            this.navMobileTarget.classList.add("hide")
+
+            this.navDesktopTargets.forEach(element => {
+                
+                element.classList.remove("hide")
+            });
+            
+            this.navMobileTargets.forEach(element => {
+                
+                element.classList.add("hide")
+            });
 
         }
     }
