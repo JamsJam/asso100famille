@@ -3,10 +3,10 @@
 >
     <a class='logo__container' href="{{path('app_home')}}">
 
-        <img class='logo' src="{{asset("/images/logo/250x100_logo.webp")}}" alt="l'ogo de l'association 100% Famille">
+        <img class='logo' src="{{asset("/images/logo/logo.webp")}}" alt="l'ogo de l'association 100% Famille">
         {# <span>Association</span> #}
     </a>
-    
+
     <div class="navLink__container" {{stimulus_target('responsivnav', 'navDesktop')}}>
         <a class="{{ app.current_route == 'app_evenements' ? 'navLink active' : 'navLink' }}" href="{{path('app_evenements')}}">Evenements</a>
         <a class="{{ app.current_route == 'app_contact' ? 'navLink active' : 'navLink' }}" href="{{path('app_contact')}}">Contact</a>
