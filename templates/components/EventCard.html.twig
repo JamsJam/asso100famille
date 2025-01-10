@@ -3,7 +3,7 @@
 <div {{ attributes }} class="events__card">
     <!-- component html -->
     <div class="events__card__image">
-        <img src="{{asset('images/Rectangle_19.jpg')}}" alt="Zumba Picnic Swap Event">
+        <img src="images/upload/events/{{event.image}}" alt="Zumba Picnic Swap Event">
     </div>
     <div class="events__card__details">
 
@@ -19,5 +19,9 @@
         </div>
         <a class="btn--accent1" href="{{path('app_evenements_show',{'id': event.id, 'type':event.recurringRule is defined ? "recurring" : "ponctuel" })}}"> S'inscrire</a>
     </div>
+
+    {# <pre>
+        {{ dump(event) }}
+    </pre> #}
 </div>
 
