@@ -16,7 +16,8 @@
     
     .header{
         background-color: $bg-clair1;
-        // min-height: 70vh;
+        min-height: 70vh;
+        @extend %flex-row-center;
     }
 
 

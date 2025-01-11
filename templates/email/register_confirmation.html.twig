@@ -1,0 +1,27 @@
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
+    <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #ddd;">
+            <h1 style="color: #27ae60; aria-label="Bienvenue dans l'association"">Bienvenue dans l'association 100% Famille !</h1>
+        </div>
+        <div style="padding: 20px 0;">
+            <p>Bonjour {{ fullname }},</p>
+
+            <p>Nous avons le plaisir de confirmer votre adhésion à notre association. Nous sommes ravis de vous compter parmi nos membres !</p>
+
+            <p>Voici un récapitulatif de vos informations d'adhésion :</p>
+
+            <ul>
+                <li><strong>Nom :</strong> {{ fullname }}</li>
+                <li><strong>Email :</strong> {{ email }}</li>
+                <li><strong>Date d'adhésion :</strong> {{ membership_date|date('d/m/Y') }}</li>
+            </ul>
+
+            <p>Nous vous tiendrons informé(e) des prochaines activités et événements organisés par l'association.</p>
+
+            <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+        </div>
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9em; color: #777;">
+            <p>&copy; {{ "now"|date('Y') }} Association 100% Famille. Tous droits réservés.</p>
+        </div>
+    </div>
+</div>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,7 +75,7 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route('/reset/{token}', name: 'app_reset_password')]
-    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, ?string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, ?string $token = null, MailerService $mailerService): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -121,6 +122,15 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
+            $mailerService->sendTemplatedMail(
+                new Address('reset-password@tiers-lieu100p100famille.fr', 'Association 100% famille'),
+                $user->getEmail(),
+                "Réinitialisation du mot de passe",
+                "reset_password/reset_confirmation.html.twig",
+                ["firstname" => $user->getPrenom()]
+            );
+
+
             return $this->redirectToRoute('app_home');
         }
 
@@ -159,7 +169,7 @@ class ResetPasswordController extends AbstractController
         $email = (new TemplatedEmail())
             ->from(new Address('reset-password@tiers-lieu100p100famille.fr', 'Association 100% famille'))
             ->to((string) $user->getEmail())
-            ->subject('Your password reset request')
+            ->subject('Réinitialisation du mot de passe')
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,

@@ -1,0 +1,24 @@
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
+    <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #ddd;">
+            <h1 style="color: #e74c3c;">Nouvelle Réservation</h1>
+        </div>
+        <div style="padding: 20px 0;">
+            <p>Bonjour ,</p>
+
+            <p>Une nouvelle réservation a été effectuée. Voici les détails :</p>
+
+            <ul>
+                <li><strong>Nom du participant :</strong> {{ user_fullname }}</li>
+                <li><strong>Email :</strong> {{ user_email }}</li>
+                <li><strong>Nom de l'événement :</strong> {{ event_name }}</li>
+
+            </ul>
+
+            <p>Vous pouvez consulter plus de détails sur cette réservation dans l'interface d'administration.</p>
+        </div>
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9em; color: #777;">
+            <p>&copy; {{ "now"|date('Y') }} Association 100% Famille. Tous droits réservés.</p>
+        </div>
+    </div>
+</div>

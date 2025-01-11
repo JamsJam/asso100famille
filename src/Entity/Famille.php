@@ -40,7 +40,7 @@ class Famille
 
     #[ORM\OneToOne(inversedBy: 'famille', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?Adherent $adherent = null;
 
 
 
@@ -145,14 +145,14 @@ class Famille
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAdherent(): ?Adherent
     {
-        return $this->user;
+        return $this->adherent;
     }
 
-    public function setUser(User $user): static
+    public function setAdherent(Adherent $adherent): static
     {
-        $this->user = $user;
+        $this->adherent = $adherent;
 
         return $this;
     }

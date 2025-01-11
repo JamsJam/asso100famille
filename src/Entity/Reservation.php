@@ -47,7 +47,7 @@ class Reservation
     private ?bool $isPaid = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
-    private ?User $user = null;
+    private ?Adherent $adherent = null;
 
     #[ORM\Column(length: 10)]
     private ?string $typeEvent = null;
@@ -185,14 +185,14 @@ class Reservation
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAdherent(): ?Adherent
     {
-        return $this->user;
+        return $this->adherent;
     }
 
-    public function setUser(?User $user): static
+    public function setAdherent(?Adherent $adherent): static
     {
-        $this->user = $user;
+        $this->adherent = $adherent;
 
         return $this;
     }
