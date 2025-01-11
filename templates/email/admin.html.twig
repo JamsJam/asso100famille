@@ -1,0 +1,28 @@
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; margin: 0; padding: 0;">
+    <div style="max-width: 600px; margin: 20px auto; background: #ffffff; border: 1px solid #ddd; border-radius: 5px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #ddd;">
+            <h1 style="color: #0056b3;">Bienvenue en tant qu'Administrateur</h1>
+        </div>
+        <div style="padding: 20px 0;">
+            <p>Bonjour {{ firstname }} {{ lastname }},</p>
+
+            <p>Un compte administrateur a été créé pour vous dans notre application. Voici vos informations de connexion :</p>
+
+            <ul>
+                <li><strong>Email :</strong> {{ emaill }}</li>
+                <li><strong>Mot de passe temporaire :</strong> {{ temporary_password }}</li>
+            </ul>
+
+            <p>Nous vous recommandons de vous connecter dès maintenant et de changer votre mot de passe pour garantir la sécurité de votre compte.</p>
+
+            <a href="https://tiers-lieu100p100famille.fr/login" style="display: inline-block; margin: 20px 0; padding: 10px 20px; background-color: #0056b3; color: #ffffff; text-decoration: none; border-radius: 5px;">Accéder à votre compte</a>
+
+
+            <p>Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter.</p>
+        </div>
+        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #ddd; font-size: 0.9em; color: #777;">
+            <p>Cet email a été généré automatiquement. Merci de ne pas y répondre directement.</p>
+            <p>&copy; {{ "now"|date('Y') }} Votre Application. Tous droits réservés.</p>
+        </div>
+    </div>
+</div>

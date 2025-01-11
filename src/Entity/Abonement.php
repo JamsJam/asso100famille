@@ -23,7 +23,7 @@ class Abonement
     private ?string $status = null;
 
     #[ORM\OneToOne(inversedBy: 'abonement', cascade: ['persist', 'remove'])]
-    private ?User $user = null;
+    private ?Adherent $adherent = null;
 
     public function getId(): ?int
     {
@@ -66,14 +66,14 @@ class Abonement
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getAdherent(): ?Adherent
     {
-        return $this->user;
+        return $this->adherent;
     }
 
-    public function setUser(?User $user): static
+    public function setAdherent(?Adherent $adherent): static
     {
-        $this->user = $user;
+        $this->adherent = $adherent;
 
         return $this;
     }

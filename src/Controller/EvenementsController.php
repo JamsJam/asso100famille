@@ -134,7 +134,7 @@ class EvenementsController extends AbstractController
         
                     if($user){
                         $reservation 
-                            ->setUser($user)
+                            ->setAdherent($user)
                             ->setPrix($event->isFree() ? 0 : $event->getUserPrice)
                             ->setNom($user->getNom())
                             ->setPrenom($user->getPrenom())

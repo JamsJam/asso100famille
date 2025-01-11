@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Famille;
 use App\Entity\User;
+use DateTimeImmutable;
+use App\Entity\Famille;
+use App\Entity\Adherent;
+use Stripe\StripeClient;
+use App\Service\StripeService;
 use App\Security\EmailVerifier;
 use App\Form\Register\CoordType;
 use App\Form\RegistrationFormType;
@@ -12,11 +16,8 @@ use App\Form\Register\AdherantType;
 use App\Form\Register\AdhesionType;
 use Symfony\Component\Mime\Address;
 use App\Form\Register\ConfirmationType;
-use App\Repository\FamilleTypeRepository;
-use App\Service\StripeService;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Stripe\StripeClient;
+use App\Repository\FamilleTypeRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -125,7 +126,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
         
-        $user = new User();
+        $user = new Adherent();
         $famille = new Famille();
 
         $form = $this->createForm(ConfirmationType::class);

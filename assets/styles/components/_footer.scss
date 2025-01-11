@@ -37,6 +37,7 @@ footer{
 
         
         &__container{
+            padding-block: 4rem;
             @extend %container;
             @extend %flex-row-between-center;
             
