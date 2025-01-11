@@ -4,6 +4,7 @@ namespace App\Command;
 
 
 use App\Entity\Admin;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +31,7 @@ class CreateAdminCommand extends Command
 
     public function __construct
     (
-        public MailerInterface $mailer,
+        public MailerService $mailerService,
         public UrlGeneratorInterface $urlGeneratorInterface,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly EntityManagerInterface $entityManager
@@ -169,28 +170,20 @@ class CreateAdminCommand extends Command
                 $this->entityManager->flush();
 
 
-                $emailInfo = [//? Mail admin
-                        'to'=>'j.antoine971@hotmail.fr',
-                        'from'=>'contact@tiers-lieu100p100famille.fr',
-                        'subject'=>'Nouvelle réservation reçue - Guadeloupe Passion Caraïbes',
-                        'template'=>'email/admin.html.twig',
-                ];
-                
-                $email = (new TemplatedEmail())
-                    ->from($emailInfo['from'])
-                    ->to($emailInfo['to'])
-                    ->subject($emailInfo['subject'])
-                    ->htmlTemplate($emailInfo['template'])
-                    ->context([
+                $this->mailerService->sendTemplatedMail(
+                    // "j.antoine971@hotmail.fr", //! test
+                    $email, //! prod
+                    "contact@tiers-lieu100p100famille.fr",
+                    "Vos identifiants",
+                    "email/admin.html.twig",
+                    [
                         'firstname' => $prenom,
                         'lastname' => $nom,
                         'emaill' => $email,
                         'temporary_password' => $password,
                         'login_url' => $this->urlGeneratorInterface->generate("app_login",[], UrlGeneratorInterface::ABSOLUTE_PATH),
-                    ])
-                ;
-
-                $this->mailer->send($email);
+                    ]
+                    );
             } catch (\Throwable $th) {
                 $output->writeln([
                     '',

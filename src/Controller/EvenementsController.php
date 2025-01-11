@@ -161,7 +161,7 @@ class EvenementsController extends AbstractController
             $entityManager->flush();
 
             $request->getSession()->set('reservationContext',$reservation->getId());
-            if($event->isFree())
+
 
             return $this->redirect( $event->isFree() ? $this->generateUrl("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL) : $stripeService->createCheckoutSession($produit));
 
