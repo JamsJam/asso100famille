@@ -172,8 +172,8 @@ class CreateAdminCommand extends Command
 
                 $this->mailerService->sendTemplatedMail(
                     // "j.antoine971@hotmail.fr", //! test
-                    $email, //! prod
                     "contact@tiers-lieu100p100famille.fr",
+                    $email, //! prod
                     "Vos identifiants",
                     "email/admin.html.twig",
                     [
