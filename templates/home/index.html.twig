@@ -30,7 +30,7 @@
 
         <div class="events__header">
             <h2>Les événements</h2>
-            <a href="#" class="events__all">Tous les événements</a>
+            <a href="{{path('app_evenements')}}" class="events__all">Tous les événements</a>
         </div>
         
         {# {% for event in events %} #}
@@ -59,10 +59,68 @@
     <section class="service">
         <h2>Les Services</h2>
         <div class="service__container">
-            <twig:ServiceCard />
-            <twig:ServiceCard />
-            <twig:ServiceCard />
-            <twig:ServiceCard />
+            <twig:ServiceCard 
+                titre="Familles"
+                :items="[
+                    'Coworking',
+                    'Espace détente',
+                    'Jardin partagé',
+                    'Théâtre',
+                    'Groupe de parole',
+                    'Sortie détente',
+                    'Atelier couture',
+                    'Atelier bricolage',
+                    'Défilé de mode',
+                    'Dance'
+                ]"
+            />
+             
+            <twig:ServiceCard 
+                titre="Enfants"
+                :items="[
+                    'Espace détente',
+                    'Jardin partagé',
+                    'Théâtre',
+                    'Voyages',
+                    'Sortie détente / Festival',
+                    'Atelier lecture',
+                    'Clas',
+                    'Activités sportives'
+                ]"
+            />
+            <twig:ServiceCard 
+                titre="Jeunesses"
+                :items="[
+                    'PS Jeunes',
+                    'Espace détente',
+                    'Jardin partagé',
+                    'Ciné / Débat',
+                    'Théâtre',
+                    'Voyages',
+                    'Sortie détente / Festival',
+                    'Clas',
+                    'Activités sportives',
+                    'Défilé de mode'
+                ]"
+            />
+            <twig:ServiceCard 
+                titre="Seniors"
+                :items="[
+                    'Coworking',
+                    'Espace détente',
+                    'Jardin partagé',
+                    'Théâtre',
+                    'Groupe de parole',
+                    'Sortie détente / Festival',
+                    'Voyages',
+                    'Soirée jeux de société',
+                    'Initiation informatique',
+                    'Atelier couture / bricolage',
+                    'Défilé de mode',
+                    'Mémoire / baignade'
+                ]"
+            />
+
         </div>
     </section>
 
