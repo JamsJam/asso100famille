@@ -4,18 +4,14 @@
         <img src="{{asset('/images/img012.jpg')}}" alt="">
     </div>
     <div class="service__details">
-        <h3>Familles</h3>
+        <h3>{{ titre }}</h3>
         <ul>
-            <li>Coworking</li>
-            <li>Espace détente</li>
-            <li>Jardin partagé</li>
-            <li>Théâtre</li>
-            <li>Groupe de parole</li>
-            <li>Sortie détente</li>
-            <li>Atelier couture</li>
-            <li>Atelier bricolage</li>
-            <li>Défilé de mode</li>
-            <li>Dance</li>
+            {% for item in items %}
+                
+                <li>{{ item }}</li>
+                
+            {% endfor %}
+
         </ul>
     </div>
 </div>
