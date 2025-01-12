@@ -46,7 +46,7 @@
         min-height: 300px;
 
 
-        font-size: clamp(1rem, 0.7135rem + 0.5961vw, 1.25rem);
+        font-size: clamp(0.775rem, 0.7135rem + 0.5961vw, 1rem);
 
         @extend %flex-column-start-center;
         gap: 1rem;
@@ -56,7 +56,11 @@
             // margin-block:1rem;
             align-self: start;
             // padding-inline-start: 1rem ;
-
+            // word-wrap:;
+            text-wrap: pretty;
+            font-size: clamp(0.825rem, 0.9643rem + 0.5952vw, 1.15rem);
+        
+        
         }
         ul{
             width: 100%;
