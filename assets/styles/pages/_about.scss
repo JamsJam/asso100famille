@@ -7,9 +7,19 @@
         gap: 2rem;
         padding-block: 3rem;
         
-        p{
+        p, li{
             color: $font-color1;
             font-size: $text-24-16-desk;
+        }
+
+        ul{
+            padding-inline-start: 1.2rem ;
+            @extend %flex-column-start-start;
+            gap: 0.5rem;
+
+            li{
+                list-style: disc;
+            }
         }
         
     }

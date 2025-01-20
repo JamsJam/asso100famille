@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ReservationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Adherent;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReservationRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation

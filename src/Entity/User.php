@@ -2,26 +2,25 @@
 
 namespace App\Entity;
 
-use App\Entity\Famille;
-use App\Entity\Abonement;
-use App\Entity\Reservation;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity]
-#[ORM\Table(name: "user")]
-#[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name: "type", type: "string")]
-#[ORM\DiscriminatorMap(["admin" => Admin::class, "adherent" => Adherent::class])]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn("discriminator", "string")]
+#[ORM\DiscriminatorMap([
+    "admin" => "Admin",
+    "adherent" => "Adherent"
+])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,15 +41,42 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-    
+
+
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
-    
+
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    
+    // #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    // private ?\DateTimeImmutable $ddn = null;
 
+    // #[ORM\Column(length: 255)]
+    // private ?string $profession = null;
+
+    // #[ORM\Column(length: 100)]
+    // private ?string $adresse = null;
+
+    // #[ORM\Column(length: 255, nullable: true)]
+    // private ?string $adresse2 = null;
+
+    // #[ORM\Column(length: 5)]
+    // private ?string $codepostal = null;
+
+    // #[ORM\Column(length: 255)]
+    // private ?string $ville = null;
+
+    // #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    // private ?Famille $famille = null;
+
+    // #[ORM\Column(length: 20)]
+    // private ?string $telephone = null;
+
+    // public function __construct()
+    // {
+    //     $this->reservations = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -126,7 +152,8 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-    
+
+
     
     public function getNom(): ?string
     {
@@ -151,6 +178,132 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         
         return $this;
     }
-
     
+
+    // public function getReservations(): Collection
+    // {
+    //     return $this->reservations;
+    // }
+
+    // public function addReservation(Reservation $reservation): static
+    // {
+    //     if (!$this->reservations->contains($reservation)) {
+    //         $this->reservations->add($reservation);
+    //         $reservation->setUser($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeReservation(Reservation $reservation): static
+    // {
+    //     if ($this->reservations->removeElement($reservation)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($reservation->getUser() === $this) {
+    //             $reservation->setUser(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+    // public function getDdn(): ?\DateTimeImmutable
+    // {
+        //     return $this->ddn;
+        // }
+        
+        // public function setDdn(\DateTimeImmutable $ddn): static
+        // {
+    //     $this->ddn = $ddn;
+
+    //     return $this;
+    // }
+
+    // public function getProfession(): ?string
+    // {
+    //     return $this->profession;
+    // }
+
+    // public function setProfession(string $profession): static
+    // {
+    //     $this->profession = $profession;
+
+    //     return $this;
+    // }
+
+    // public function getAdresse(): ?string
+    // {
+    //     return $this->adresse;
+    // }
+
+    // public function setAdresse(string $adresse): static
+    // {
+    //     $this->adresse = $adresse;
+
+    //     return $this;
+    // }
+
+    // public function getAdresse2(): ?string
+    // {
+    //     return $this->adresse2;
+    // }
+
+    // public function setAdresse2(?string $adresse2): static
+    // {
+    //     $this->adresse2 = $adresse2;
+
+    //     return $this;
+    // }
+
+    // public function getCodepostal(): ?string
+    // {
+    //     return $this->codepostal;
+    // }
+
+    // public function setCodepostal(string $codepostal): static
+    // {
+    //     $this->codepostal = $codepostal;
+
+    //     return $this;
+    // }
+
+    // public function getVille(): ?string
+    // {
+    //     return $this->ville;
+    // }
+
+    // public function setVille(string $ville): static
+    // {
+    //     $this->ville = $ville;
+
+    //     return $this;
+    // }
+
+    // public function getFamille(): ?Famille
+    // {
+    //     return $this->famille;
+    // }
+
+    // public function setFamille(Famille $famille): static
+    // {
+    //     // set the owning side of the relation if necessary
+    //     if ($famille->getUser() !== $this) {
+    //         $famille->setUser($this);
+    //     }
+
+    //     $this->famille = $famille;
+
+    //     return $this;
+    // }
+
+    // public function getTelephone(): ?string
+    // {
+    //     return $this->telephone;
+    // }
+
+    // public function setTelephone(string $telephone): static
+    // {
+    //     $this->telephone = $telephone;
+
+    //     return $this;
+    // }
 }

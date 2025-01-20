@@ -12,9 +12,25 @@
         <a class="{{ app.current_route == 'app_contact' ? 'navLink active' : 'navLink' }}" href="{{path('app_contact')}}">Contact</a>
         <a class="{{ app.current_route == 'app_about' ? 'navLink active' : 'navLink' }}" href="{{path('app_about')}}">A propos</a>
         {# <a href="" class='navLink'>Connexion</a> #}
-        <a class="{{ app.current_route == 'app_login' ? 'navLink active' : 'navLink' }}" href="{{path('app_login')}}">Connexion</a>
+        {% if  app.user %}
+
+            <a class="navLink" href="{{path('admin')}}">Espace {{ is_granted('ROLE_ADMIN') ? 'administrateur' : 'membre' }}</a>
+            <a class="{{ app.current_route == 'app_login' ? 'navLink active' : 'navLink' }}" href="{{path('app_logout')}}">Deconnexion</a>
+
+        {% else %}
+            <a class="{{ app.current_route == 'app_login' ? 'navLink active' : 'navLink' }}" href="{{path('app_login')}}">Connexion</a>
+        
+
+            <a class="btn--accent2" href="{{path('app_register')}}" {{stimulus_target('responsivnav', 'navDesktop')}}>J'adhère</a>
+            
+        {% endif %}
     </div>
-    <a class="btn--accent2" href="{{path('app_register')}}" {{stimulus_target('responsivnav', 'navDesktop')}}>J'adhère</a>
+    {# {% if not app.user %}
+        
+
+        <a class="btn--accent2" href="{{path('app_register')}}" {{stimulus_target('responsivnav', 'navDesktop')}}>J'adhère</a>
+        
+    {% endif %} #}
 
     <div 
         class="navBurger" 
