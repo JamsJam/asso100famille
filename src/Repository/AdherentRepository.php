@@ -31,13 +31,21 @@ class AdherentRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Adherent
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function getMonthlyCount($dateLimite): ?int
+    {
+        $qb =  $this->createQueryBuilder('a');
+        $result= $qb
+            ->select('COUNT(a.id)') // Sélectionne le nombre d'adhérents
+            ->join('a.abonement', 'abo')
+            ->Where([ 'abo.status = :status' ])
+            ->andWhere($qb->expr()->lte('abo.createdAt', ':date'))
+            ->setParameter('status', 'active')
+            ->setParameter('date', $dateLimite)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result;
+        
+    }
 }

@@ -150,7 +150,7 @@ class Famille
         return $this->adherent;
     }
 
-    public function setAdherent(Adherent $adherent): static
+    public function setAdherent(?Adherent $adherent): static
     {
         $this->adherent = $adherent;
 

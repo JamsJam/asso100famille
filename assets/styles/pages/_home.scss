@@ -56,7 +56,7 @@
 
             &__container{
                 @extend %flex-row-around-center;
-                gap: 1rem;
+                // gap: 1rem;
                 
                 
                 @media screen and (max-width:768px) {

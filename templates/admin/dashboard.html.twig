@@ -12,10 +12,61 @@
             
 {% endblock %}
 
-{% block main %}
-        {# <p>hello</p> #}
-        {# <a clasc'y">Promotions</a> #}
-        {# <p>hello</p> #}
+{% block main %} {# ceci est une section qui englobe le contenue #}
+
+
+    {# 
+        * Admin :
+            ! les adherents
+            ! les evenements
+            ! Les dernieres actions sur le site
+            ! données de configuration (mail de confirmation de paiement, n° de tel, mail de contact)
+        * Adhérents : 
+            ! mes réservations
+            ! mon historique de reservation
+            ! mon historique de paiement
+            ! mes evenemnts à venir
+            ! mes donnes  personneles
+            ! mon adhesion
+    #}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        
+        {#? Adherent  #}
+        {#? chart + callToAction Adherent  #}
+
+        <div class="index-data__container">
+            <div class="index-data">
+                    <div style="height: 300px;">
+                        {{ render_chart(chart) }}
+                    </div>
+            </div>
+        </div>
+
+        {#! Les 3 prochains evenements + cta  #}
+        {#! cta add Evenement , voir evenement, Ajouter un user #}
+        <div class="index-data__container">
+            <div class="index-data">
+                {#? x 3 #}
+                <div class="admin-event-Card">
+                </div>
+            </div>
+        </div>
+
+        {# log -> 10 derniers evenement sur le site. CTA voir All #}
+        <div class="index-data__container">
+            <div class="index-data">
+
+                <div class="logcontainer">
+
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        
+    {% endif %}
+
 {#! Les 3 prochains evenements + cta  #}
 {#! cta add Evenement , voir evenement, Ajouter un user #}
 
