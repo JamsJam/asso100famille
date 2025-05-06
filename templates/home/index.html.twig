@@ -15,6 +15,13 @@
                 message="{{message}}"
             />
         {% endfor %}
+        {% for message in app.flashes('stripe_success') %}
+
+            <twig:Flash
+                type="success_form"
+                message="{{message}}"
+            />
+        {% endfor %}
         
         <twig:HeaderHero
             title="Ensemble pour la famille, à chaque étape de la vie"

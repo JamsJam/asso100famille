@@ -47,7 +47,7 @@ class AdherantType extends AbstractType
                     "Votre type de famille" => "",
                     "traditionnel" => "traditionnelle",
                     "nucléaire" => "nucleaire",
-                    "pacsé" => "pacsee",
+                    "pacsé" => "pacse",
                 ],
                 'multiple' => false,
                 'expanded' => false,

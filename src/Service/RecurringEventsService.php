@@ -19,11 +19,26 @@ class RecurringEventsService{
             $daysOfWeek = $event->getRecurringRule()->getDaysOfWeek();
             $eventStartDate = $event->getStartDate();
 
+
+
                 // Trouve le premier jour correspondant à la règle après le début de la plage
-                $currentDate = (clone $startDate)->modify("next ". $daysOfWeek);
+                // $currentDate = (clone $startDate)->modify("next ". $daysOfWeek);
                 // while ($currentDate < $day) {
                 //     $currentDate->modify('+1 day');
                 // }
+
+                if ((new \DateTimeImmutable('now'))->format('Y-m-d') === $startDate->format('Y-m-d') ) {
+                    $newEvent = clone $event;
+                    // $eventStartDate
+                    $newEvent->setStartDate($startDate);
+                    // $newEvent->getRecurringRule()->setDaysOfWeek(($jours)[$newEvent->getRecurringRule()->getDaysOfWeek()]);
+                    $occurrences[] = $newEvent;
+                    // Ajoute une semaine pour trouver la prochaine occurrence du même jour
+                    $currentDate = (clone $startDate)->modify("next ". $daysOfWeek);
+                } else{
+                    $currentDate = (clone $startDate)->modify("next ". $daysOfWeek);
+                }
+                
 
                 // Vérifie si la date calculée est dans la plage et après la date de début de l'événement
                 while ($currentDate < $endDate) {

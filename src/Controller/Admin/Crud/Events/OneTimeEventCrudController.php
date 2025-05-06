@@ -3,6 +3,7 @@
 namespace App\Controller\Admin\Crud\Events;
 
 use App\Entity\OneTimeEvent;
+use App\Service\MailerService;
 use App\Repository\OneTimeEventRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\SearchMode;
@@ -136,6 +139,24 @@ class OneTimeEventCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $cancelAction = Action::new('cancelEvent','Annuler');
+            // renders the action as a <a> HTML element
+            $cancelAction->displayAsLink()
+
+            // a key-value array of attributes to add to the HTML element
+            ->setHtmlAttributes(['data-foo' => 'bar', 'target' => '_blank'])
+            // removes all existing CSS classes of the action and sets
+            // the given value as the CSS class of the HTML element
+            ->setCssClass('btn btn-primary action-foo')
+            // adds the given value to the existing CSS classes of the action (this is
+            // useful when customizing a built-in action, which already has CSS classes)
+            ->addCssClass('some-custom-css-class text-danger')
+
+            //? methode parameters
+            ->linkToCrudAction('cancelEvent')
+            // //? route parameters
+            // ->linkToRoute('admin_re_cancel')
+        ;
         return $actions
         
         //! ==========================  Index page
@@ -211,4 +232,52 @@ class OneTimeEventCrudController extends AbstractCrudController
         ;
     }
 
+    #[AdminAction(routePath: 'admin/cancel', routeName: 'cancel', methods: ['GET','POST'] )]
+    public function cancelEvent(AdminContext $context, MailerService $mailerService)
+    {
+        
+        
+        // get the class name
+        $className = $context->getEntity()->getFqcn();
+        // get id and formData from POST parameters
+        $form = $context->getRequest()->request;
+        $id = $form->get('entityId');
+        $isAllCancel = $form->get('isAllCancel');
+
+        $dateEvent = $form->get('eventdate');
+        //get the entity Manager
+        $entityManager = $this->container->get('doctrine')->getManagerForClass($className);
+
+        $currentEntity = $entityManager->find($className,$id);
+        // dd($currentEntity->getReservations());
+        $currentEntity->setStatus("cancel");
+        foreach ($currentEntity->getReservations() as $reservation) {
+            $adherentMail = $reservation->getEmail();
+            $adherentNom = $reservation->getNom();
+            $adherentPrenom = $reservation->getPrenom();
+            // mail pour evenement annulé
+            $mailerService->sendTemplatedMail(
+                'contact@tiers-lieu100p100famille.fr',
+                $adherentMail,
+                'Evenement Annulé',
+                'admin/cancel.html.twig',
+                [
+                    "event_name" => 'currentEntity',
+                    "user_fullname" => $adherentNom.' '.$adherentPrenom,
+                    "event_date" => $dateEvent,
+                    "isAllCancel" => $isAllCancel
+                ]
+            );
+        }
+
+        
+
+
+
+        $entityManager->persist($currentEntity);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin');
+
+    }
 }

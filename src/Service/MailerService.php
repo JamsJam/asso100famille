@@ -18,13 +18,14 @@ class MailerService
 
 
     public function sendTemplatedMail(
-        string|Address $from,
-        string|Address $to,
+        Address|string $from,
+        Address|string $to,
         string $subject,
         string $template,
         array $context
 
     ){
+        // dd($from,$to);
         try {
             $email = (new TemplatedEmail())
                         ->from($from)
@@ -35,7 +36,8 @@ class MailerService
                     ;
 
                     $this->mailer->send($email);
-                    $this->logger->info("Email sent successfully to {$to}", ['subject' => $subject]);
+
+                    $this->logger->info("Email sent successfully to ". (is_string($to) ? $to : $to->getAddress()), ['subject' => $subject]);
         
         } catch (\Throwable $exception) {
             $this->logger->error("Failed to send email: " . $exception->getMessage(), [
@@ -45,6 +47,7 @@ class MailerService
                 'template' => $template,
                 'context' => $context,
             ]);
+            
 
             throw new \RuntimeException('Failed to send email: ' . $exception->getMessage());
         }

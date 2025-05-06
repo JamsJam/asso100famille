@@ -13,62 +13,183 @@
 {% endblock %}
 
 {% block main %} {# ceci est une section qui englobe le contenue #}
+    <br><br>
+
+        {# 
+            * Admin :
+                ! les adherents
+                ! les evenements
+                ! Les dernieres actions sur le site
+                ! données de configuration (mail de confirmation de paiement, n° de tel, mail de contact)
+            * Adhérents : 
+                ! mes réservations
+                ! mon historique de reservation
+                ! mon historique de paiement
+                ! mes evenemnts à venir
+                ! mes donnes  personneles
+                ! mon adhesion
+        #}
+
+            {#! parametters : events  #}
+            {#! Les 3 prochains evenements + cta  #}
+            {#! cta add Evenement , voir evenement, Ajouter un user #}
+                <section class="index-data__container" id="events" role="article" aria-labelledby="event-container" >
+                    <h2 id="event-container">Évènements de la semaine</h2>
+                    <hr>
+                    <br>
+                        {#? x 3 #}
+                        {% for  eventsList in events %}
+                            {% for date, eventsThisDay in eventsList %}
+                            
+                                <div class="index-data" role="group" aria-labelledby="event-date-{{ date|slug }}">
+                                    <h3 class="eventDate" 
+                                    id="event-date-{{ date|slug }}"
+                                    style="
+                                        align-self:start;
+                                        padding-inline-start:3rem;
+                                        font-weight: 700;
+                                        " >
+                                        {{ date }} 
+                                    </h3>
+                                    {% for event in eventsThisDay %}
+
+                                        <twig:Admin:EventCard 
+                                            idNum="{{event.id}}"
+                                            title="{{event.title}}"
+                                            description="{{event.description}}"
+                                            date="{{event.startDate}}"
+                                            startHour="{{event.startHour}}"
+                                            endHour="{{event.endHour}}"
+                                            price="{{event.price}}"
+                                            priceUser="{{event.userPrice}}"
+                                            isFree="{{event.isFree}}"
+                                            image="{{event.image}}"
+                                            recurringRule="{{event.recurringRule is defined ? event.recurringRule : null}}"
+                                        />
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
 
 
-    {# 
-        * Admin :
-            ! les adherents
-            ! les evenements
-            ! Les dernieres actions sur le site
-            ! données de configuration (mail de confirmation de paiement, n° de tel, mail de contact)
-        * Adhérents : 
-            ! mes réservations
-            ! mon historique de reservation
-            ! mon historique de paiement
-            ! mes evenemnts à venir
-            ! mes donnes  personneles
-            ! mon adhesion
-    #}
 
-    {% if is_granted('ROLE_ADMIN') %}
-        
-        {#? Adherent  #}
-        {#? chart + callToAction Adherent  #}
-
-        <div class="index-data__container">
-            <div class="index-data">
-                    <div style="height: 300px;">
-                        {{ render_chart(chart) }}
+                    <div class="index-data__cta-container" role="navigation" aria-labelledby="nav-event-title">
+                        <h3 id="nav-event-title">Actions disponibles</h3>
+                        <ul role="menu">
+                            <li role="menuitem">
+                                <a href="{{path('admin_one_time_event_index')}}" class="index-data__cta">Gérer les évènements ponctuels</a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="{{path('admin_one_time_event_index')}}" class="index-data__cta">Gérer les évènements récurents</a>
+                            </li>
+                        </ul>
                     </div>
-            </div>
-        </div>
+                </section>
+
+        {# {% if is_granted('ROLE_ADMIN') %} #}
+            {#* Adherent  #}
+            {#? user informations  #}
+            {#! parametters : user #}
+            {% if not is_granted('ROLE_ADMIN') %}
+                {# <pre>
+                    {{ dump(user) }}
+                </pre> #}
+                <section class="index-data__container" aria-labelledby="adherent-informations-title" id="user-info" role="article">
+                    <h2 id="adherent-informations-title">Information personnel</h2>
+                    <hr>
+                    <br>
+                    <div class="index-data"  aria-label="Information de l'utilisateur" role='group'>
+                        <div aria-labelledby="user-fullname-title" aria-describedby="user-fullname-data" role='group'>
+                            <h3 id="user-fullname-title">Prenom nom</h3>
+                            <p id="user-fullname-data">{{user.prenom}} {{user.nom}}</p>
+                        </div>
+                        <div aria-labelledby="user-profession-title" aria-describedby="user-profession-data" role='group'>
+                            <h3 id="user-profession-title">Profession</h3>
+                            <p id="user-profession-data">{{user.profession}}</p>
+                        </div>
+                        <div aria-labelledby="user-dob-title" aria-describedby="user-dob-data" role='group'>
+                            <h3 id="user-dob-title">Date de naissance</h3>
+                            <p id="user-dob-data">{{user.ddn|date('d/m/Y')}}</p>
+                        </div>
+                        <div aria-labelledby="user-email-title" aria-describedby="user-email-data" role='group'>
+                            <h3 id="user-email-title">Email</h3>
+                            <p id="user-email-data">{{user.email}}</p>
+                        </div>
+                        <div aria-labelledby="user-telephone-title" aria-describedby="user-telephone-data" role='group'>
+                            <h3 id="user-telephone-title">Téléphone</h3>
+                            <p id="user-telephone-data">{{user.telephone}}</p>
+                        </div>
+                        <div aria-labelledby="user-adress-title" aria-describedby="user-adress-data" role='group'>
+                            <h3 id="user-adress-title">Adresse</h3>
+                            <p id="user-adress-data">{{user.adresse}}</p>
+                        </div>
+                        <div aria-labelledby="user-cp-title" aria-describedby="user-cp-data" role='group'>
+                            <h3 id="user-cp-title">Code postal</h3>
+                            <p id="user-cp-data">{{user.codepostal}}</p>
+                        </div>
+                        <div aria-labelledby="user-ville-title" aria-describedby="user-ville-data" role='group'>
+                            <h3 id="user-ville-title">Ville</h3>
+                            <p id="user-ville-data">{{user.ville}}</p>
+                        </div>
+                    </div>
+                    <div class="index-data__cta-container" role="navigation" aria-labelledby="nav-adherant-title">
+                        <h3 id="nav-adherent-title">Actions disponibles</h3>
+                        <ul role="menu">
+                            <li role="menuitem">
+                                <a  href="{{path('admin_adherent_detail',{'entityId' : user.id})}}" class="index-data__cta">Voir mon profil</a>
+                            </li>
+                            <li role="menuitem">
+                                <a  href="{{path('admin_adherent_edit',{'entityId' : user.id})}}" class="index-data__cta">Modifier mon profil</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            {% endif %} 
+
+            
+
+    
+            
 
         {#! Les 3 prochains evenements + cta  #}
         {#! cta add Evenement , voir evenement, Ajouter un user #}
-        <div class="index-data__container">
-            <div class="index-data">
-                {#? x 3 #}
-                <div class="admin-event-Card">
-                </div>
-            </div>
-        </div>
 
-        {# log -> 10 derniers evenement sur le site. CTA voir All #}
-        <div class="index-data__container">
-            <div class="index-data">
-
-                <div class="logcontainer">
-
-                </div>
-            </div>
-        </div>
-
-    {% else %}
+            {#* Admin  #}
+            {#? Adherent  #}
+            {#! parametters : chart  #}
+            {#? chart + callToAction Adherent  #}
+            {% if is_granted('ROLE_ADMIN') %}
+                <section class="index-data__container" aria-labelledby="adherent-gestion" id="chart" role="article">
+                    <h2 id="adherent-gestion">Gestion des adhérents</h2>
+                    <hr>
+                    <br>
+                    <div class="index-data" aria-labelledby="chart-title" role='group'>
+                            {# <div> #}
+                                <h3 id="chart-title">Evolution des Utilisateur</h3>
+                                {{ render_chart(chart ,{
+                                    "role":"img",
+                                    "aria-labelledby": "chart-title",
+                                    "aria-label":"Graphique montrant l'évolution des abonnés sur 6 mois.",
+                                    "aria-description":"Graphique montrant l'évolution des abonnés sur 6 mois.",
+                                    
+                                })}}
+                                    {# <p id="chart-description">
+                                    Ce graphique linéaire illustre l'évolution du nombre total d'abonnés de l'association sur les 6 derniers mois
+                                </p> #}
+                            {# </div> #}
+                    </div>
+                    <div class="index-data__cta-container" role="navigation" aria-labelledby="nav-adherant-title">
+                        <h3 id="nav-adherent-title">Actions disponibles</h3>
+                        <ul role="menu">
+                            <li role="menuitem">
+                                <a  href="" class="index-data__cta">Gérer les adhérents</a>
+                            </li>
+                            <li role="menuitem">
+                                <a  href="" class="index-data__cta">Voir les abonnements</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            {% endif %} 
         
-    {% endif %}
-
-{#! Les 3 prochains evenements + cta  #}
-{#! cta add Evenement , voir evenement, Ajouter un user #}
-
-
 {% endblock %}

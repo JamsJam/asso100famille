@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
             ->setPassword(password_hash('adminadminadmin', PASSWORD_BCRYPT))
         ;
         $manager->persist($admin);
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 351; $i++) {
             // Crée un adhérent
             $adherent = new Adherent();
             $adherent->setNom($faker->lastName());

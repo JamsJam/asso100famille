@@ -47,6 +47,9 @@ abstract class EventAbstract
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $crop = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $status = null; // maintenu|reporté|annulé
+
     // Méthodes communes
     public function getId(): ?int
     {
@@ -173,6 +176,18 @@ abstract class EventAbstract
     public function setCrop(?Array $crop): self
     {
         $this->crop = $crop;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

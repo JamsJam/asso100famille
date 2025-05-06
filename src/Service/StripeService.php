@@ -23,13 +23,13 @@ class StripeService
      * @param array  $products Tableau des produits avec type ('one_time' ou 'subscription')
      * @param string $successUrl url apres succes du paiement
      * @param string $cancelUrl url apres echec du paiement
-     * @return string
+     * @return array
      */
     public function createCheckoutSession(
-        array $products,
-        ?string $successUrl = null,
-        ?string $cancelUrl = null
-    ): string 
+            array $products,
+            ?string $successUrl = null,
+            ?string $cancelUrl = null
+        ): array 
     {
 
 
@@ -38,28 +38,38 @@ class StripeService
         //? ================= set Default Parameters
             $lineItem = [];
             $mode = 'payment'; // Par défaut, mode pour les paiements uniques
+            $sessionInvoce = ['enabled' => true];
             
             
             // default sucess and cancel
 
             $successRedirect = $successUrl === null ? $this->urlGenerator->generate("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL): $successUrl;
             $cancelRedirect  = $cancelUrl === null ? $this->urlGenerator->generate("app_stripe_cancel",[],UrlGeneratorInterface::ABSOLUTE_URL) : $cancelUrl;
-            // dd($successRedirect,$cancelRedirect);
+
         foreach ($products as $product) {
+            // dd($products);
         //? ================= Error Checking
                     // Vérifier que le tableau de produits n'est pas vide
             if (empty($products)) {
                 throw new \InvalidArgumentException('Le tableau de produits ne peut pas être vide.');
             }
-            if (!isset($product['productName'], $product['amount'], $product['quantity'], $product['type'])) {
+            if (!isset(
+                $product['productName'], 
+                $product['amount'], 
+                $product['quantity'], 
+                $product['type']
+                )) {
                 throw new \InvalidArgumentException(
                     'Chaque produit doit contenir "productName", "amount", "quantity", et "type".'
                 );
             }
+            // dd('test reussi');
 
         //? ================= Products handle
             if ($product['type'] === 'subscription') {
                 $mode = 'subscription';
+
+                
                 $lineItem[] = [
                     'price_data' => [
                         'currency' => 'eur',
@@ -84,7 +94,8 @@ class StripeService
                     ],
                     'quantity' => $product['quantity'],
                 ];
-            } }
+            } 
+        }
 
 
         //? =========== Create  session
@@ -96,13 +107,36 @@ class StripeService
                     'success_url' => $successRedirect,
                     'cancel_url' => $cancelRedirect,
                 ]);
+
+                if($mode === 'payment'){
+                    $checkout_session['invoice_creation'] = ['enabled' => true];
+                }
             } catch (\Exception $e) {
                 throw new \RuntimeException('Erreur Stripe : ' . $e->getMessage());
             }
 
+            return [
+                'id' => $checkout_session->id,
+                'url' => $checkout_session->url
+            ];
+    }
+
+
+    public function getStripeInvoiceLink(?string $sessionId){
+        $stripeClient = new StripeClient($this->stripeSecretKey);
+        $invoiceId = $this->getSessionCheckout($sessionId)['invoice'];
+        $stripeInvoice = $stripeClient->invoices->retrieve($invoiceId, [])['hosted_invoice_url'];
+
         
+        return $stripeInvoice;
+    }
+
+    public function getSessionCheckout(?string $sessionId){
+        $stripe = new StripeClient($this->stripeSecretKey);
+
+        $stripeSession = $stripe->checkout->sessions->retrieve($sessionId, []);
         
-            return $checkout_session->url;
+        return $stripeSession;
     }
 
 

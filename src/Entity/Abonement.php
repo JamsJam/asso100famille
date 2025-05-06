@@ -22,6 +22,13 @@ class Abonement
     #[ORM\Column(length: 20)]
     private ?string $status = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $invoiceId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $sessionId = null;
+
+
     #[ORM\OneToOne(inversedBy: 'abonement', cascade: ['persist', 'remove'])]
     private ?Adherent $adherent = null;
 
@@ -77,4 +84,30 @@ class Abonement
 
         return $this;
     }
+
+    public function getInvoiceId(): ?string
+    {
+        return $this->invoiceId ;
+    }
+
+    public function setInvoiceId(?string $invoiceId): ?static
+    {
+        $this->invoiceId = $invoiceId;
+        
+        return $this ;
+    }
+
+    public function getSessionId(): ?string
+    {
+        return $this->sessionId ;
+    }
+
+    public function setSessionId(?string $sessionId): ?static
+    {
+        $this->sessionId = $sessionId;
+
+        return $this ;
+    }
+
+
 }

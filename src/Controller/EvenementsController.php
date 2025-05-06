@@ -109,21 +109,28 @@ class EvenementsController extends AbstractController
             $produit = [
                 "productName" => $event->getTitle(),
                 "quantity"=>$form->getData()->getQuantity(),
-                "amount"=>$price,
+                "amount"=> $price ?? 0,
                 'type'=> "payment",
                 "interval"=> null
             ];
+            // dd($produit);
             
 
                 //?=========== create reservation
 
 
                     if($typeEvent === 'ponctuel'){
+
+                        
                         $reservation 
                             ->setOtEvent($event)// ontime eventID
                         ;
                         
                     }else if($typeEvent === 'recurring'){
+                        
+                        $produit['type'] = "subscription";
+                        $produit['interval'] = 'month';
+
                         $reservation 
                             ->setREvent($event) // recuring eventID
                         ;
@@ -135,7 +142,7 @@ class EvenementsController extends AbstractController
                     if($user){
                         $reservation 
                             ->setAdherent($user)
-                            ->setPrix($event->isFree() ? 0 : $event->getUserPrice)
+                            ->setPrix($event->isFree() ? 0 : $event->getUserPrice())
                             ->setNom($user->getNom())
                             ->setPrenom($user->getPrenom())
                             ->setEmail($user->getEmail())
@@ -143,7 +150,7 @@ class EvenementsController extends AbstractController
                         ;
                     }else{
                         $reservation 
-                            ->setPrix($event->isFree() ? 0 : $event->getPrice)
+                            ->setPrix($event->isFree() ? 0 : $event->getPrice())
                             // customer data fill by the form
                         ;
                     }
@@ -160,10 +167,14 @@ class EvenementsController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            $request->getSession()->set('reservationContext',$reservation->getId());
+            $stripeSession = $stripeService->createCheckoutSession([$produit]);
+            $request->getSession()->set('reservationContext',[
+                    "user" => $reservation->getId(),
+                    "sessionId" => $stripeSession['id']
+                ]);
+                // dd($produit);
 
-
-            return $this->redirect( $event->isFree() ? $this->generateUrl("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL) : $stripeService->createCheckoutSession($produit));
+            return $this->redirect( $event->isFree() ? $this->generateUrl("app_stripe_success",[],UrlGeneratorInterface::ABSOLUTE_URL) : $stripeSession['url']);
 
         }
 
