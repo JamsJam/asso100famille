@@ -1,0 +1,82 @@
+<div{{ attributes.defaults(stimulus_controller('cancel_event action_event')) }} class="admin-event-card" role="region" aria-labelledby="event-title-{{date|date('dmY')}}-{{idNum}}" >
+
+
+        {% if this.status == 'inProgress' %}
+            
+            <div class="admin-event-card__status {{ this.status }}">
+                {{ ux_icon('noto:green-circle', {class:'admin-event-card__status-icon'}) }} 
+                {#! remplace by color dot SVG according the status #}
+
+            
+            {% elseif this.status == 'past' %}
+                
+                <div class="admin-event-card__status {{ this.status }}">
+                {{ ux_icon('noto:black-circle', {class:'admin-event-card__status-icon'}) }} 
+                {#! remplace by color dot SVG according the status #}
+
+            {% elseif this.status == 'incoming' %}
+                
+                <div class="admin-event-card__status {{ this.status }}">
+                {{ ux_icon('noto:orange-circle', {class:'admin-event-card__status-icon'}) }} 
+                {#! remplace by color dot SVG according the status #}
+
+            
+        {% endif %}
+         {# dynamicely change the status #}
+        <p>{{ this.status }}</p> 
+    </div>
+    <div class="admin-event-card__title">
+        <h4 id="event-title-{{date|date('dmY')}}-{{idNum}}">
+            {{title}}
+        </h4>
+
+    </div>
+
+    <div 
+        class="admin-event-card__action" 
+        role='region' aria-label="action de l'evenement"
+        {{
+            stimulus_target('action_event','action_container')|
+            stimulus_action('action_event','onClicAction','click@window')
+        }} 
+    >
+        {{ ux_icon('charm:menu-kebab',{
+            class: 'admin-event-card__action-icon',
+            'data-action-event-target': 'action_kebabicon'
+        }) }}
+        {{ ux_icon('mingcute:close-fill',{
+            class: 'admin-event-card__action-icon visually-hidden',
+            'data-action-event-target': 'action_close'
+        }) }}
+
+        {# <canvas id="chart-subscribers" aria-labelledby="chart-title" aria-describedby="chart-description"></canvas> #}
+
+        {# {{ ux_icon('charm:menu-kebab',{class: 'admin-event-card__action-icon'}) }} #}
+        <div class="action__box" role="toggle-box" {{stimulus_target('action_event','action_box')}}>
+
+            {% if recurringRule is not same as null %}
+                
+                <a href="{{path('admin_recurring_event_detail',{'entityId': idNum})}}">Voir l'évènement</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{path('admin_recurring_event_edit',{'entityId': idNum})}}">Modifier l'évènement</a>
+                    <a href="{{path('admin_recurring_event_cancel',{'entityId': idNum})}}">Annuler l'évènement</a>
+                {# {% else %} #}
+                    
+                {% endif %}
+
+            {% else %}
+                
+                <a href="{{path('admin_one_time_event_detail',{'entityId': idNum})}}">Voir l'évènement</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{path('admin_one_time_event_edit',{'entityId': idNum})}}">Modifier l'évènement</a>
+                    <a href="{{path('admin_one_time_event_cancel',{'entityId': idNum})}}">Annuler l'évènement</a>
+                {# {% else %} #}
+                    
+                {% endif %}
+            {% endif %}
+        </div>
+        {# </div> #}
+        {# </div> #}
+    </div>
+
+</div>

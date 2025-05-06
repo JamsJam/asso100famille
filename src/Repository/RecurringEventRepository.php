@@ -32,6 +32,25 @@ class RecurringEventRepository extends ServiceEntityRepository
             ;
        }
 
+    //    /**
+    //     * @return RecurringEvent[] Returns an array of RecurringEvent objects
+    //     */
+    public function findNextEvents(\DateTimeImmutable $today): array
+    {
+        
+     //min((:totay - e.start_date))
+        ($qb = $this->createQueryBuilder('r'))
+            ->addSelect('a')
+            ->innerJoin('r.recurringRule','a')
+            ->andWhere($qb->expr()->eq( ':today','a.daysOfWeek'))
+            ->andWhere($qb->expr()->eq( ':activ','a.isActive'))
+            ->setParameter('activ', true)
+            ->setParameter('today', $today->format('l'))
+            ;
+            // dd($qb ->getQuery()->getResult());
+         return $qb ->getQuery()->getResult();
+    }
+
     //    public function findOneBySomeField($value): ?RecurringEvent
     //    {
     //        return $this->createQueryBuilder('r')

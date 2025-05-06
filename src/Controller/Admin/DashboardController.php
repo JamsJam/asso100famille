@@ -5,8 +5,12 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Entity\OneTimeEvent;
 use App\Entity\RecurringEvent;
-use App\Repository\AdherentRepository;
 use Symfony\UX\Chartjs\Model\Chart;
+use App\Repository\AdherentRepository;
+use App\Service\RecurringEventsService;
+use App\Repository\OneTimeEventRepository;
+use App\Repository\RecurringEventRepository;
+use App\Service\StripeService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -14,7 +18,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Stripe\Stripe;
+use Symfony\Component\Validator\Constraints\Length;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -35,83 +43,129 @@ class DashboardController extends AbstractDashboardController
 
     public function __construct(
         public ChartBuilderInterface $chartBuilder,
-        public AdherentRepository $adherentRepository
+        public AdherentRepository $adherentRepository,
+        public RecurringEventRepository $recurringEventRepository,
+        public OneTimeEventRepository $oneTimeEventRepository,
+        public RecurringEventsService $recurringEventsService,
+        public StripeService $stripeService
     )
     {}
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
-        // avoir le compte des 6 derniers mois.
-        // a partir du mois d'aujourd'hui, un tableau des 6 dernier mois
-        $months = []; // month to the chart
-        $dataSet = []; 
-        $today = new \DateTimeImmutable('now');
-        for ($i=-6; $i <= 0; $i++) { 
-            $months[] = clone($today)
-                ->modify($i . 'month');
-        }
-        $dataSet = array_map(
-            function($month){
+                // dd($events);
+        // if($this->isGranted('ROLE_ADMIN')){
+            $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+            $today = new \DateTimeImmutable('now',new \DateTimeZone('America/Guadeloupe'));
 
+            //?  ========================== Chart
+                // avoir le compte des 6 derniers mois.
+                // a partir du mois d'aujourd'hui, un tableau des 6 dernier mois
+                $months = []; // month to the chart
+                $dataSet = []; 
+                for ($i=-6; $i <= 0; $i++) { 
+                    $months[] = clone($today)
+                        ->modify($i . 'month');
+                }
+                $dataSet = array_map(
+                    function($month){
+
+                        
+                        return $this->adherentRepository->getMonthlyCount($month->modify('last day of this month'));
+                    },$months);
+                    // dd($months,$dataSet);
+                // dd($months);
+                $chart->setData([
+
+                    'labels' => array_map(
+                        function($date) {
+                            $month = $date->format('m');
+                            $date->format('Y');
+                            if ($month == 1 || $month == 12) {
+                                return $this->getMonthName(intval($month)) . ' ' . $date->format('Y');
+                            } else {
+                                return $this->getMonthName(intval($month));
+                            }
+                            
+                        },$months),
+                    'datasets' => [
+                        [
+                            'label' => 'Nombre total d\'abonnés ',
+                            'backgroundColor' => 'hsl(338, 27.70%, 36.90%)',
+                            'borderColor' => 'hsl(338, 27.70%, 46.90%)',
+                            'data' => $dataSet
+                        ],
+                    ],
+                ]);
+
+                $chart->setOptions([
+                    'scales' => [
+                        'y' => [
+                            'suggestedMin' => 0,
+                            'suggestedMax' => 100,
+                        ],
+                    ],
+                ]);
+
+            //! ---------
+            
+            //?  ========================== Events
+
+
+                $events = array_merge(
+                    $this->oneTimeEventRepository->findNextEvents($today),
+                    $this->recurringEventsService->getOccurrences(
+                        $this->recurringEventRepository->findNextEvents($today),
+                        $today,$today->modify('+1 week')
+                    )
+                );
+
+
+                usort($events,[self::class, 'sortTable']);
+                // $events[] = $this->recurringEventsService->getOccurrences($this->recurringEventRepository->findNextEvents($today),$today,$today->modify('+1 week')) ; 
+                // dd($today,$today->modify('+1 day'));
+            //! ---------
+
+            $filterEvents = [];
+            for ($i=0; $i < 7; $i++) { 
+                $date = $today->modify("+" .$i. "days");
+                $thisDayEvent = $this->filterOnDate($events,$date);
+                if(count($thisDayEvent) === 0 ){
+                    continue;
+                }
+                $formatter = new \IntlDateFormatter('fr_FR', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE);
+                $formatter->setPattern('EEEE dd MMMM');
+                // $formatter->format($date);
+                $filterEvents[]= [$formatter->format($date) => $thisDayEvent];
                 
-                return $this->adherentRepository->getMonthlyCount($month->modify('last day of this month'));
-            },$months);
-            // dd($months,$dataSet);
-        // dd($months);
-        $chart->setData([
+            };
+            // dd($filterEvents);
 
-            'labels' => array_map(
-                function($date) {
-                    $month = $date->format('m');
-                    $date->format('Y');
-                    if ($month == 1 || $month == 12) {
-                        return $this->getMonthName(intval($month)) . ' ' . $date->format('Y');
-                    } else {
-                        return $this->getMonthName(intval($month));
-                    }
-                    
-                },$months),
-            'datasets' => [
-                [
-                    'label' => 'Nombre total d\'abonnés ',
-                    'backgroundColor' => 'rgb(255, 99, 132)',
-                    'borderColor' => 'rgb(255, 99, 132)',
-                    'data' => $dataSet
-                ],
-            ],
-        ]);
+            $this->stripeService->getSessionCheckout('cs_test_b15p1Xjo2v7UisI8DEy8PXze5DY45XsnxdvSNr5WuocWs0DUskHOU1OOyi');
 
-        $chart->setOptions([
-            'scales' => [
-                'y' => [
-                    'suggestedMin' => 0,
-                    'suggestedMax' => 100,
-                ],
-            ],
-        ]);
 
-        if($this->isGranted('ROLE_ADMIN')){
+            $userInfo = $this->getUser();
+            // dd($userInfo);
 
-            //? Voir le nombre d'abonnées ( chart par mois ) + call to action gestion utilisateurs
+
+            return $this->render('admin/dashboard.html.twig' ,[
+                'chart' => $chart,
+                'events'=> $filterEvents,
+                'user' => $userInfo
+            ]);
             
+        // }else{
             
-            
-            //? 
+            // get data client
+            // return $this->render('admin/dashboard.html.twig' ,[
+            //     'chart' => $chart,
+            //     'events'=> $events,
+    
+    
+            // ]);
 
-
-
-
-        }else{
-
-        }
-        
-        
-        return $this->render('admin/dashboard.html.twig' ,[
-            'chart' => $chart,
-
-        ]);
+        // }
         
     }
     
@@ -180,6 +234,37 @@ class DashboardController extends AbstractDashboardController
     public static function getMonthNumber(string $monthName): ?int
     {
         return array_flip(self::MONTHS)[$monthName] ?? null;
+    }
+
+    public static function sortTable($event1, $event2) {
+        $date1 = clone $event1->getStartDate(); // Supposons qu'une méthode getStartDate() existe
+        $date2 = clone $event2->getStartDate();
+    
+        $time1 = $date1->setTime(
+            $event1->getStartHour()->format("H"),
+            $event1->getStartHour()->format("i"),
+            $event1->getStartHour()->format("s")
+        );
+    
+        $time2 = $date2->setTime(
+            $event2->getStartHour()->format("H"),
+            $event2->getStartHour()->format("i"),
+            $event2->getStartHour()->format("s")
+        );
+    
+        if ($time1 == $time2) {
+            return 0;
+        }
+        return ($time1 < $time2) ? -1 : 1;
+    }
+
+    public static function filterOnDate( array $events, \DateTimeImmutable $date) {
+        return $filterArray = array_filter($events, function($event) use ($date){
+            
+            return $event->getStartDate()->format('d/m/Y') == $date->format('d/m/Y');
+        });
+
+        
     }
 
 

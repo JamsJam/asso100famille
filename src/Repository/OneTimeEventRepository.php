@@ -43,6 +43,23 @@ class OneTimeEventRepository extends ServiceEntityRepository
             return $qb ->getQuery()->getResult();
        }
 
+    //    /**
+    //     * @return OneTimeEvent[] Returns an array of OneTimeEvent objects
+    //     */
+       public function findNextEvents(\DateTimeImmutable $today): array
+       {
+        //min((:totay - e.start_date))
+            ($qb = $this->createQueryBuilder('e'))
+                ->andWhere($qb->expr()->lte( ':today','e.startDate'))
+                ->orderBy('e.startDate', 'ASC')
+                ->setMaxResults(5)
+                ->setParameter('today', $today)
+                
+                ;
+
+            return $qb ->getQuery()->getResult();
+       }
+
     //    public function findOneBySomeField($value): ?OneTimeEvent
     //    {
     //        return $this->createQueryBuilder('o')

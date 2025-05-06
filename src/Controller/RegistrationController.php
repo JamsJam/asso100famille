@@ -220,6 +220,7 @@ class RegistrationController extends AbstractController
                     ->setNbAdultes($famille->getNbFemmes() + $famille->getNbHommes())
                     ->setNbMineurs($famille->getNbGarcons() + $famille->getNbFilles())
                     ->setMembre($famille->getNbAdultes() + $famille->getNbMineurs())
+
                 ;
                 $user->setFamille($famille);
             //?-----------
@@ -229,7 +230,7 @@ class RegistrationController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->persist($famille);
 
-                // $entityManager->flush();
+                $entityManager->flush();
             //?-----------
             
 
@@ -237,7 +238,7 @@ class RegistrationController extends AbstractController
 
             //? =======Stripe - create session
 
-                $stripe_checkout_url = $stripeService->createCheckoutSession(
+                $stripe_checkout = $stripeService->createCheckoutSession(
                     array_map(
                         function($item){
                             if ($item['nom'] == 'Adhésion famille') {
@@ -257,8 +258,13 @@ class RegistrationController extends AbstractController
                             }
                         },$items)
                 );
+                $stripe_checkout_url = $stripe_checkout['url'];
+                $sessionId = $stripe_checkout['id'];
                 
-                $session->set('registerContext', $user->getId());
+                $session->set('registerContext', [
+                    "user" => $user->getId(),
+                    "sessionId" => $sessionId
+                ] );
             //?-----------
 
 
@@ -282,7 +288,6 @@ class RegistrationController extends AbstractController
                 );
             //?-----------
 
-            // do anything else you need here, like send an email
 
             // dd($stripe_checkout_url);
 
