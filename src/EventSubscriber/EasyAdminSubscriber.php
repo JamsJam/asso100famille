@@ -1,15 +1,12 @@
 <?php
 namespace App\EventSubscriber;
 
-use App\Entity\Promos;
+
 use DateTimeImmutable;
-use App\Entity\Activites;
-use App\Entity\Excursions;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
+use App\Entity\OneTimeEvent;
+use App\Entity\RecurringEvent;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
@@ -24,7 +21,10 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            BeforeEntityPersistedEvent::class => ['convertDateToDateTimeImmutable'],
+            BeforeEntityPersistedEvent::class => [
+                ['convertDateToDateTimeImmutable'],
+                ['setCreationDate']
+            ],
             // BeforeEntityUpdatedEvent::class => ['updateEntities'],
             // BeforeCrudActionEvent::class      => ['addReservationInfoToEvent'] 
         ];
@@ -33,16 +33,27 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
 
 
-    public function convertDateToDateTimeImmutable(BeforeEntityPersistedEvent $event){
+    public function convertDateToDateTimeImmutable(BeforeEntityPersistedEvent $event) :void
+    {
         $start = $event->getEntityInstance()->getStartDate();
 
         // dd($event->getEntityInstance()->getStartDate());
     }
 
 
-    public function addReservationInfoToEvent(BeforeCrudActionEvent $event){
-        // dd($event);
+    public function setCreationDate(BeforeEntityPersistedEvent $event): void
+    {
+        // dd(new \DateTimeImmutable('now'),$event);
+        $entity = $event->getEntityInstance();
+        // dd($entity);
 
+        if (!$entity instanceof RecurringEvent && !$entity instanceof OneTimeEvent) {
+            return;
+        }
+
+        if($entity->getCreatedAt() === null){
+            $entity->setCreatedAt(new \DateTimeImmutable('now')) ;
         // dd($event->getEntityInstance()->getStartDate());
+        }
     }
 }

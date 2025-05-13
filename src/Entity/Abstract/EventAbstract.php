@@ -20,8 +20,12 @@ abstract class EventAbstract
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column( nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $startDate = null;
+
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $endDate = null;
@@ -47,7 +51,7 @@ abstract class EventAbstract
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $crop = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null; // maintenu|reporté|annulé
 
     // Méthodes communes
@@ -75,6 +79,17 @@ abstract class EventAbstract
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 
