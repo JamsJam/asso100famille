@@ -202,7 +202,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Evenements ponctuels', 'fas fa-list', OneTimeEvent::class);
         yield MenuItem::linkToCrud('Evenements recurrents', 'fas fa-list', RecurringEvent::class);
         yield MenuItem::section('Utilisateurs');
-        // yield MenuItem::linkToCrud('Utilisateur', 'fas fa-list', User::class);
+        yield MenuItem::linkToCrud('Utilisateur', 'fas fa-list', User::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }

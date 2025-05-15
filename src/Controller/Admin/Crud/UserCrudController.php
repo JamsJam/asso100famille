@@ -144,6 +144,9 @@ class UserCrudController extends AbstractCrudController
             ->update(Crud::PAGE_INDEX, Action::NEW,function (Action $action) {
                 return $action->setIcon('fa fa-file-alt')->setLabel('Ajouter');
             })
+            ->update(Crud::PAGE_INDEX, Action::EDIT,function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Modifier');
+            })
             ->update(Crud::PAGE_INDEX, Action::DELETE,function (Action $action) {
                 return $action->setIcon('fa fa-file-alt')->setLabel('Supprimer');
             })

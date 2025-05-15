@@ -42,7 +42,7 @@ class OneTimeEventCrudController extends AbstractCrudController
                 'attr' => ['data-controller' => 'cropper']
             ])
             ->setFormThemes(['admin/form.html.twig', '@EasyAdmin/crud/form_theme.html.twig'])
-            // ->setDefaultSort(['id' => 'DESC'])
+            ->setDefaultSort(['createdAt' => 'DESC'])
         ;
     }
 
@@ -52,7 +52,13 @@ class OneTimeEventCrudController extends AbstractCrudController
 
         yield FormField::addFieldset('Date');
         yield TextField::new('title', 'Titre')
-            ->setSortable(true);
+        ->setSortable(true);
+        if(Crud::PAGE_INDEX == $pageName){
+
+            yield DateField::new('createdAt', 'Créé le')
+                ->setSortable(true);
+        }
+
 
         yield TextEditorField::new('description', 'Description')
             ->setSortable(true);
@@ -169,6 +175,9 @@ class OneTimeEventCrudController extends AbstractCrudController
             })
             ->update(Crud::PAGE_INDEX, Action::NEW,function (Action $action) {
                 return $action->setIcon('fa fa-file-alt')->setLabel('Ajouter');
+            })
+            ->update(Crud::PAGE_INDEX, Action::EDIT,function (Action $action) {
+                return $action->setIcon('fa fa-file-alt')->setLabel('Modifier');
             })
             ->update(Crud::PAGE_INDEX, Action::DELETE,function (Action $action) {
                 return $action->setIcon('fa fa-file-alt')->setLabel('Supprimer');
