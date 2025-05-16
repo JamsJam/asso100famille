@@ -1,7 +1,14 @@
 <div {{ attributes }} class="service__card">
     <!-- component html -->
     <div class="service__img">
-        <img src="{{asset('/images/img012.jpg')}}" alt="">
+
+        {% if img is defined %}
+            
+            <img src="{{ img }}" alt="">
+        {% else %}
+            
+            <img src="{{asset('/images/img012.jpg')}}" alt="">
+        {% endif %}
     </div>
     <div class="service__details">
         <h3>{{ titre }}</h3>
