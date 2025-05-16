@@ -17,9 +17,14 @@ nav{
         height: 100%;
 
         &__container{
-            display: block;
+            display: flex;
             height: 65%;
             width: 130px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
     }
