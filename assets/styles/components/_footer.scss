@@ -40,13 +40,23 @@ footer{
             padding-block: 4rem;
             @extend %container;
             @extend %flex-row-between-center;
+
+                    @media screen and (max-width:768px) {
+            &{
+
+                flex-direction: column;
+                align-items: start;
+                width: 100%;
+                padding-inline-start: 4rem;
+            }
+        }
             
         }
         
         &__logo{
             
+            
             @extend %flex-row-center;
-            display: block;
             height: 65%;
             width: 130px;
 
@@ -62,10 +72,13 @@ footer{
         
         &__nav{
             height: 120px;
+            display: flex;
             @extend %flex-column-center-start;
             gap: 1rem;
             font-weight: 300;
             
         }
+        
+
     }
 }

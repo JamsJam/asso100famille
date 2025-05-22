@@ -1,6 +1,7 @@
 @use '../abstract' as *;
 
 nav{
+    // display: flex;
     @extend %flex-row-between-center;
     @extend %container;
     min-height: 120px;
