@@ -51,23 +51,34 @@
 
     &__logo{
 
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
+        a{
+
+            text-decoration: none;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            img{
+                    width: 130px;
+
+            }
+
+            p{
+                font-weight: 700;
+            }
         }
     }
 
     &__link{
-        //todo flex column
+        
         @extend %flex-column-around-center;
         gap: 3rem;
     }
 
-    &__footer{
-        //cta j'adhere / connection
-    }
+    // &__footer{
+    //     //cta j'adhere / connection
+    // }
 
 
 }

@@ -11,10 +11,10 @@
         <meta name="geo.placename" content="Guadeloupe" />
         <meta name="geo.position" content="16.265;-61.551" />
         <meta name="ICBM" content="16.265, -61.551" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Association 100% Famille |{% endblock %}</title>
         <link rel="icon" href="{{asset('/images/favicon/favicon.ico')}}" type="image/x-icon">
         {% block stylesheets %}
-             <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+             {# <link rel="stylesheet" href="{{ asset('styles/app.scss') }}"> #}
         {% endblock %}
 
         {% block javascripts %}
@@ -31,16 +31,19 @@
                 <div class="modal" {{stimulus_controller('modalmanager')|stimulus_target('modalmanager', 'modal')|stimulus_action('modalmanager','openModal','responsivnav:getModalEvent@window')|stimulus_action('modalmanager','showOnlyOnMobile','resize@window')}}>
                     <div class="modal__container">
                         {{ ux_icon('iconamoon:close-bold',{'class':'close', 'data-action':'click->modalmanager#closeModal'}) }}
-                        <div class="logo">
+                        <div class="modal__logo">
                             
                             <a href="{{path('app_home')}}">
-                            {# <img src="" alt="logo Association 100% famille"> #}
-                                Association 100% famille
+                                <img src="{{asset("/images/logo/logomark.webp")}}" alt="logo Association 100% famille">
+                                <p>
+                                    Association 100% famille
+                                </p>
                             </a>
                         </div>
                         <div class="modal__link">
-                            <a class="{{ app.current_route == 'app_about' ? 'navLink active' : 'navLink' }}" href="{{path('app_about')}}">A propos</a>
-                            <a class="{{ app.current_route == 'app_evenements' ? 'navLink active' : 'navLink' }}" href="{{path('app_evenements')}}">Evenements</a>
+                            <a class="{{ app.current_route == 'app_home' ? 'navLink active' : 'navLink' }}" href="{{path('app_home')}}">Accueil</a>
+                            <a class="{{ app.current_route == 'app_about' ? 'navLink active' : 'navLink' }}" href="{{path('app_about')}}">À propos</a>
+                            <a class="{{ app.current_route == 'app_evenements' ? 'navLink active' : 'navLink' }}" href="{{path('app_evenements')}}">Évènements</a>
                             <a class="{{ app.current_route == 'app_contact' ? 'navLink active' : 'navLink' }}" href="{{path('app_contact')}}">Contact</a>
                             
                         </div>
