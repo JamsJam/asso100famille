@@ -1,0 +1,215 @@
+/* Background */
+@media only screen and (min-width: 1279px) and (max-width: 1550px) {
+  .nftmax-main__column {
+    width: 100%;
+  }
+  .nftmax-main__sidebar {
+    width: 100%;
+    padding-left: 15px;
+  }
+  .nftmax-adashboard.nftmax-close {
+    padding-left: 7%;
+  }
+  .nftmax-header.nftmax-close {
+    padding-left: 7%;
+  }
+}
+.close-icon {
+  text-align: center;
+  min-width: 25px;
+  cursor: pointer;
+  display: block;
+  line-height: initial;
+  position: relative;
+}
+
+.nftmax-smenu {
+  position: fixed;
+  left: 0;
+  z-index: 6000;
+  height: 100%;
+  transition: all 0.3s ease;
+  width: 335px;
+  transform: translateX(0%);
+  box-shadow: 0 9px 95px 0 rgba(0, 0, 0, 0.0509803922);
+  transition: all 0.4s;
+  padding: 30px 40px 44px;
+}
+.nftmax-smenu .menu-bar__count {
+  transition: all 0.3s ease;
+}
+
+.nftmax-smenu.nftmax-close {
+  width: 70px;
+  padding-inline: 0;
+}
+.nftmax-smenu.nftmax-close .nftmax-logo__icon {
+  width: 100%;
+  opacity: 1;
+  visibility: visible;
+}
+.nftmax-smenu.nftmax-close .logo {
+  justify-content: center;
+  margin: 0 20px 20px;
+}
+.nftmax-smenu.nftmax-close .logo a {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  display: none;
+}
+.nftmax-smenu.nftmax-close .menu-bar__name {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  display: none;
+}
+.nftmax-smenu.nftmax-close .menu-bar__count {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  display: none;
+}
+.nftmax-smenu.nftmax-close .admin-menu__title {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0);
+  display: none;
+}
+.nftmax-smenu.nftmax-close .primary {
+  background: transparent !important;
+  padding: 0 5px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+.nftmax-smenu.nftmax-close .nftmax__toggle {
+  position: relative;
+  margin: 0;
+}
+.nftmax-smenu.nftmax-close .admin-menu {
+  padding: 0;
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+}
+.nftmax-smenu.nftmax-close .admin-menu__two.mg-top-50 {
+  margin-top: 30px;
+}
+.nftmax-smenu.nftmax-close .nftmax-menu-icon {
+  margin: 0;
+}
+
+.nftmax-adashboard {
+  transition: all 0.4s;
+  padding-left: 363px;
+  padding-right: 70px;
+  width: 100%;
+  padding-bottom: 50px;
+}
+
+.nftmax-header {
+  transition: all 0.4s;
+  padding-left: 363px;
+  padding-right: 70px;
+}
+
+.nftmax-logo__icon {
+  max-width: 40px;
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+}
+
+.admin-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.nftmax-adashboard.nftmax-close {
+  padding-left: 5%;
+}
+
+.nftmax-header.nftmax-close {
+  padding-left: 5%;
+}
+
+@media only screen and (min-width: 0px) and (max-width: 1278px) {
+  .nftmax-smenu {
+    width: 280px !important;
+    transform: translateX(-100%);
+  }
+  .nftmax-smenu .nftmax-logo__icon {
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+  }
+  .nftmax-smenu .menu-bar__count {
+    right: -30px;
+  }
+  .nftmax-smenu .admin-menu {
+    padding: 15px 15px;
+    padding-top: 30px;
+  }
+  .nftmax-smenu.nftmax-close {
+    transform: translatex(0%);
+  }
+  .nftmax-smenu.nftmax-close .close-icon {
+    right: 0;
+    border-radius: 0;
+    top: 0;
+  }
+  .nftmax-smenu.nftmax-close .logo a {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    display: inline;
+  }
+  .nftmax-smenu.nftmax-close .menu-bar__name {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    display: inline;
+    display: inline-block;
+  }
+  .nftmax-smenu.nftmax-close .menu-bar__count {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    display: inline;
+  }
+  .nftmax-smenu.nftmax-close .admin-menu__title {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    display: inline;
+    text-align: left;
+    padding: 0 20px;
+    display: block;
+  }
+  .nftmax-smenu.nftmax-close .menu-bar li {
+    text-align: left;
+    padding: 0 20px;
+    display: block;
+  }
+  .nftmax-smenu.nftmax-close .nftmax-menu-icon {
+    margin-right: 14px !important;
+  }
+  .close-icon {
+    display: block !important;
+  }
+  .nftmax-adashboard {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .nftmax-header {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .nftmax-adashboard.nftmax-close {
+    padding-left: 25px;
+  }
+  .nftmax-header.nftmax-close {
+    padding-left: 25px;
+  }
+}/*# sourceMappingURL=menu-ber.css.map */

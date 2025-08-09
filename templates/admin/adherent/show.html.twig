@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adherent{% endblock %}
+
+{% block body %}
+    <h1>Adherent</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ adherent.id }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ adherent.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ adherent.roles ? adherent.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ adherent.password }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ adherent.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ adherent.prenom }}</td>
+            </tr>
+            <tr>
+                <th>IsVerified</th>
+                <td>{{ adherent.isVerified ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Ddn</th>
+                <td>{{ adherent.ddn ? adherent.ddn|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Profession</th>
+                <td>{{ adherent.profession }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ adherent.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Adresse2</th>
+                <td>{{ adherent.adresse2 }}</td>
+            </tr>
+            <tr>
+                <th>Codepostal</th>
+                <td>{{ adherent.codepostal }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ adherent.ville }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ adherent.telephone }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_adherent_index') }}">back to list</a>
+
+    <a href="{{ path('app_admin_adherent_edit', {'id': adherent.id}) }}">edit</a>
+
+    {{ include('admin/adherent/_delete_form.html.twig') }}
+{% endblock %}

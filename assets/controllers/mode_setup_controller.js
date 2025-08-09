@@ -1,0 +1,92 @@
+import { Controller } from '@hotwired/stimulus';
+
+/*
+* The following line makes this controller "lazy": it won't be downloaded until needed
+* See https://github.com/symfony/stimulus-bridge#lazy-controllers
+*/
+/* stimulusFetch: 'lazy' */
+export default class extends Controller {
+    static targets = [
+
+    ]
+
+
+    initalize(){}
+
+    connect(){
+        let darkMode = JSON.parse(localStorage.getItem("darkMode"))
+        this.modeSetup(darkMode)
+        document.getElementById("theme-controll").addEventListener("click", event => {
+            darkMode = !darkMode
+            localStorage.setItem("darkMode", darkMode)
+            // updateRevFlow()
+            // const main = document.querySelector("html")
+
+            this.modeSetup(darkMode)
+        })
+         
+         console.log('setup')
+    }
+
+    modeSetup(mode){
+        if (mode) {
+
+        document.documentElement.style.setProperty("--headding-color", "#fff")
+        document.documentElement.style.setProperty("--paragraph-color", "#E2E8F0")
+        document.documentElement.style.setProperty("--primary-color-2", "#22C55E")
+        document.documentElement.style.setProperty("--primary-color-border", "#2A313C")
+        document.documentElement.style.setProperty("--primary-color", "#22C55E")
+        document.documentElement.style.setProperty("--warning-color", "#FACC15")
+        document.documentElement.style.setProperty("--alerts-color", "#FF4747")
+        document.documentElement.style.setProperty("--other-color", "#FF784B")
+        document.documentElement.style.setProperty("--grey-color", "#2A313C")
+        document.documentElement.style.setProperty("--grey-color-border", "#edf2f7")
+        document.documentElement.style.setProperty("--body-bg-color", "#23262B")
+        document.documentElement.style.setProperty("--bg-color", "#1D1E24")
+        document.documentElement.style.setProperty("--greyscale-3", "#191B1F")
+        document.documentElement.style.setProperty("--greyscale-4", "#293644")
+        document.documentElement.style.setProperty("--greyscale-5", "#D9FBE6")
+        document.documentElement.style.setProperty("--greyscale-200", "rgba(226, 232, 240, 0.7)")
+        document.documentElement.style.setProperty("--greyscale-1", "#2A313C")
+        document.documentElement.style.setProperty("--bg-color-2", "#23262B")
+
+        document.getElementById("dark-icon").style.setProperty("display", "block")
+        document.getElementById("light-icon").style.setProperty("display", "none")
+        document.getElementsByClassName("logo")[0].style.setProperty("display", "none")
+        document.getElementsByClassName("logo-dark")[0].style.setProperty("display", "block")
+        } else {
+
+        document.documentElement.style.setProperty("--headding-color", "#111827")
+        document.documentElement.style.setProperty("--paragraph-color", "#747681")
+        document.documentElement.style.setProperty("--primary-color", "#22C55E")
+        document.documentElement.style.setProperty("--primary-color-border", "#22C55E")
+        document.documentElement.style.setProperty("--primary-color-2", "#22C55E")
+        document.documentElement.style.setProperty("--warning-color", "#FACC15")
+        document.documentElement.style.setProperty("--alerts-color", "#FF4747")
+        document.documentElement.style.setProperty("--other-color", "#FF784B")
+        document.documentElement.style.setProperty("--grey-color", "#F7FAFC")
+        document.documentElement.style.setProperty("--grey-color-border", "#edf2f7")
+        document.documentElement.style.setProperty("--bg-color", "#FAFAFA")
+        document.documentElement.style.setProperty("--body-bg-color", "#F6F6F6")
+        document.documentElement.style.setProperty("--greyscale-200", "rgba(42, 49, 60, 0.7)")
+        document.documentElement.style.setProperty("--greyscale-1", "#EDF2F7")
+        document.documentElement.style.setProperty("--greyscale-3", "#EEEFF2")
+        document.documentElement.style.setProperty("--greyscale-4", "#CBD5E0")
+        document.documentElement.style.setProperty("--greyscale-5", "#23262B")
+        document.documentElement.style.setProperty("--bg-color-2", "#f7fafc")
+        document.getElementById("dark-icon").style.setProperty("display", "none")
+        document.getElementById("light-icon").style.setProperty("display", "block")
+        document.getElementsByClassName("logo")[0].style.setProperty("display", "block")
+        document.getElementsByClassName("logo-dark")[0].style.setProperty("display", "none")
+        }
+
+
+        
+
+    }
+
+
+
+
+
+}

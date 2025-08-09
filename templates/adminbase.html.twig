@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" >
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Association 100% Famille |
+			{% endblock %}
+		</title>
+		<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+		{# <link rel="stylesheet" href="{{asset("css/bootstrap.min.css")}}"> #}
+		{# <link rel="stylesheet" href="{{asset("css/slick.css")}}"> #}
+		{# <link rel="stylesheet" href="{{asset("css/responsive.css")}}"> #}
+		{# <link rel="stylesheet" href="{{asset("css/style.css")}}"> #}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('admin') }}{% endblock %}
+        {% endblock %}
+	</head>
+	<body  class="admin" {{stimulus_controller('theme_switch')}}>
+
+
+            {% include "partials/admin/components/_aside.html.twig" %}
+
+			<div class="container container--dark">
+{% include "partials/admin/components/_header.html.twig" with {
+    title: block('pagetitle')
+} %}
+				<main>
+					<button {{stimulus_action('theme_switch', 'switchTheme', 'click')}}>change theme</button>
+
+						{% block main %}{% endblock %}
+				</main>
+			</div>
+
+                <!-- NFTmax Dashboard -->
+
+
+
+
+
+
+		{# <script src={{asset("dist/js/jquery-3.6.3.min.js")}}></script>
+		<script src={{asset("dist/js/slick.min.js")}}></script>
+		<script src={{asset("dist/js/bootstrap.bundle.min.js")}}></script>
+		<script src={{asset("dist/js/chart.js")}}></script>
+		<script src={{asset("dist/js/custom.js")}}></script>
+		<script src={{asset("dist/js/modeControl.js")}}></script> #}
+	</body>
+</html>
