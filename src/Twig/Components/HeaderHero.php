@@ -19,6 +19,8 @@ final class HeaderHero
 
     public ?string $img;
 
+    public ?string $alt;
+
     public ?bool   $bento = false;
 
     public ?array  $contact ;

@@ -45,7 +45,12 @@
 
         {% if img is defined  %}
             <div class='hero-img'>
-                <img  src="{{img}}" alt="">
+                <img  
+                
+                    src="{{img}}" alt="{{alt}}" loading="lazy"
+                    
+                >
+                
             </div>
         {% endif %}
 
@@ -101,7 +106,7 @@
 
         {% if img is defined  %}
             <div class='hero-img'>
-                <img  src="{{img}}" alt="">
+                <img  src="{{img}}" alt="{{alt ?? null}}" loading="lazy">
             </div>
         {% endif %}
 

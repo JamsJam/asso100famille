@@ -4,7 +4,7 @@
 
         {% if img is defined %}
             
-            <img src="{{ img }}" alt="">
+            <img src="{{ img }}" alt="{{alt}}" loading="lazy">
         {% else %}
             
             <img src="{{asset('/images/img012.jpg')}}" alt="">

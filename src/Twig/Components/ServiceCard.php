@@ -10,4 +10,5 @@ final class ServiceCard
     public ?string $titre = null;
     public array $items = [];
     public ?string $img;
+    public ?string $alt;
 }

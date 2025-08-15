@@ -41,6 +41,10 @@
         }
 
         &__image{
+            max-width: 300px;
+            width: 30dvw;
+            min-width: 250px;
+
             img{
                 width: 100%;
                 height: 100%;
