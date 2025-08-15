@@ -11,10 +11,12 @@
         <meta name="geo.placename" content="Guadeloupe" />
         <meta name="geo.position" content="16.265;-61.551" />
         <meta name="ICBM" content="16.265, -61.551" />
+        
 
         <meta name="ahrefs-site-verification" content="aa751aae3c41e616c24d24be20f9d96c8b561d0c243540f6ff88e5d5a1ada26f">
         <title>{% block title %}Association 100% Famille | {% endblock %}</title>
         <link rel="icon" href="{{asset('/images/favicon/favicon.ico')}}" type="image/x-icon">
+        <link rel="canonical" href="{{ app.request.uri }}" />
         {% block stylesheets %}
              {# <link rel="stylesheet" href="{{ asset('styles/app.scss') }}"> #}
         {% endblock %}
@@ -25,6 +27,8 @@
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="WxhYiC1GD+j1qOf1g6kYBg" async></script>
     </head>
     <body>
+    
+
         <header>
             <twig:Navigation />
         </header>
