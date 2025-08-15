@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+{% block metadescription %}{{event.description}}{% endblock %}
 {% block title %}{{parent()}}{{event.title}}{% endblock %}
 
 {% block body %}
