@@ -45,7 +45,7 @@ final class SitemapController extends AbstractController
                 ),
                 'lastmod' => "2025-08-15",
                 'changefreq' => 'monthly',
-                'priority' => '0.5',
+                'priority' => '1.0',
             ];
         }
 
@@ -77,7 +77,7 @@ final class SitemapController extends AbstractController
                 ),
                 'lastmod' => $event->getCreatedAt() ? $event->getCreatedAt()->format('Y-m-d') : $today->format('Y-m-d'),
                 'changefreq' => 'weekly',
-                'priority' =>'0.5',
+                'priority' =>'1.0',
             ];
         }
 
