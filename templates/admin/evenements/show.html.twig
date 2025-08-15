@@ -60,7 +60,7 @@
                             
                             <tr class="tr--{{theme}}">
                                 <th class="th--{{theme}}">Tout les ... </th>
-                                <td class="td--{{theme}}">{{event.recurringRule.dayOfWeek}} à {{ event.startHour|date("H:i") }}</td>
+                                <td class="td--{{theme}}">{{event.recurringRule.daysOfWeek}} à {{ event.startHour|date("H:i") }}</td>
                             </tr>
                         {% endif %}
 
@@ -94,7 +94,7 @@
 				<table class="table--{{theme}}">
 					<thead class="thead--{{theme}}">
 						<tr class="tr--{{theme}}">
-							<th style="text-align:center" colspan="5">Reservations</th>
+							<th style="text-align:center" colspan="4">Reservations</th>
 						</tr>
 					</thead>
 					<thead class="thead--{{theme}}">
@@ -105,32 +105,38 @@
 							<th scope="col">Email</th>
 							<th scope="col">prix</th>
 							<th scope="col">quantité</th>
-							<th scope="col">action</th>
+							{# <th scope="col">action</th> #}
 						</tr>
 					</thead>
 					<tbody>
+                        {% set totalPrice = 0 %}
+                        {% set totalQuantity = 0 %}
 						{% for adherent in event.reservations %}
+
+                        {% set totalPrice = totalPrice + (adherent.finalPrice / 100) %}
+                        {% set totalQuantity = totalQuantity + adherent.quantity %}
 
                             <tr class="tr--{{theme}}">
                                 <td class="td--{{theme}}">{{adherent.prenom}} {{adherent.nom}}</td>
                                 <td class="td--{{theme}}">{{adherent.email}}</td>
-                                <td class="td--{{theme}}">{{adherent.finalPrice}}</td>
+                                <td class="td--{{theme}}">{{(adherent.finalPrice / 100)|number_format(2, '.', ',')}} €</td>
                                 <td class="td--{{theme}}">{{adherent.quantity}}</td>
-                                <td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
-                                    <button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
-                                    <ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
-                                        <li class="actionDropdown__item actionDropdown__item--{{theme}}">
-                                            <a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_evenements_show",{type:type,id:event.id})}}">
-                                                Voir l'adherent
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </td>
+
                             </tr>
+                            {% if loop.last %}
+                            <tr>
+                                <th>Total</th>
+                                <td><b>{{event.reservations|length}} inscris</b></td>
+                                <td><b>{{totalPrice|number_format(2, '.', ',')}} €</b></td>
+                                <td><b>{{totalQuantity}}</b></td>
+                            </tr>
+                            
+                            {% endif %}
+                            
                         {% else %}
-						<tr class="tr--{{theme}}">
-							<td class="td--{{theme}}" colspan="5">Aucun réservation pour le moment</td>
-						</tr>
+                            <tr class="tr--{{theme}}">
+                                <td class="td--{{theme}}" colspan="5">Aucun réservation pour le moment</td>
+                            </tr>
 						{% endfor %}
 
 					</tbody>

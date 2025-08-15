@@ -123,10 +123,16 @@
             
             & tr{
                 border-bottom: 1px solid;
+                position: relative;
                 
                 &:last-child {
                     border-bottom: none;
                 }
+
+                .dot {
+                    height: 1.5rem;
+                    width: 1.5rem;
+            }
             }
         }
 

@@ -44,7 +44,7 @@ final class EvenementController extends AbstractController
             return $event->getRecurringRule()->isActive() === true;
         });
 
-        dump($inCommingOtEvenements,$historyOtEvenements, $recurringEvenement  );
+        
         return $this->render('admin/evenements/index.html.twig', [
             'theme' => $theme,
             'otEvents' => $inCommingOtEvenements,
