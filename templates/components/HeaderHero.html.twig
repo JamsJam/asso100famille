@@ -47,7 +47,7 @@
             <div class='hero-img'>
                 <img  
                 
-                    src="{{img}}" alt="{{alt}}" loading="lazy"
+                    src="{{img}}" alt="{{alt}}" fetchpriority="high"
                     
                 >
                 
@@ -106,7 +106,7 @@
 
         {% if img is defined  %}
             <div class='hero-img'>
-                <img  src="{{img}}" alt="{{alt ?? null}}" loading="lazy">
+                <img  src="{{img}}" alt="{{alt ?? null}}" fetchpriority="high">
             </div>
         {% endif %}
 
