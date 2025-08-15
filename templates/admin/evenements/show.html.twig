@@ -1,0 +1,159 @@
+{% extends 'adminBase.html.twig' %}
+
+
+{% block title %}{{event.title}}
+{% endblock %}
+{% block pagetitle %}{{event.title}}
+{% endblock %}
+
+{% block main %}
+
+	<article class="adherentShow">
+
+		<section class="adherentShow__row">
+			<div class="row__action">
+				<a class="button button--{{theme}} button--secondary" href="{{path('app_admin_evenements_edit',{type:type,id:event.id})}}">
+					Modifier
+				</a>
+				<a class="button button--{{theme}} button--secondary" href="{{path('app_admin_evenements')}}">
+					Retour
+				</a>
+			</div>
+		</section>
+		<section class="adherentShow__row">
+			<div
+				class="adherentInfo">
+
+				{#! ==========. Table information de l'evenement  #}
+				<table class="table table--{{theme}}">
+					<thead class="thead--{{theme}}">
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}" colspan="2">Informations Sur l'evenement</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Evenement créer le :</th>
+							<td class="td--{{theme}}">{{ event.createdAt|date("d/m/Y h:i") }}
+							</td>
+						</tr>
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Nom de l'evenement</th>
+							<td class="td--{{theme}}">{{ event.title }}</td>
+						</tr>
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">description de l'evenement</th>
+							<td class="td--{{theme}}">{{ event.description }}</td>
+						</tr>
+
+                        {% if type is same as "po" %}
+                            
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Date de début</th>
+                                <td class="td--{{theme}}">Le {{ event.startDate|date("d/m/Y") }} à {{ event.startHour|date("H:i") }}</td>
+                            </tr>
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Date de fin</th>
+                                <td class="td--{{theme}}">Le {{ event.endDate|date("d/m/Y") }} à {{ event.endHour|date("H:i") }}</td>
+                            </tr>
+                        {% elseif type is same as "re" %}
+                            
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Tout les ... </th>
+                                <td class="td--{{theme}}">{{event.recurringRule.daysOfWeek}} à {{ event.startHour|date("H:i") }}</td>
+                            </tr>
+                        {% endif %}
+
+
+
+                        {% if event.isFree %}
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Prix</th>
+                                <td class="td--{{theme}}">Gratuit</td>
+                            </tr>
+                        {% else %}
+                            
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Prix</th>
+                                <td class="td--{{theme}}">{{ (event.price / 100)|number_format(2, '.', ',') }} €</td>
+                            </tr>
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Prix Adherent</th>
+                                <td class="td--{{theme}}">{{ (event.userPrice / 100)|number_format(2, '.', ',')}} €</td>
+                            </tr>
+                        {% endif %}
+                            <tr class="tr--{{theme}}">
+                                <th class="th--{{theme}}">Nombre d'inscrisption</th>
+                                <td class="td--{{theme}}">{{ event.reservations|length}}</td>
+                            </tr>
+
+					</tbody>
+				</table>
+
+				{#! ==========. Table des reservations  #}
+				<table class="table--{{theme}}">
+					<thead class="thead--{{theme}}">
+						<tr class="tr--{{theme}}">
+							<th style="text-align:center" colspan="4">Reservations</th>
+						</tr>
+					</thead>
+					<thead class="thead--{{theme}}">
+						<tr
+							class="tr--{{theme}}">
+							{# <th  scope="col">image</th> #}
+							<th scope="col">Adherents</th>
+							<th scope="col">Email</th>
+							<th scope="col">prix</th>
+							<th scope="col">quantité</th>
+							{# <th scope="col">action</th> #}
+						</tr>
+					</thead>
+					<tbody>
+                        {% set totalPrice = 0 %}
+                        {% set totalQuantity = 0 %}
+						{% for adherent in event.reservations %}
+
+                        {% set totalPrice = totalPrice + (adherent.finalPrice / 100) %}
+                        {% set totalQuantity = totalQuantity + adherent.quantity %}
+
+                            <tr class="tr--{{theme}}">
+                                <td class="td--{{theme}}">{{adherent.prenom}} {{adherent.nom}}</td>
+                                <td class="td--{{theme}}">{{adherent.email}}</td>
+                                <td class="td--{{theme}}">{{(adherent.finalPrice / 100)|number_format(2, '.', ',')}} €</td>
+                                <td class="td--{{theme}}">{{adherent.quantity}}</td>
+
+                            </tr>
+                            {% if loop.last %}
+                            <tr>
+                                <th>Total</th>
+                                <td><b>{{event.reservations|length}} inscris</b></td>
+                                <td><b>{{totalPrice|number_format(2, '.', ',')}} €</b></td>
+                                <td><b>{{totalQuantity}}</b></td>
+                            </tr>
+                            
+                            {% endif %}
+                            
+                        {% else %}
+                            <tr class="tr--{{theme}}">
+                                <td class="td--{{theme}}" colspan="5">Aucun réservation pour le moment</td>
+                            </tr>
+						{% endfor %}
+
+					</tbody>
+				</table>
+
+
+
+
+
+
+			</div>
+		</section>
+
+	</article>
+
+
+	{# <a href="{{ path('app_admin_adherent_edit', {'id': adherent.id}) }}">edit</a>
+		
+		    {{ include('admin/adherent/_delete_form.html.twig') }} #}
+{% endblock %}

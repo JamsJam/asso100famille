@@ -100,12 +100,13 @@ class EvenementsController extends AbstractController
 
         $thisWeekEvents = array_merge($ponctualEvents,$recurringEventsService->getOccurrences($recurringEvents,$today,$today->modify("+1 week")));
 
+        dump($event);
 
         //?=========== form handle
         if ($form->isSubmitted() && $form->isValid()){
-            
+            $userPrice = $event->getUserPrice() ?? 0;
             // dd($form->getData(), $event);
-            $price = $user ? $event->getPrice() : $event->getUserPrice() ;
+            $price = $user ? $userPrice : $event->getPrice() ;
             $produit = [
                 "productName" => $event->getTitle(),
                 "quantity"=>$form->getData()->getQuantity(),
@@ -113,10 +114,10 @@ class EvenementsController extends AbstractController
                 'type'=> "payment",
                 "interval"=> null
             ];
-            // dd($produit);
+            // dump($produit);
             
 
-                //?=========== create reservation
+            //?=========== create reservation
 
 
                     if($typeEvent === 'ponctuel'){
@@ -137,17 +138,19 @@ class EvenementsController extends AbstractController
                     }else {
                             throw new \InvalidArgumentException('Type d\'événement invalide.');
                         }
-        
-        
-                    if($user){
-                        $reservation 
+
+                        $eventPrice = $event->isFree() ? 0 : $userPrice;
+                        
+                        if($user){
+                            $reservation 
                             ->setAdherent($user)
-                            ->setPrix($event->isFree() ? 0 : $event->getUserPrice())
+                            ->setPrix($eventPrice)
                             ->setNom($user->getNom())
                             ->setPrenom($user->getPrenom())
                             ->setEmail($user->getEmail())
                             
-                        ;
+                            ;
+                            
                     }else{
                         $reservation 
                             ->setPrix($event->isFree() ? 0 : $event->getPrice())
@@ -162,6 +165,7 @@ class EvenementsController extends AbstractController
                         ->setActiv(false)
                         ->setPaid(false)
                     ;
+                    // dd($produit);
 
 
             $entityManager->persist($reservation);

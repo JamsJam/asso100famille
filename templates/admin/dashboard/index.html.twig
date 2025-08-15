@@ -1,0 +1,164 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block pagetitle %}Dashboard{% endblock %}
+
+
+{% block main %}
+	<article class="dashboard">
+	
+		{% if is_granted("ROLE_ADMIN") %}
+			<section class="dashboard__row">
+			
+				<div class="card card--{{theme}}">
+					<h2 class="card__title card__title--{{theme}}">Nombre d'adhérents</h2>
+					<p class="card__content card__content--{{theme}}">{{countAdherent}}</p>
+				</div>
+
+			</section>
+
+			<section class="dashboard__row">
+			
+				<div class="chart chart--{{theme}}">
+					<h2 class="chart__title chart__title--{{theme}}">Nombre d'adhérents</h2>
+					
+					<div class="chart__container">
+
+						{#todo  // render graph des adhérent ces si derniers mois + recette
+							{{ render_chart(chart) }} 
+						#}
+
+						{{ render_chart(chart) }}
+						
+					</div>
+				</div>
+
+
+
+			</section>
+
+		
+		{% else %}
+
+			<section class="dashboard__row">
+			
+				<div class="events events--{{theme}}">
+					<h2 class="events__title events__title--{{theme}}">Mes evenements à venirs</h2>
+					
+					<table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								<th  scope="col">Evenements</th>
+								<th  scope="col">date</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for event in pEvents %}
+								
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{event.title}}</td>
+									<td class="td--{{theme}}">{{event.beginAt}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_evenements_show",{id:event.OtEvent.id})}}">
+													Voir l'evenement
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							{% else %}
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}"colspan="3">Aucun évènements à venir</td>
+								</tr>
+							{% endfor %}
+								
+						</tbody>
+					</table>
+					
+					<table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								<th  scope="col">Evenements</th>
+								<th  scope="col">Tout les ...</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for event in rEvents %}
+								
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{event.rEvent.title}}</td>
+									<td class="td--{{theme}}">{{dayMapping[event.rEvent.recurringRule.daysOfWeek]}} {{event.rEvent.startHour|format_datetime('none', 'short', locale: 'fr')}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_evenements_show",{id:event.rEvent.id})}}">
+													Voir l'evenement
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							{% else %}
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}"colspan="3">Aucun évènements à venir</td>
+								</tr>
+							{% endfor %}
+								
+						</tbody>
+					</table>
+
+				</div>
+
+
+			</section>
+
+			<section class="dashboard__row">
+			
+				<div class="events events--{{theme}}">
+					<h2 class="events__title events__title--{{theme}}">Mon Abonnement</h2>
+					
+
+					
+					<table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								<th  scope="col">Depuis</th>
+								<th  scope="col">Expire le :</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+						<tbody>
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{abonement.createdAt|date("d/m/Y")}}</td>
+									<td class="td--{{theme}}">{{abonement.expiredAt|date("d/m/Y")}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_adherent_show",{id:app.user.id})}}">
+													Voir mon profil
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+
+								
+						</tbody>
+					</table>
+
+				</div>
+
+
+			</section>
+
+		{% endif %}
+
+	</article>
+{% endblock %}

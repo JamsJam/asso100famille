@@ -1,0 +1,115 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}
+	Les adhérents
+{% endblock %}
+{% block pagetitle %}Les adhérents{% endblock %}
+
+
+{% block main %}
+
+	<article class="adherent">
+	
+		<section class="adherent__row">
+				<div class="adherentList adherentList--{{theme}}">
+					<h2 class="adherentList__title adherentList__title--{{theme}}">Tout les adhérents</h2>
+					
+					{# <form action="{{ path("app_admin_adherent_index") }}">
+						<input type="search" name="q" placeholder="Search">
+						<input type="submit" value="Go">
+					</form> #}
+					<table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								<th  scope="col">Nom</th>
+								<th  scope="col">date de naissance</th>
+								<th  scope="col">email</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for adherent in adherents %}
+								
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{adherent.nom}}</td>
+									<td class="td--{{theme}}">{{adherent.ddn|date("d/m/Y")}}</td>
+									<td class="td--{{theme}}">{{adherent.email}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_adherent_show",{id:adherent.id})}}">
+													Voir le profil
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							{% else %}
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}"colspan="3">Aucun évènements à venir</td>
+								</tr>
+							{% endfor %}
+								
+						</tbody>
+					</table>
+
+					
+					<nav class="pagination">
+
+						<ul class="pagination__items">
+							<li class="pagination__item pagination__item--{{theme}}  {{ page is same as 1 ? "disabled" : "" }}">
+							<a 
+								class="pagination__link pagination__link--{{theme}} {{ page is same as 1 ? "disabled" : "" }} " 
+								href="{{ page is same as 1 ? "#" :  path('app_admin_adherent_index',{"page" : page - 1})}}">Previous</a></li>
+							{% set displayed = [] %}
+							{% for i in 1..pageCount %}
+								{% if i == 1
+									or i == pageCount
+									or (i >= page - 2 and i <= page + 2) 
+								%}
+
+									{# Ajouter des "..." si écart avec la dernière page affichée #}
+									{% if displayed is not empty and i > displayed|last + 1 %}
+										<li class="pagination__item pagination__item--{{theme}} disabled">
+											<span class="pagination__link pagination__link--{{theme}}">…</span>
+										</li>
+									{% endif %}
+
+									{% if i == page %}
+										<li class="pagination__item pagination__item--{{theme}} active">
+											<span class="pagination__link pagination__link--{{theme}}">{{ i }}</span>
+										</li>
+									{% else %}
+										<li class="pagination__item pagination__item--{{theme}}">
+											<a class="pagination__link pagination__link--{{theme}} " href="?page={{ i }}">{{ i }}</a>
+										</li>
+									{% endif %}
+
+									{% set displayed = displayed|merge([i]) %}
+								{% endif %}
+
+							{% endfor %}
+							<li class="pagination__item pagination__item--{{theme}} {{ page is same as pageCount ? "disabled" : "" }}">
+								<a 
+									class="pagination__link pagination__link--{{theme}} {{ page is same as pageCount ? "disabled" : "" }} " 
+									href="{{ page is same as pageCount ? "#" :  path('app_admin_adherent_index',{"page" : page - 1})}}"
+									>
+									Next
+								</a>
+							</li>
+						</ul>
+					</nav>
+					
+
+				</div>
+		
+
+
+		</section>
+
+
+
+
+	</article>
+{% endblock %}

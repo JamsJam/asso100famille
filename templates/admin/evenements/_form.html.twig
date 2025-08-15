@@ -1,0 +1,80 @@
+{{ form_start(form) }}
+
+    {{ form_row(form.titre) }}
+
+
+    {{ form_row(form.description) }}
+
+ 
+
+        {#?====== isFree #}
+
+        <div class="form__row radio_field" id="isfreeRow">
+            {{ form_label(form.isFree) }}
+            <div class="form__fieldset">
+                {% for item in form.isFree.children %}
+                    <div class="radio_field__row">
+                        {{ form_label(item, null,{ label_attr: { for: item.vars.id, class:'form__label form__label--' ~ theme } }) }}
+                        {{ form_widget(item,{attr:{"data-action":"change->dynamic-form-submit#onDynamicChange"}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {#?====== prices #}
+        {% if form.prix is defined %} 
+            {{form_row(form.prix)}} 
+        {% endif %}
+
+        {% if form.userPrix is defined %} 
+            {{form_row(form.userPrix)}} 
+        {% endif %}
+
+    {#?====== Date #}
+
+        {{ form_row(form.startAt) }}
+        {{ form_row(form.startHour) }}
+
+        {{ form_row(form.endAt) }}
+        {{ form_row(form.endHour) }}
+
+        {#?====== EventType #}  
+
+
+        <div class="form__row radio_field" id="typeEventRow">
+            {{ form_label(form.eventType) }}
+            <div class="form__fieldset">
+                {% for item in form.eventType.children %}
+                    <div class="radio_field__row">
+                        {{ form_label(item, null,{ label_attr: { for: item.vars.id, class:'form__label form__label--' ~ theme } }) }}
+                        {{ form_widget(item,{attr:{"data-action":"change->dynamic-form-submit#onDynamicChange"}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if  form.recurringRule is defined %} 
+            {{ form_row(form.recurringRule) }}
+        {% endif %}
+
+
+
+
+
+
+ 
+
+
+
+
+    {# {{ form_row(form.startAt) }}
+    {{ form_row(form.endAt) }} #}
+    {# {{ form_row(form.image) }} #}
+    <div class="dropzoneWithPreview" {{stimulus_controller("dropzone-solo-preview")}}>
+        <div class="dropzone__container dropzone__container--{{theme}}" {{stimulus_target("dropzone-solo-preview", 'dropzoneContainer')}}>
+            {{form_widget(form.image,{attr:stimulus_target("dropzone-solo-preview", 'dropzoneInput').toArray()})}}
+            <p class="dropzone__placeholder dropzone__placeholder--{{theme}}" {{stimulus_target("dropzone-solo-preview", 'dropzonePlaceholder')}}>Déposer vos fichier ici ou Parcourir</p>
+        </div>
+    </div>
+    <button class="button button--{{theme}} button--sucess">{{ button_label|default('Valider') }}</button>
+{{ form_end(form) }}

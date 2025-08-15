@@ -1,0 +1,173 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}
+    Les évènements
+{% endblock %}
+{% block pagetitle %}
+    Tout les évènements
+{% endblock %}
+
+{% block main %}
+    <article class="evenements">
+
+        <section class="evenements__row">
+			<div class="row__action">
+				<a class="button button--{{theme}} button--secondary" href="{{path('app_admin_evenements_new')}}">
+					Ajouter
+				</a>
+				<a class="button button--{{theme}} button--secondary" href="{{path('app_admin_dashboard')}}">
+					Retour
+				</a>
+			</div>
+		</section>
+        <section class="evenements__row">
+			
+				<div class="events events--{{theme}}">
+					<h2 class="events__title events__title--{{theme}}">Les évènements à venirs</h2>
+					{# ?========== ponctuel  #}
+					<table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr  class="tr--{{theme}}">
+								<th style="text-align:center" colspan="4">Evenements ponctuels</th>
+							</tr>
+						</thead>
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								<th  scope="col">titre</th>
+								<th  scope="col">date</th>
+								<th  scope="col">Participants</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for event in otEvents %}
+								
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{event.title}}</td>
+									<td class="td--{{theme}}">{{event.startDate|date('d/m/Y')}}</td>
+									<td class="td--{{theme}}">{{event.reservations|length}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_evenements_show",{type:"po",id:event.id})}}">
+													Voir l'évènement
+												</a>
+											</li>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_evenements_edit",{type:"po",id:event.id})}}">
+													Modifier l'évènement
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							{% else %}
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}"colspan="3">Aucun évènements à venir</td>
+								</tr>
+							{% endfor %}
+								
+						</tbody>
+					</table>
+
+					{# ?========== recurent  #}
+                    <table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr  class="tr--{{theme}}">
+								<th style="text-align:center" colspan="4">évènements récurents</th>
+							</tr>
+						</thead>
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								{# <th  scope="col">image</th> #}
+								<th  scope="col">titre</th>
+								<th  scope="col">Jour</th>
+								<th  scope="col">Participants</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for event in reEvents %}
+								
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{event.title}}</td>
+									<td class="td--{{theme}}">Tout les {{event.recurringRule.DaysOfWeek}}</td>
+									<td class="td--{{theme}}">{{event.reservations|length}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_evenements_show",{type:"re",id:event.id})}}">
+													Voir l'évènement
+												</a>
+											</li>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_evenements_edit",{type:"re",id:event.id})}}">
+													Modifier l'évènement
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							{% else %}
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}"colspan="3">Aucun évènements à venir</td>
+								</tr>
+							{% endfor %}
+								
+						</tbody>
+					</table>
+					
+				</div>
+				{#?============ History  #}
+				<div class="events events--{{theme}}">
+					<h2 class="events__title events__title--{{theme}}">Historique</h2>
+					<table class="table--{{theme}}">
+						<thead class="thead--{{theme}}">
+							<tr  class="tr--{{theme}}">
+								<th style="text-align:center" colspan="3">"évènements récurents"</th>
+							</tr>
+						</thead>
+
+						<thead class="thead--{{theme}}">
+							<tr class="tr--{{theme}}">
+								<th  scope="col">titre</th>
+								<th  scope="col">date</th>
+								<th  scope="col">action</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							{% for event in historyEvents %}
+								
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}">{{event.title}}</td>
+									<td class="td--{{theme}}">{{event.startDate|date("d/m/Y")}}</td>
+									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_evenements_show",{type:'po',id:event.id})}}">
+													Voir l'évènement
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							{% else %}
+								<tr class="tr--{{theme}}">
+									<td class="td--{{theme}}"colspan="3">Aucun évènements à venir</td>
+								</tr>
+							{% endfor %}
+								
+						</tbody>
+					</table>
+					
+				</div>
+
+
+			</section>
+        
+    </article>
+{% endblock %}
