@@ -48,9 +48,6 @@ abstract class EventAbstract
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $crop = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null; // maintenu|reporté|annulé
 
@@ -183,17 +180,7 @@ abstract class EventAbstract
         return $this;
     }
 
-    public function getCrop(): ?Array
-    {
-        return $this->crop;
-    }
 
-    public function setCrop(?Array $crop): self
-    {
-        $this->crop = $crop;
-
-        return $this;
-    }
 
     public function getStatus(): ?string
     {

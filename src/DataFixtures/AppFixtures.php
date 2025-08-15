@@ -23,8 +23,16 @@ class AppFixtures extends Fixture
             ->setRoles(["ROLE_ADMIN"])
             ->setPassword(password_hash('adminadminadmin', PASSWORD_BCRYPT))
         ;
+
+        // $basicUser = (new Adherent())
+        //     ->setNom('user')
+        //     ->setPrenom('user')
+        //     ->setEmail('user@user.fr')
+        //     ->setRoles([])
+        //     ->setPassword(password_hash('useruseruser', PASSWORD_BCRYPT))
+        // ;
         $manager->persist($admin);
-        for ($i = 0; $i < 351; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             // Crée un adhérent
             $adherent = new Adherent();
             $adherent->setNom($faker->lastName());

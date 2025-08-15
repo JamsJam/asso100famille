@@ -1,0 +1,37 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}
+    Les évènements
+{% endblock %}
+{% block pagetitle %}
+    Tout les évènements
+{% endblock %}
+
+{% block main %}
+    <article class="evenements">
+
+        <section class="evenements__row">
+			<div class="row__action">
+
+
+				<a class="button button--{{theme}} button--secondary" href="{{path('app_admin_evenements')}}">
+					Annuler
+				</a>
+			</div>
+		</section>
+        <section class="evenements__row">
+			
+				<div class="events events--{{theme}}">
+					
+
+					{% include "admin/evenements/_form.html.twig" %}
+
+					
+				</div>
+
+
+
+			</section>
+        
+    </article>
+{% endblock %}

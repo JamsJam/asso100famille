@@ -15,7 +15,7 @@
         {# <a href="" class='navLink'>Connexion</a> #}
         {% if  app.user %}
 
-            <a class="navLink" href="{{path('admin')}}">Espace {{ is_granted('ROLE_ADMIN') ? 'administrateur' : 'membre' }}</a>
+            <a class="navLink" href="{{path('app_admin_dashboard')}}">Espace {{ is_granted('ROLE_ADMIN') ? 'administrateur' : 'membre' }}</a>
             <a class="{{ app.current_route == 'app_login' ? 'navLink active' : 'navLink' }}" href="{{path('app_logout')}}">Deconnexion</a>
 
         {% else %}

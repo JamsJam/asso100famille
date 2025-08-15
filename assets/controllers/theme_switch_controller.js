@@ -40,16 +40,44 @@ export default class extends Controller {
         // this.fooTarget.removeEventListener('click', this._fooBar)
     }
 
-    switchTheme(){
+    async switchTheme(){
         const menu = document.querySelector('.menu');
-        const actualThemes = Array.from(this.menuTarget.classList).some((el => el.endsWith('--dark'))) ? "dark" : "light";
-        const newThemes = actualThemes === "dark" ? "light" : "dark"
-        const items = document.querySelectorAll(`[class *="--${actualThemes}"`)
+        const actualTheme = Array.from(this.menuTarget.classList).some((el => el.endsWith('--dark'))) ? "dark" : "light";
+        const newTheme = actualTheme === "dark" ? "light" : "dark"
+        const success = await this.switchThemeConfig(newTheme);
+        if (!success) {
+            console.error("Erreur lors de la mise à jour du thème côté serveur");
+            return;
+        }
+        const items = document.querySelectorAll(`[class *="--${actualTheme}"`)
         items.forEach(element => {
-            const oldClass = Array.from(element.classList).find((el => el.endsWith(`--${actualThemes}`)))
-            const newClass = oldClass.replace(`--${actualThemes}`,`--${newThemes}`)
+            const oldClass = Array.from(element.classList).find((el => el.endsWith(`--${actualTheme}`)))
+            const newClass = oldClass.replace(`--${actualTheme}`,`--${newTheme}`)
             element.classList.replace(oldClass, newClass)
         });
+    }
+
+    async switchThemeConfig(theme){
+        try{
+
+            const response = await fetch('/config/change-theme',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    
+                    // Ajouter CSRF token ici si nécessaire
+                },
+                body:JSON.stringify({theme})
+            })
+            if(response.ok){
+    
+                return true
+            }
+        }catch (error) {
+            console.error("Erreur fetch:", error);
+            return false;
+        }
+
     }
 
 

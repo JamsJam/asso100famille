@@ -1,74 +1,174 @@
-{% extends 'base.html.twig' %}
+{% extends 'adminBase.html.twig' %}
 
-{% block title %}Adherent{% endblock %}
 
-{% block body %}
-    <h1>Adherent</h1>
+{% block title %}Mon profil
+{% endblock %}
+{% block pagetitle %}Mon profil
+{% endblock %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ adherent.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ adherent.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ adherent.roles ? adherent.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ adherent.password }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ adherent.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ adherent.prenom }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ adherent.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Ddn</th>
-                <td>{{ adherent.ddn ? adherent.ddn|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Profession</th>
-                <td>{{ adherent.profession }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ adherent.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Adresse2</th>
-                <td>{{ adherent.adresse2 }}</td>
-            </tr>
-            <tr>
-                <th>Codepostal</th>
-                <td>{{ adherent.codepostal }}</td>
-            </tr>
-            <tr>
-                <th>Ville</th>
-                <td>{{ adherent.ville }}</td>
-            </tr>
-            <tr>
-                <th>Telephone</th>
-                <td>{{ adherent.telephone }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block main %}
 
-    <a href="{{ path('app_admin_adherent_index') }}">back to list</a>
+	<article class="adherentShow">
 
-    <a href="{{ path('app_admin_adherent_edit', {'id': adherent.id}) }}">edit</a>
+		<section class="adherentShow__row">
+			<div class="row__action">
+				<a class="button button--{{theme}} button--secondary" href="{{path('app_admin_dashboard')}}">
+					Retour
+				</a>
+			</div>
+		</section>
+		<section class="adherentShow__row">
+			<div class="adherentInfo">
 
-    {{ include('admin/adherent/_delete_form.html.twig') }}
+				<table class="table table--{{theme}}">
+					<thead class="thead--{{theme}}">
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}" colspan="2">Informations générales</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Nom</th>
+							<td class="td--{{theme}}">{{ adherent.prenom }}
+								{{ adherent.nom }}</td>
+						</tr>
+
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Date de naissance</th>
+							<td class="td--{{theme}}">{{ adherent.ddn ? adherent.ddn|date('d/m/Y') : '' }}</td>
+						</tr>
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Profession</th>
+							<td class="td--{{theme}}">{{ adherent.profession }}
+							</td>
+						</tr>
+
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Adresse</th>
+							<td class="td--{{theme}}">{{ adherent.adresse }}
+								{{ adherent.adresse2 }},
+								{{ adherent.codepostal }}
+								{{ adherent.ville }}</td>
+						</tr>
+
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Telephone</th>
+							<td class="td--{{theme}}">{{ adherent.telephone }}</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table class="table table--{{ theme }}">
+					<thead class="thead--{{ theme }}">
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}" colspan="2">Informations Familiales</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Type de famille</th>
+							<td class="td--{{ theme }}">{{ famille.type.nom ?? 'Non défini' }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre total de membres</th>
+							<td class="td--{{ theme }}">{{ famille.membre ?? 0 }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre d'adultes</th>
+							<td class="td--{{ theme }}">{{ famille.nbAdultes ?? 0 }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre de mineurs</th>
+							<td class="td--{{ theme }}">{{ famille.nbMineurs ?? 0 }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre d'hommes</th>
+							<td class="td--{{ theme }}">{{ famille.nbHommes ?? 0 }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre de femmes</th>
+							<td class="td--{{ theme }}">{{ famille.nbFemmes ?? 0 }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre de garçons</th>
+							<td class="td--{{ theme }}">{{ famille.nbGarcons ?? 0 }}</td>
+						</tr>
+						<tr class="tr--{{ theme }}">
+							<th class="th--{{ theme }}">Nombre de filles</th>
+							<td class="td--{{ theme }}">{{ famille.nbFilles ?? 0 }}</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+				<table class="table table--{{theme}}">
+					<thead class="thead--{{theme}}">
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}" colspan="2">Informations connexion</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Email</th>
+							<td class="td--{{theme}}">{{ adherent.email }}</td>
+						</tr>
+
+						<tr class="tr--{{theme}}">
+							<th class="th--{{theme}}">Mot de passe</th>
+							<td class="td--{{theme}}">
+								******
+								{% if not is_granted("ROLE_ADMIN")%}
+									<a class="passRequest passRequest--{{theme}}" href="{{path('app_forgot_password_request')}}">reinitialiser le mot de passe</a>
+								{% endif %}
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+
+<table class="table table--{{ theme }}">
+    <thead class="thead--{{ theme }}">
+        <tr class="tr--{{ theme }}">
+            <th class="th--{{ theme }}" colspan="2">Informations Abonnement</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="tr--{{ theme }}">
+            <th class="th--{{ theme }}">Date de création</th>
+            <td class="td--{{ theme }}">
+                {{ adherent.abonement.createdAt ? adherent.abonement.createdAt|date('d/m/Y H:i') : 'Non défini' }}
+            </td>
+        </tr>
+        <tr class="tr--{{ theme }}">
+            <th class="th--{{ theme }}">Date d'expiration</th>
+            <td class="td--{{ theme }}">
+                {{ adherent.abonement.expiredAt ? adherent.abonement.expiredAt|date('d/m/Y H:i') : 'Non défini' }}
+            </td>
+        </tr>
+        <tr class="tr--{{ theme }}">
+            <th class="th--{{ theme }}">Statut</th>
+            <td class="td--{{ theme }}">{{ adherent.abonement.status ?? 'Non défini' }}</td>
+        </tr>
+        {# <tr class="tr--{{ theme }}">
+            <th class="th--{{ theme }}">ID Facture</th>
+            <td class="td--{{ theme }}">{{ adherent.abonement.invoiceId ?? 'Non défini' }}</td>
+        </tr>
+        <tr class="tr--{{ theme }}">
+            <th class="th--{{ theme }}">ID Session</th>
+            <td class="td--{{ theme }}">{{ adherent.abonement.sessionId ?? 'Non défini' }}</td>
+        </tr> #}
+    </tbody>
+</table>
+
+
+			</div>
+		</section>
+
+	</article>
+
+
+	{# <a href="{{ path('app_admin_adherent_edit', {'id': adherent.id}) }}">edit</a>
+	
+	    {{ include('admin/adherent/_delete_form.html.twig') }} #}
 {% endblock %}

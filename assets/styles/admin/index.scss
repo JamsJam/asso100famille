@@ -1,7 +1,9 @@
 // @forward 'reservation_field';
 @forward 'adminBase';
 @forward 'dashboard';
-@use 'components'
+@use 'adherent';
+@use 'evenements';
+@use 'components';
 
 
 

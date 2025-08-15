@@ -4,12 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Entity\Adherent;
 use App\Form\AdherentForm;
+use App\Service\ThemeService;
 use App\Repository\AdherentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Attribute\WithHttpStatus;
 
 #[Route('/adherents')]
 final class AdherentController extends AbstractController
@@ -18,8 +20,10 @@ final class AdherentController extends AbstractController
     public function index(
         AdherentRepository $adherentRepository,
         Request $request,
+        ThemeService $theme_service,
     ): Response
     {
+        $theme = $theme_service->getTheme();
 
         $page = intval($request->query->get('page') ?? 1);
         $offset = $page - 1;
@@ -30,7 +34,7 @@ final class AdherentController extends AbstractController
         $adherentsList = array_slice($adherents, $offset*$maxsizelist ,$maxsizelist);
         
         $countPage = intval(ceil($totalAdherents/$maxsizelist));
-        dump($page,$offset);
+
 
         
 
@@ -39,7 +43,8 @@ final class AdherentController extends AbstractController
             'itemCount' => $totalAdherents,
             'sizeList' => $maxsizelist,
             'page' => $page,
-            'pageCount' => $countPage
+            'pageCount' => $countPage,
+            "theme"=>$theme,
 
 
         ]);
@@ -66,10 +71,19 @@ final class AdherentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_admin_adherent_show', methods: ['GET'])]
-    public function show(Adherent $adherent): Response
+    public function show(
+        Adherent $adherent,
+        ThemeService $theme_service
+        ): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN') && $this->getUser()->getId() !== $adherent->getId()) {
+            return $this->redirectToRoute('app_admin_dashboard',[], 303);
+        }
+
+        $theme = $theme_service->getTheme();
         return $this->render('admin/adherent/show.html.twig', [
             'adherent' => $adherent,
+            'theme' => $theme
         ]);
     }
 

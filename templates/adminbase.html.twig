@@ -3,11 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
 			{% block title %}Association 100% Famille |
 			{% endblock %}
 		</title>
 		<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+		<link rel="shortcut icon" href="{{asset("images/favicon/favicon.ico")}}" type="image/x-icon">
 
 		{# <link rel="stylesheet" href="{{asset("css/bootstrap.min.css")}}"> #}
 		{# <link rel="stylesheet" href="{{asset("css/slick.css")}}"> #}
@@ -21,31 +23,39 @@
 	<body  class="admin" {{stimulus_controller('theme_switch')}}>
 
 
-            {% include "partials/admin/components/_aside.html.twig" %}
+            {% include "partials/admin/components/_aside.html.twig" with {theme:theme} %}
 
-			<div class="container container--dark">
-{% include "partials/admin/components/_header.html.twig" with {
-    title: block('pagetitle')
-} %}
+			<div class="container container--{{theme}}">
+			{% include "partials/admin/components/_header.html.twig" with {
+				title: block('pagetitle') ?? 'Titre de la page',
+				theme: theme
+			} %}
 				<main>
-					<button {{stimulus_action('theme_switch', 'switchTheme', 'click')}}>change theme</button>
+					    {# {% for message in app.flashes( ) %}
+
+							<twig:Flash
+								type="success_form"
+								message="{{message}}"
+							/>
+						{% endfor %} #}
+						{% for label, messages in app.flashes %}
+							{% for message in messages %}
+		
+
+								<div class="flash__container"  {{stimulus_controller("flash")}}>
+									<div class="flash flash__{{label}} flash__{{ label }}--{{theme}}" {{stimulus_target("flash","flash")}}>
+
+										<p>
+											{{ message }}
+										</p>
+									</div>
+								</div>
+							{% endfor %}
+						{% endfor %}
+					
 
 						{% block main %}{% endblock %}
 				</main>
 			</div>
-
-                <!-- NFTmax Dashboard -->
-
-
-
-
-
-
-		{# <script src={{asset("dist/js/jquery-3.6.3.min.js")}}></script>
-		<script src={{asset("dist/js/slick.min.js")}}></script>
-		<script src={{asset("dist/js/bootstrap.bundle.min.js")}}></script>
-		<script src={{asset("dist/js/chart.js")}}></script>
-		<script src={{asset("dist/js/custom.js")}}></script>
-		<script src={{asset("dist/js/modeControl.js")}}></script> #}
 	</body>
 </html>
