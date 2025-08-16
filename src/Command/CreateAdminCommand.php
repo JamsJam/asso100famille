@@ -175,7 +175,7 @@ class CreateAdminCommand extends Command
                     "contact@tiers-lieu100p100famille.fr",
                     $email, //! prod
                     "Vos identifiants",
-                    "email/admin.html.twig",
+                    "emails/admin.html.twig",
                     [
                         'firstname' => $prenom,
                         'lastname' => $nom,

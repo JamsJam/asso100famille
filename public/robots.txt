@@ -1,15 +1,16 @@
 User-agent: Googlebot
-Disallow: /admin/*
+Disallow: /admin/
 Disallow: /dashboard/
-Allow: /*
+Allow: /
 
 User-agent: AhrefsBot
-Disallow: /admin/*
+Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /assets/
+Allow: /
 
 User-agent: *
-Disallow: /admin/*
+Disallow: /admin/
 Disallow: /dashboard/
 
 Sitemap: https://tiers-lieu100p100famille.fr/sitemap
