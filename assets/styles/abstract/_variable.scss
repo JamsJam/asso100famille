@@ -57,10 +57,10 @@ $text-24-16-mob : clamp(1rem, 0.8214rem + 0.8929vw, 1.25rem);
 //   $dark-mode__info: hsl(217 100% 70%);
 
   $dark-mode__bg-dark: hsl(185 85% 1%);
-  $dark-mode__bg: hsl(183 51% 4%);
+  $dark-mode__bg: hsl(180, 50%, 4%);
   $dark-mode__bg-light: hsl(183 28% 8%);
   $dark-mode__text: hsl(183 74% 92%);
-  $dark-mode__text-muted: hsl(183 17% 67%);
+  $dark-mode__text-muted: #9db8b9;
   $dark-mode__highlight: hsl(183 14% 36%);
   $dark-mode__border: hsl(183 20% 26%);
   $dark-mode__border-muted: hsl(183 32% 15%);

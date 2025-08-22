@@ -1,6 +1,6 @@
 {% extends 'adminBase.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}{{parent()}} Dashboard {% endblock %}
 {% block pagetitle %}Dashboard{% endblock %}
 
 
@@ -124,7 +124,6 @@
 					<h2 class="events__title events__title--{{theme}}">Mon Abonnement</h2>
 					
 
-					
 					<table class="table--{{theme}}">
 						<thead class="thead--{{theme}}">
 							<tr class="tr--{{theme}}">
@@ -134,22 +133,20 @@
 							</tr>
 						</thead>
 						<tbody>
-								<tr class="tr--{{theme}}">
-									<td class="td--{{theme}}">{{abonement.createdAt|date("d/m/Y")}}</td>
-									<td class="td--{{theme}}">{{abonement.expiredAt|date("d/m/Y")}}</td>
-									<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
-										<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
-										<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
-											<li class="actionDropdown__item actionDropdown__item--{{theme}}">
-												<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_adherent_show",{id:app.user.id})}}">
-													Voir mon profil
-												</a>
-											</li>
-										</ul>
-									</td>
-								</tr>
-
-								
+							<tr class="tr--{{theme}}">
+								<td class="td--{{theme}}">{{abonement.createdAt|date("d/m/Y")}}</td>
+								<td class="td--{{theme}}">{{abonement.expiredAt|date("d/m/Y")}}</td>
+								<td class="td--{{theme}}" {{stimulus_controller('dropdown')}}>
+									<button {{stimulus_target('dropdown','toggleler')}}>{{ ux_icon('zondicons:dots-horizontal-triple',{class: 'dot'}) }}</button>
+									<ul class="actionDropdown actionDropdown--{{theme}}" {{stimulus_target('dropdown','container')}}>
+										<li class="actionDropdown__item actionDropdown__item--{{theme}}">
+											<a class="actionDropdown__link actionDropdown__link--{{theme}}" href="{{path("app_admin_adherent_show",{id:app.user.id})}}">
+												Voir mon profil
+											</a>
+										</li>
+									</ul>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 
@@ -162,3 +159,5 @@
 
 	</article>
 {% endblock %}
+
+
