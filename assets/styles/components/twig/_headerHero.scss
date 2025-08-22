@@ -74,10 +74,15 @@
     
     .hero-img{
         // height: 100%;
-        width: 100%;
+        // width: 100%;
+        width: 50dvw;
 
         img{
+            // width: 100%;
             width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
         }
 
         @media screen and (max-width:768px) {

@@ -10,12 +10,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StripeWebhookController extends AbstractController
 {
+
+    public function __construct(
+        private string $webhookSign
+    )
+    {}
+
     #[Route('/stripe/webhook', name: 'app_stripe_webhook', methods: ['POST'])]
-    public function __invoke(Request $request): Response
+    public function __invoke(
+        Request $request,
+        ): Response
     {
         $payload = $request->getContent();
         $sig_header = $request->headers->get('stripe-signature');
-        $endpoint_secret = "whsec_55f32e78f1036e943fe9fd39a84af6649a406ee67960186a028ac1b3ba8163af"; // récupéré dans Stripe
+        $endpoint_secret = $this->webhookSign; // récupéré dans Stripe
         // $endpoint_secret = $_ENV['STRIPE_WEBHOOK_SECRET']; // récupéré dans Stripe
 
         try {

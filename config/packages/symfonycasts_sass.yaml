@@ -2,3 +2,7 @@ symfonycasts_sass:
     root_sass:
         - '%kernel.project_dir%/assets/styles/app.scss'
         - '%kernel.project_dir%/assets/styles/admin.scss'
+    sass_options:
+
+        # The style of the generated CSS: compressed or expanded.
+        style:                compressed 
