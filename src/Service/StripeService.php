@@ -4,13 +4,10 @@ namespace App\Service;
 
 use Stripe\StripeClient;
 use Stripe\Checkout\Session;
-
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class StripeService
 {
-
-
 
     public function __construct(
         private string $stripeSecretKey,
@@ -28,7 +25,8 @@ class StripeService
     public function createCheckoutSession(
             array $products,
             ?string $successUrl = null,
-            ?string $cancelUrl = null
+            ?string $cancelUrl = null,
+            string $mailUser
         ): array 
     {
 
@@ -106,6 +104,8 @@ class StripeService
                     'mode' => $mode,
                     'success_url' => $successRedirect,
                     'cancel_url' => $cancelRedirect,
+                    'customer_creation' => 'always',
+                    'customer_email' => $mailUser
                 ]);
 
                 if($mode === 'payment'){
@@ -137,6 +137,10 @@ class StripeService
         $stripeSession = $stripe->checkout->sessions->retrieve($sessionId, []);
         
         return $stripeSession;
+    }
+
+    public function getStripeClient(){
+        return new StripeClient($this->stripeSecretKey);
     }
 
 

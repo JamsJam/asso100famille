@@ -35,6 +35,7 @@ class StripeController extends AbstractController
                 
                 /** @var int $context */
                 $context = $session->get('reservationContext')['user'];
+                // $contextId = $session->get('reservationContext')['id'];
 
 
                 /** @var \App\Entity\Reservation $reservation */
@@ -59,20 +60,9 @@ class StripeController extends AbstractController
                 );
 
                 //? ------------- send mail to admin
-                // $mailerService->sendTemplatedMail(
-                //     new Address("contact@tiers-lieu100p100famille.fr","Association 100% Famille"),
-                //     new Address("contact@tiers-lieu100p100famille.fr","Association 100% Famille"),
-                //     "Une nouvelle reservation",
-                //     "emails/admin_reservation_confirmation.html.twig",
-                //     [
-                //         "user_fullname" => $reservation->getPrenom() ."  ". $reservation->getNom(),
-                //         "user_email" =>  $reservation->getEmail(),
-                //         "event_name" => $reservation->getOtEvent() ? $reservation->getOtEvent()->getTitle() : $reservation->getREvent()->getTitle()
-                //     ]
-                // );
                 $mailerService->sendTemplatedMail(
-                    new Address("j.antoine971@hotmail.fr","Association 100% Famille"),
-                    new Address("j.antoine971@hotmail.fr","Association 100% Famille"),
+                    new Address("contact@tiers-lieu100p100famille.fr","Association 100% Famille"),
+                    new Address("contact@tiers-lieu100p100famille.fr","Association 100% Famille"),
                     "Une nouvelle reservation",
                     "emails/admin_reservation_confirmation.html.twig",
                     [
@@ -81,6 +71,17 @@ class StripeController extends AbstractController
                         "event_name" => $reservation->getOtEvent() ? $reservation->getOtEvent()->getTitle() : $reservation->getREvent()->getTitle()
                     ]
                 );
+                // $mailerService->sendTemplatedMail(
+                //     new Address("j.antoine971@hotmail.fr","Association 100% Famille"),
+                //     new Address("j.antoine971@hotmail.fr","Association 100% Famille"),
+                //     "Une nouvelle reservation",
+                //     "emails/admin_reservation_confirmation.html.twig",
+                //     [
+                //         "user_fullname" => $reservation->getPrenom() ."  ". $reservation->getNom(),
+                //         "user_email" =>  $reservation->getEmail(),
+                //         "event_name" => $reservation->getOtEvent() ? $reservation->getOtEvent()->getTitle() : $reservation->getREvent()->getTitle()
+                //     ]
+                // );
 
 
                 //? ------------- clean session
