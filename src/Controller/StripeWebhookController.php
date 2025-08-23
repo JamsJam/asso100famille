@@ -112,9 +112,33 @@ class StripeWebhookController extends AbstractController
                 ) ;
 
                 break;
-            // case 'checkout.session.failed':
-            //     // TODO : avertir le client ou suspendre
-            //     break;
+            case 'invoice.payment_failed':
+                $invoice = $event->data->object; // \Stripe\Invoice
+                $invoiceUrl = $invoice->hosted_invoice_url;
+                $customerEmail = $invoice->customer_email;
+
+                if ($customerEmail && $invoiceUrl) {
+                    $failedMail = [
+                        'from' => new Address("contact@tiers-lieu100p100famille.fr", "Association 100% Famille"),
+                        'to' => $customerEmail,
+                        'template' => 'emails/payment_failed.html.twig',
+                        'subject' => 'Échec de votre paiement - Association 100% Famille',
+                        'context' => [
+                            "invoiceURL" => $invoiceUrl,
+                            "amount_due" => $invoice->amount_due / 100, // montant à payer en €
+                            "due_date" => $invoice->due_date ? date('d/m/Y', $invoice->due_date) : null,
+                        ],
+                    ];
+
+                    $mailerService->sendTemplatedMail(
+                        $failedMail["from"],
+                        $failedMail["to"],
+                        $failedMail["subject"],
+                        $failedMail["template"],
+                        $failedMail["context"]
+                    );
+                }
+                break;
         }
 
         return new Response('OK', 200);
